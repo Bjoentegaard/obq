@@ -1,10 +1,19 @@
-import {type AppState, getDomainProgress, getKnownCount, getUnknownCount, type QuizResult} from './state'
+import {
+    addQuizSet,
+    type AppState,
+    getDomainProgress,
+    getKnownCount,
+    getUnknownCount,
+    type QuizResult, type QuizSetProgress, recordQuizSetResult,
+    removeQuizSet
+} from './state'
 import type {Flashcard} from './data/flashcards'
 import type {QuizQuestion} from './data/quiz'
+import {parseQuizSetFile} from "./importer.ts";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-type Page = 'dash' | 'fc' | 'quiz'
+type Page = 'dash' | 'fc' | 'quiz' | 'sets'
 type Domain = Flashcard['domain']
 
 interface AppOptions {
@@ -30,6 +39,7 @@ interface QuizSession {
     questions: QuizQuestion[]
     index: number
     correct: number
+    setId?: string
 }
 
 let quizSession: QuizSession | null = null
@@ -78,6 +88,9 @@ export function renderApp(opts: AppOptions): void {
           <button class="tab-btn" data-page="quiz">
             ${iconQuestion()} Quiz
           </button>
+          <button class="tab-btn" data-page="sets">
+            ${iconImport()} Quiz-sett
+          </button>
         </div>
         <button class="reset-all" id="btn-reset">Nullstill alt</button>
       </nav>
@@ -98,6 +111,7 @@ export function renderApp(opts: AppOptions): void {
             main.innerHTML = buildFlashcards();
             renderCard()
         } else if (currentPage === 'quiz') main.innerHTML = buildQuizSetup()
+        else if (currentPage === 'sets') main.innerHTML = buildSetsPage()
 
         bindPageEvents()
     }
@@ -325,6 +339,51 @@ export function renderApp(opts: AppOptions): void {
       </div>`
     }
 
+    function buildSetsPage(): string {
+        const sets = state.quizSets
+
+        const setCards = sets.length
+            ? sets.map(s => {
+                const history = state.quizSetHistory[s.id] ?? []
+                const best = history.length
+                    ? Math.max(...history.map(r => r.percentage))
+                    : null
+                return `
+          <div class="set-card">
+            <div class="set-card-info">
+              <div class="set-title">${s.title}</div>
+              <div class="set-meta">
+                ${s.questions.length} spørsmål
+                ${best !== null ? `· Beste: <span class="${best >= 70 ? 'pass' : 'fail'}">${best}%</span>` : ''}
+              </div>
+              ${s.description ? `<div class="set-desc">${s.description}</div>` : ''}
+            </div>
+            <div class="set-card-actions">
+              <button class="start-btn" data-set-id="${s.id}">Start quiz</button>
+              <button class="remove-btn" data-remove-id="${s.id}">Slett</button>
+            </div>
+          </div>`
+            }).join('')
+            : '<p class="empty-state">Ingen quiz-sett importert ennå.</p>'
+
+        return `
+    <div class="page-inner">
+      <p class="section-head">Importer quiz-sett</p>
+      <label class="import-drop" id="import-drop">
+        <input type="file" accept=".json" id="file-input" style="display:none">
+        <div class="import-drop-inner">
+          ${iconImport()}
+          <span>Slipp en .json-fil her, eller klikk for å velge</span>
+          <span class="import-hint">Format: { id, title, questions: [{ question, options, answer }] }</span>
+        </div>
+      </label>
+      <div id="import-feedback"></div>
+
+      <p class="section-head" style="margin-top:1.75rem">Lagrede sett</p>
+      <div class="sets-list">${setCards}</div>
+    </div>`
+    }
+
     function buildHistoryHTML(qh: QuizResult[]): string {
         if (!qh.length) return '<p class="empty-state">Ingen quiz fullført ennå.</p>'
         return '<div class="history-list">' + [...qh].reverse().slice(0, 8).map(r => {
@@ -435,6 +494,14 @@ export function renderApp(opts: AppOptions): void {
         const percentage = Math.round((correct / total) * 100)
         const pass = percentage >= 70
 
+        if (quizSession.setId) {
+            const progress: QuizSetProgress = { correct, total, percentage, timestamp: Date.now() }
+            update(recordQuizSetResult(state, quizSession.setId, progress))
+        } else {
+            const result: QuizResult = { timestamp: Date.now(), correct, total, percentage }
+            update({ ...state, quizHistory: [...state.quizHistory, result] })
+        }
+
         const result: QuizResult = {timestamp: Date.now(), correct, total, percentage}
         update({...state, quizHistory: [...state.quizHistory, result]})
 
@@ -508,6 +575,71 @@ export function renderApp(opts: AppOptions): void {
         if (currentPage === 'quiz') {
             document.getElementById('btn-start-quiz')?.addEventListener('click', startQuiz)
         }
+
+        if (currentPage === 'sets') {
+            const fileInput = document.getElementById('file-input') as HTMLInputElement
+            const drop = document.getElementById('import-drop')!
+            const feedback = document.getElementById('import-feedback')!
+
+            // Klikk åpner filvelger
+            drop.onclick = () => fileInput.click()
+
+            // Dra og slipp
+            drop.ondragover = (e) => { e.preventDefault(); drop.classList.add('dragover') }
+            drop.ondragleave = () => drop.classList.remove('dragover')
+            drop.ondrop = (e) => {
+                e.preventDefault()
+                drop.classList.remove('dragover')
+                const file = e.dataTransfer?.files[0]
+                if (file) handleImport(file, feedback)
+            }
+
+            fileInput.onchange = () => {
+                const file = fileInput.files?.[0]
+                if (file) handleImport(file, feedback)
+            }
+
+            // Start quiz fra sett
+            document.querySelectorAll<HTMLButtonElement>('[data-set-id]').forEach(btn => {
+                btn.onclick = () => startQuizFromSet(btn.dataset['setId']!)
+            })
+
+            // Slett sett
+            document.querySelectorAll<HTMLButtonElement>('[data-remove-id]').forEach(btn => {
+                btn.onclick = () => {
+                    const id = btn.dataset['removeId']!
+                    if (confirm(`Slette "${state.quizSets.find(s => s.id === id)?.title}"?`)) {
+                        update(removeQuizSet(state, id))
+                        navigate('sets')
+                    }
+                }
+            })
+        }
+    }
+
+    async function handleImport(file: File, feedbackEl: HTMLElement): Promise<void> {
+        try {
+            const set = await parseQuizSetFile(file)
+            update(addQuizSet(state, set))
+            feedbackEl.innerHTML = `<p class="import-success">✓ "${set.title}" importert med ${set.questions.length} spørsmål</p>`
+            navigate('sets')
+        } catch (err) {
+            feedbackEl.innerHTML = `<p class="import-error">✗ ${(err as Error).message}</p>`
+        }
+    }
+
+    function startQuizFromSet(id: string): void {
+        const set = state.quizSets.find(s => s.id === id)
+        if (!set) return
+
+        let pool = [...set.questions]
+        for (let i = pool.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [pool[i], pool[j]] = [pool[j], pool[i]]
+        }
+
+        quizSession = { questions: pool as any, index: 0, correct: 0, setId: id }
+        renderQuizQuestion()
     }
 
     function bindKeyboard(): void {
@@ -543,6 +675,10 @@ export function renderApp(opts: AppOptions): void {
 
     function iconQuestion(): string {
         return icon('<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>')
+    }
+
+    function iconImport(): string {
+        return icon('<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>')
     }
 
     function iconLeft(): string {

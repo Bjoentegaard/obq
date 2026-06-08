@@ -942,3 +942,85 @@ svg.icon {
     stroke-linejoin: round;
     flex-shrink: 0
 }
+
+
+/* Import drop zone */
+.import-drop {
+    display: block;
+    border: 1px dashed var(--border2);
+    border-radius: var(--r-lg);
+    padding: 2rem;
+    cursor: pointer;
+    transition: border-color .15s, background .15s;
+    margin-bottom: 1rem;
+}
+
+.import-drop:hover,
+.import-drop.dragover {
+    border-color: var(--accent);
+    background: rgba(79,142,247,0.05);
+}
+
+.import-drop-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--text2);
+    font-size: 14px;
+    text-align: center;
+}
+
+.import-drop-inner svg { width: 24px; height: 24px; color: var(--accent); }
+
+.import-hint {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text3);
+}
+
+.import-success { color: var(--green); font-size: 13px; padding: 8px 0; }
+.import-error   { color: var(--red);   font-size: 13px; padding: 8px 0; }
+
+/* Set cards */
+.sets-list { display: flex; flex-direction: column; gap: 10px; }
+
+.set-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.set-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+
+.set-meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text3);
+}
+
+.set-meta .pass { color: var(--green); }
+.set-meta .fail { color: var(--red); }
+
+.set-desc { font-size: 12px; color: var(--text2); margin-top: 4px; }
+
+.set-card-actions { display: flex; gap: 8px; flex-shrink: 0; }
+
+.remove-btn {
+    font-family: var(--font);
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: var(--r);
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text3);
+    cursor: pointer;
+    transition: all .15s;
+}
+
+.remove-btn:hover { color: var(--red); border-color: rgba(247,111,111,0.4); }
