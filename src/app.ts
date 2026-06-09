@@ -529,7 +529,7 @@ export function renderApp(opts: AppOptions): void {
         // Topbar reset
         document.getElementById('btn-reset')?.addEventListener('click', () => {
             if (confirm('Nullstille ALL fremgang? Dette kan ikke angres.')) {
-                update({scores: {}, quizHistory: []})
+                update({scores: {}, quizHistory: [], quizSets: [], quizSetHistory: {}})
                 fcDeck = [...flashcards]
                 fcIndex = 0
                 fcFlipped = false

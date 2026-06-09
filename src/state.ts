@@ -23,22 +23,60 @@ export interface AppState {
 }
 
 const STORAGE_KEY = 'obq_state_v1'
+const STATE_SCHEMA_VERSION = 2
+
+export interface StorageAdapter {
+    load: () => unknown
+    save: (payload: unknown) => void
+    clear?: () => void
+}
+
+interface PersistedStateV2 {
+    schemaVersion: 2
+    data: AppState
+}
+
+let storageAdapter: StorageAdapter = {
+    load: () => {
+        const raw = localStorage.getItem(STORAGE_KEY)
+        return raw ? JSON.parse(raw) : null
+    },
+    save: (payload: unknown) => {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(payload))
+    },
+    clear: () => {
+        localStorage.removeItem(STORAGE_KEY)
+    },
+}
 
 function defaultState(): AppState {
     return {scores: {}, quizHistory: [], quizSets: [], quizSetHistory: {}}
 }
 
+export function setStorageAdapter(adapter: StorageAdapter): void {
+    storageAdapter = adapter
+}
+
 export function loadState(): AppState {
     try {
-        const raw = localStorage.getItem(STORAGE_KEY)
-        return raw ? (JSON.parse(raw) as AppState) : defaultState()
+        const raw = storageAdapter.load()
+        const migrated = migratePersistedState(raw)
+        return migrated ?? defaultState()
     } catch {
         return defaultState()
     }
 }
 
 export function saveState(state: AppState) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
+    const payload: PersistedStateV2 = {
+        schemaVersion: STATE_SCHEMA_VERSION as 2,
+        data: state,
+    }
+    storageAdapter.save(payload)
+}
+
+export function clearState(): void {
+    storageAdapter.clear?.()
 }
 
 export function getKnownCount(state: AppState): number {
@@ -80,4 +118,27 @@ export function recordQuizSetResult(
             [id]: [...existing, result],
         },
     }
+}
+
+function migratePersistedState(raw: unknown): AppState | null {
+    if (!raw || typeof raw !== 'object') return null
+
+    const obj = raw as Record<string, unknown>
+
+    // Current format
+    if (obj['schemaVersion'] === 2 && typeof obj['data'] === 'object' && obj['data'] !== null) {
+        return sanitizeAppState(obj['data'] as Record<string, unknown>)
+    }
+
+    // Legacy format (pre-versioned): AppState stored directly
+    return sanitizeAppState(obj)
+}
+
+function sanitizeAppState(raw: Record<string, unknown>): AppState {
+    const scores = (raw['scores'] ?? {}) as Record<string, boolean>
+    const quizHistory = (raw['quizHistory'] ?? []) as QuizResult[]
+    const quizSets = (raw['quizSets'] ?? []) as QuizSet[]
+    const quizSetHistory = (raw['quizSetHistory'] ?? {}) as Record<string, QuizSetProgress[]>
+
+    return {scores, quizHistory, quizSets, quizSetHistory}
 }
