@@ -1,7 +1,7 @@
-import {addQuizSet, type AppState, removeQuizSet} from "../state.ts";
 import {type QuizSet} from "../data/quizset.ts";
 import {parseQuizSetFile} from "../importer.ts";
 import {iconImport} from "../styles/icon.ts";
+import {addQuizSet, type AppState, removeQuizSet} from "../state";
 
 // ─── Controller ───────────────────────────────────────────────────────────────
 

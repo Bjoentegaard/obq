@@ -1,9 +1,7 @@
-// ─── Dashboard ─────────────────────────────────────────────────────────────
-
-import {type AppState, getDomainProgress, getKnownCount, getUnknownCount} from "../state.ts";
 import {flashcards} from "../data/flashcards.ts";
 import { DOMAIN_META } from '../data/domain.ts'
 import type { Domain } from '../data/domain.ts'
+import {type AppState, getDomainProgress, getKnownCount, getUnknownCount} from "../state";
 
 export function buildDash(state: AppState): string {
     const known = getKnownCount(state)

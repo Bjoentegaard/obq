@@ -1,7 +1,7 @@
 import {iconCheck, iconLeft, iconRight, iconShuffle, iconX} from "../styles/icon.ts";
 import {type Domain, DOMAIN_META} from "../data/domain.ts";
 import {type Flashcard} from "../data/flashcards.ts";
-import type {AppState} from "../state.ts";
+import type {AppState} from "../state";
 
 export function createFlashcardController(
     initialState: AppState,

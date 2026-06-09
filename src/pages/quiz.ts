@@ -1,7 +1,8 @@
-import {type AppState, type QuizResult, type QuizSetProgress, recordQuizSetResult} from "../state.ts";
+
 import {type Domain, DOMAIN_META} from "../data/domain.ts";
 import {type QuizQuestion} from "../data/quiz.ts";
 import {type QuizSet} from "../data/quizset.ts";
+import {type AppState, type QuizResult, type QuizSetProgress, recordQuizSetResult} from "../state";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
