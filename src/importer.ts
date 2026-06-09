@@ -5,7 +5,7 @@ export class ImportError extends Error {
 
 export function parseQuizSetFile(file: File): Promise<QuizSet> {
     return new Promise((resolve, reject) => {
-        if (!file.name.endsWith(".js")) {
+        if (!file.name.endsWith(".json")) {
             reject(new ImportError("File must be a valid .json-file."))
             return
         }
