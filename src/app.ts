@@ -6,10 +6,11 @@ import {buildDash} from "./pages/dashboard.ts";
 import {buildFlashcards, createFlashcardController} from "./pages/flashcards.ts";
 import {createQuizController} from "./pages/quiz.ts";
 import {createSetsController} from "./pages/sets.ts";
+import {buildConcepts, bindConceptsEvents} from "./pages/concepts.ts";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-type Page = 'dash' | 'fc' | 'quiz' | 'sets'
+type Page = 'dash' | 'fc' | 'quiz' | 'sets' | 'concepts'
 
 interface AppOptions {
     mountEl: HTMLElement
@@ -72,6 +73,10 @@ export function renderApp(opts: AppOptions): void {
           <button class="tab-btn" data-page="sets">
             ${iconImport()} Quiz-sett
           </button>
+          <button class="tab-btn" data-page="concepts">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            Konsepter
+          </button>
         </div>
         <button class="reset-all" id="btn-reset">Nullstill alt</button>
       </nav>
@@ -92,6 +97,7 @@ export function renderApp(opts: AppOptions): void {
         else if (currentPage === 'fc') { main.innerHTML = buildFlashcards(); fc.renderCard() }
         else if (currentPage === 'quiz') main.innerHTML = quiz.buildQuizSetup()
         else if (currentPage === 'sets') { main.innerHTML = sets.buildSetsPage(); sets.bindEvents() }
+        else if (currentPage === 'concepts') { main.innerHTML = buildConcepts(); bindConceptsEvents() }
 
         bindShellEvents()
     }
