@@ -1,0 +1,88 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout OBQ
+        uses: actions/checkout@v4
+
+      # ── 1. Bygg Vite-app ──────────────────────────────────────────────
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+
+      - name: Install og bygg Vite-app
+        working-directory: app
+        run: |
+          npm ci
+          npm run build
+        # Bygger til app/dist/ → kopieres til dist/app/
+
+      # ── 2. Bygg mdBook (aws-kokebok) ─────────────────────────────────
+      - name: Checkout aws-kokebok
+        uses: actions/checkout@v4
+        with:
+          repository: Bjoentegaard/aws-kokebok
+          path: _kokebok
+
+      - name: Installer mdBook
+        run: |
+          curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.43/mdbook-v0.4.43-x86_64-unknown-linux-gnu.tar.gz \
+            | tar -xz -C /usr/local/bin
+
+      - name: Bygg mdBook
+        working-directory: _kokebok
+        run: mdbook build
+        # Bygger til _kokebok/book/
+
+      # ── 3. Sett sammen dist/ ─────────────────────────────────────────
+      - name: Sett sammen dist-mappen
+        run: |
+          mkdir -p dist
+
+          # Portal (rot)
+          cp index.html dist/
+
+          # Quiz-app
+          cp -r app/dist dist/app
+
+          # Kokebok (mdBook output)
+          cp -r _kokebok/book dist/kokebok
+
+          # Visuelle kursgjennomganger
+          cp -r courses dist/courses
+
+      # ── 4. Deploy ─────────────────────────────────────────────────────
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy til GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -3,13 +3,180 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OBQ</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <title>OBQ – Kunnskapsbase</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --border: #334155;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      padding: 64px 24px 52px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+    header h1 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+    header p { font-size: 1rem; color: var(--muted); max-width: 440px; margin: 0 auto; }
+
+    main { flex: 1; max-width: 900px; margin: 0 auto; padding: 52px 24px; width: 100%; }
+
+    .label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+      margin-bottom: 52px;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 26px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.15s, transform 0.15s;
+      display: block;
+      position: relative;
+      overflow: hidden;
+    }
+    .card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      border-radius: 12px 12px 0 0;
+    }
+    .card.blue::before   { background: #38bdf8; }
+    .card.green::before  { background: #34d399; }
+    .card.purple::before { background: #a78bfa; }
+    .card-icon { font-size: 28px; margin-bottom: 14px; display: block; }
+    .card h2 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+    .card p { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 18px; }
+    .card-tag { font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: 0.5px; }
+    .card-tag::after { content: ' →'; }
+
+    .courses-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .course-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: border-color 0.15s;
+    }
+    .course-card:hover { border-color: var(--accent); }
+    .course-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      background: #0f172a;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .course-card h3 { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+    .course-card span { font-size: 11px; color: var(--muted); }
+
+    footer {
+      text-align: center;
+      padding: 24px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--muted);
+    }
+  </style>
 </head>
 <body>
-<div id="app"></div>
-<script type="module" src="/src/main.ts"></script>
+
+<header>
+  <div class="logo">OBQ</div>
+  <h1>Kunnskapsbase</h1>
+  <p>Notater, quiz og visuelle gjennomganger for sertifiseringer og faglig utvikling.</p>
+</header>
+
+<main>
+  <div class="label">Verktøy</div>
+  <div class="card-grid">
+    <a href="./app/" class="card blue">
+      <span class="card-icon">⚡</span>
+      <h2>Quiz &amp; Flashcards</h2>
+      <p>Interaktiv øving med spørsmål og svar. Følg fremgang og test deg selv.</p>
+      <span class="card-tag">Åpne app</span>
+    </a>
+    <a href="./kokebok/" class="card green">
+      <span class="card-icon">📗</span>
+      <h2>Kokebok</h2>
+      <p>Strukturerte notater fra kurs og sertifiseringer i søkbart mdBook-format.</p>
+      <span class="card-tag">Åpne kokebok</span>
+    </a>
+    <a href="./courses/" class="card purple">
+      <span class="card-icon">🗺️</span>
+      <h2>Visuelle gjennomganger</h2>
+      <p>Interaktive oversikter av syllabus og fagstoff – perfekt for repetisjon.</p>
+      <span class="card-tag">Bla gjennom kurs</span>
+    </a>
+  </div>
+
+  <div class="label">Siste kursgjennomganger</div>
+  <div class="courses-grid">
+    <a href="./courses/istqb/" class="course-card">
+      <div class="course-icon">🔍</div>
+      <div>
+        <h3>ISTQB CTFL v4.0.1</h3>
+        <span>Foundation Level Testing</span>
+      </div>
+    </a>
+    <a href="./kokebok/aws-skillbuilder-cloud-essentials/aws-cloud-practitioner-essentials-notes.html" class="course-card">
+      <div class="course-icon">☁️</div>
+      <div>
+        <h3>AWS Cloud Practitioner</h3>
+        <span>CLF-C02 · Notater</span>
+      </div>
+    </a>
+  </div>
+</main>
+
+<footer>OBQ · Øyvind Bjøntegaard</footer>
 </body>
 </html>

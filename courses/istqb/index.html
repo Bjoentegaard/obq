@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ISTQB CTFL v4.0.1 – Visuell Gjennomgang</title>
+<style>
+  :root {
+    --primary: #1a3a5c;
+    --accent: #0077cc;
+    --accent2: #00a86b;
+    --accent3: #e67e22;
+    --accent4: #8e44ad;
+    --accent5: #c0392b;
+    --accent6: #2980b9;
+    --bg: #f0f4f8;
+    --card: #ffffff;
+    --text: #1a1a2e;
+    --muted: #6b7280;
+    --border: #d1dce8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* === HEADER === */
+  header {
+    background: linear-gradient(135deg, #1a3a5c 0%, #0077cc 100%);
+    color: white;
+    padding: 40px 24px 32px;
+    text-align: center;
+  }
+  header .badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 20px;
+    padding: 4px 16px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 8px; }
+  header p { opacity: 0.85; font-size: 1rem; }
+
+  /* === NAV === */
+  nav {
+    background: white;
+    border-bottom: 2px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 0 16px;
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  nav::-webkit-scrollbar { display: none; }
+  nav button {
+    border: none;
+    background: none;
+    padding: 14px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+  }
+  nav button:hover { color: var(--accent); }
+  nav button.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* === MAIN === */
+  main { max-width: 960px; margin: 0 auto; padding: 32px 16px 60px; }
+
+  /* === SECTIONS === */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* === CHAPTER HEADER === */
+  .chapter-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .chapter-icon {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+  }
+  .chapter-header h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 2px; }
+  .chapter-header .meta { font-size: 13px; color: var(--muted); }
+
+  /* === CARDS === */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+  .card h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card h3 .icon { font-size: 1.1rem; }
+
+  /* === GRID === */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  @media (max-width: 640px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+  /* === TAGS === */
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    background: #e8f0fe;
+    color: #1a56db;
+  }
+  .tag.green { background: #dcfce7; color: #166534; }
+  .tag.orange { background: #ffedd5; color: #9a3412; }
+  .tag.purple { background: #f3e8ff; color: #6b21a8; }
+  .tag.red { background: #fee2e2; color: #991b1b; }
+  .tag.gray { background: #f1f5f9; color: #475569; }
+
+  /* === PRINCIPLES === */
+  .principle {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px;
+    background: var(--bg);
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+  .principle-num {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: var(--primary);
+    color: white;
+    font-weight: 700;
+    font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .principle-body strong { display: block; font-size: 14px; margin-bottom: 2px; }
+  .principle-body span { font-size: 13px; color: var(--muted); }
+
+  /* === FLOW === */
+  .flow {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 12px 0;
+  }
+  .flow-step {
+    background: var(--accent);
+    color: white;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .flow-arrow { color: var(--muted); font-size: 18px; font-weight: bold; }
+
+  /* === TABLE === */
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th { background: var(--primary); color: white; padding: 10px 14px; text-align: left; font-size: 13px; }
+  td { padding: 9px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: #f8fafc; }
+
+  /* === TECHNIQUE BLOCK === */
+  .technique {
+    border-left: 4px solid var(--accent);
+    padding: 12px 16px;
+    background: #f0f7ff;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 12px;
+  }
+  .technique.white-box { border-color: var(--accent2); background: #f0fdf4; }
+  .technique.exp { border-color: var(--accent3); background: #fffbf0; }
+  .technique.collab { border-color: var(--accent4); background: #faf5ff; }
+  .technique strong { display: block; font-size: 14px; margin-bottom: 4px; }
+  .technique p { font-size: 13px; color: #374151; }
+
+  /* === PYRAMID === */
+  .pyramid { text-align: center; margin: 16px 0; }
+  .pyramid-level {
+    margin: 0 auto 4px;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    color: white;
+  }
+
+  /* === OUTCOME GRID === */
+  .outcome-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+  .outcome-item {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+  .outcome-item .bo-code { font-weight: 700; color: var(--accent); font-size: 12px; margin-bottom: 4px; }
+
+  /* === DIVIDER === */
+  .divider { height: 1px; background: var(--border); margin: 20px 0; }
+
+  /* === LIST === */
+  ul.styled { padding-left: 0; list-style: none; }
+  ul.styled li {
+    padding: 7px 0 7px 24px;
+    position: relative;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+  }
+  ul.styled li:last-child { border-bottom: none; }
+  ul.styled li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: bold;
+  }
+
+  /* === RISK MATRIX === */
+  .risk-matrix {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin: 12px 0;
+  }
+  .risk-cell {
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  /* === ACCORDION === */
+  details {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  summary {
+    padding: 14px 18px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    background: white;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    list-style: none;
+    user-select: none;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: '+'; margin-left: auto; font-size: 18px; color: var(--accent); }
+  details[open] summary::after { content: '−'; }
+  details[open] summary { border-bottom: 1px solid var(--border); }
+  .details-body { padding: 16px 18px; background: #fafbfc; font-size: 13.5px; }
+
+  /* === INTRO OVERVIEW === */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 16px 0;
+  }
+  @media(max-width: 640px) { .overview-grid { grid-template-columns: 1fr; } }
+  .overview-card {
+    border-radius: 12px;
+    padding: 18px;
+    color: white;
+    font-size: 13px;
+  }
+  .overview-card .num { font-size: 28px; font-weight: 800; margin-bottom: 4px; }
+  .overview-card .title { font-weight: 700; margin-bottom: 4px; }
+  .overview-card .time { opacity: 0.85; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">ISTQB® Certified Tester</div>
+  <h1>Foundation Level Syllabus v4.0.1</h1>
+  <p>Visuell gjennomgang av alle 6 kapitler · 1135 minutter totalt</p>
+</header>
+
+<nav>
+  <button class="active" onclick="show('intro', this)">🏠 Oversikt</button>
+  <button onclick="show('ch1', this)">1 · Grunnleggende</button>
+  <button onclick="show('ch2', this)">2 · SDLC</button>
+  <button onclick="show('ch3', this)">3 · Statisk testing</button>
+  <button onclick="show('ch4', this)">4 · Analyse & design</button>
+  <button onclick="show('ch5', this)">5 · Test-aktiviteter</button>
+  <button onclick="show('ch6', this)">6 · Testverktøy</button>
+</nav>
+
+<main>
+
+<!-- ===== INTRO ===== -->
+<div id="intro" class="section active">
+  <div class="chapter-header">
+    <div class="chapter-icon" style="background:#1a3a5c;color:white;">📋</div>
+    <div>
+      <h2>Oversikt over syllabus</h2>
+      <div class="meta">ISTQB CTFL v4.0.1 · Utgitt 15. september 2024</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">🎯</span> Hva er ISTQB CTFL?</h3>
+    <p>Foundation Level-sertifiseringen retter seg mot <strong>alle som er involvert i programvaretesting</strong> – testere, utviklere, prosjektledere, produkteiere, QA-ledere og mer. Eksamen består av 40 spørsmål med 60 minutters varighet og krever 65 % riktige (26 av 40).</p>
+    <div class="tags">
+      <span class="tag">K1: Huske</span>
+      <span class="tag green">K2: Forstå</span>
+      <span class="tag orange">K3: Anvende</span>
+    </div>
+  </div>
+
+  <div class="overview-grid">
+    <div class="overview-card" style="background:linear-gradient(135deg,#1a3a5c,#0077cc)">
+      <div class="num">1</div>
+      <div class="title">Grunnleggende testing</div>
+      <div class="time">⏱ 180 min</div>
+    </div>
+    <div class="overview-card" style="background:linear-gradient(135deg,#00a86b,#27ae60)">
+      <div class="num">2</div>
+      <div class="title">Testing gjennom SDLC</div>
+      <div class="time">⏱ 130 min</div>
+    </div>
+    <div class="overview-card" style="background:linear-gradient(135deg,#e67e22,#f39c12)">
+      <div class="num">3</div>
+      <div class="title">Statisk testing</div>
+      <div class="time">⏱ 80 min</div>
+    </div>
+    <div class="overview-card" style="background:linear-gradient(135deg,#8e44ad,#9b59b6)">
+      <div class="num">4</div>
+      <div class="title">Analyse og design</div>
+      <div class="time">⏱ 390 min</div>
+    </div>
+    <div class="overview-card" style="background:linear-gradient(135deg,#c0392b,#e74c3c)">
+      <div class="num">5</div>
+      <div class="title">Styre test-aktiviteter</div>
+      <div class="time">⏱ 335 min</div>
+    </div>
+    <div class="overview-card" style="background:linear-gradient(135deg,#2980b9,#3498db)">
+      <div class="num">6</div>
+      <div class="title">Testverktøy</div>
+      <div class="time">⏱ 20 min</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">💼</span> 14 Business Outcomes (FL-BO)</h3>
+    <div class="outcome-grid">
+      <div class="outcome-item"><div class="bo-code">FL-BO1</div>Forstå hva testing er og hvorfor det er nyttig</div>
+      <div class="outcome-item"><div class="bo-code">FL-BO2</div>Forstå grunnleggende testbegreper</div>
+      <div class="outcome-item"><div class="bo-code">FL-BO3</div>Identifisere testtilnærming basert på kontekst</div>
+      <div class="outcome-item"><div class="bo-code">FL-BO4</div>Vurdere og forbedre dokumentasjonskvalitet</div>
+      <div class="outcome-item"><div class="bo-code">FL-BO5</div>Øke effektivitet og effisiens i testing</div>
+      <div class="outcome-item"><div class="bo-code">FL-BO6</div>Tilpasse testprosessen til SDLC</div>
+      <div class="outcome-item"><div class="bo-code">FL-BO7</div>Forstå testledelsesprinsipper</div>
+      <div class="outcome-item"><div class="bo-code">FL-BO8</div>Skrive klare og forståelige defektrapporter</div>
+      <div class="outcome-item"><div class="bo-code">FL-BO9</div>Forstå faktorer som påvirker testprioriteringer</div>
+      <div class="outcome-item"><div class="bo-code">FL-BO10</div>Arbeide i tverrfunksjonelle team</div>
+      <div class="outcome-item"><div class="bo-code">FL-BO11</div>Kjenne risiko og fordeler ved testautomatisering</div>
+      <div class="outcome-item"><div class="bo-code">FL-BO12</div>Identifisere nødvendige ferdigheter for testing</div>
+      <div class="outcome-item"><div class="bo-code">FL-BO13</div>Forstå risikoens innvirkning på testing</div>
+      <div class="outcome-item"><div class="bo-code">FL-BO14</div>Rapportere testfremdrift og kvalitet effektivt</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CHAPTER 1 ===== -->
+<div id="ch1" class="section">
+  <div class="chapter-header">
+    <div class="chapter-icon" style="background:linear-gradient(135deg,#1a3a5c,#0077cc);color:white;">🔍</div>
+    <div>
+      <h2>Kap. 1: Grunnleggende testing</h2>
+      <div class="meta">180 minutter · Fundamental konsepter, prinsipper og roller</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">❓</span> Hva er testing?</h3>
+    <p>Testing er et sett med aktiviteter for å <strong>oppdage defekter</strong> og evaluere kvaliteten til programvareprodukter. Inkluderer både <em>verifikasjon</em> (møter kravene?) og <em>validering</em> (møter brukernes behov?).</p>
+    <div class="divider"></div>
+    <div class="grid-2">
+      <div>
+        <strong style="font-size:13px;color:var(--accent);">Dynamisk testing</strong>
+        <p style="font-size:13px;margin-top:4px;">Kjører programvaren og sjekker resultater</p>
+      </div>
+      <div>
+        <strong style="font-size:13px;color:var(--accent2);">Statisk testing</strong>
+        <p style="font-size:13px;margin-top:4px;">Gjennomgang av kode/dokumenter uten kjøring</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">🎯</span> Typiske testmål</h3>
+    <ul class="styled">
+      <li>Evaluere arbeidsprodukter (krav, design, kode)</li>
+      <li>Forårsake feil og finne defekter</li>
+      <li>Sikre nødvendig dekning av testobjektet</li>
+      <li>Redusere risikonivået for utilstrekkelig kvalitet</li>
+      <li>Verifisere at krav er oppfylt</li>
+      <li>Gi informasjon til interessenter for beslutninger</li>
+      <li>Bygge tillit til kvaliteten på testobjektet</li>
+      <li>Validere at testobjektet fungerer som forventet</li>
+    </ul>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3><span class="icon">🐛</span> Feil – Defekt – Svikt</h3>
+      <div class="flow" style="flex-direction:column;gap:6px;">
+        <div class="flow-step" style="background:#c0392b;width:100%;text-align:center;">Error (menneskelig feil)</div>
+        <div class="flow-arrow" style="text-align:center;">↓</div>
+        <div class="flow-step" style="background:#e67e22;width:100%;text-align:center;">Defect (feil i kode)</div>
+        <div class="flow-arrow" style="text-align:center;">↓</div>
+        <div class="flow-step" style="background:#8e44ad;width:100%;text-align:center;">Failure (synlig svikt)</div>
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin-top:8px;">Root cause = underliggende årsak til feilen</p>
+    </div>
+    <div class="card">
+      <h3><span class="icon">🔧</span> Testing vs. Debugging</h3>
+      <table>
+        <tr><th>Testing</th><th>Debugging</th></tr>
+        <tr><td>Finner feil/svikt</td><td>Finner årsaken</td></tr>
+        <tr><td>Utføres av testere</td><td>Utføres av utviklere</td></tr>
+        <tr><td>Trigger svikt</td><td>Fikser defekten</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">⚖️</span> 7 Testprinsipper</h3>
+    <div class="principle">
+      <div class="principle-num">1</div>
+      <div class="principle-body"><strong>Testing viser tilstedeværelse av defekter</strong><span>Kan aldri bevise at et system er feilfritt</span></div>
+    </div>
+    <div class="principle">
+      <div class="principle-num">2</div>
+      <div class="principle-body"><strong>Uttømmende testing er umulig</strong><span>Fokuser på risikobaserte prioriteringer</span></div>
+    </div>
+    <div class="principle">
+      <div class="principle-num">3</div>
+      <div class="principle-body"><strong>Tidlig testing sparer tid og penger</strong><span>Defekter funnet tidlig er billigere å fikse</span></div>
+    </div>
+    <div class="principle">
+      <div class="principle-num">4</div>
+      <div class="principle-body"><strong>Defekter klumper seg</strong><span>Fleste defekter finnes i et fåtall moduler (Pareto)</span></div>
+    </div>
+    <div class="principle">
+      <div class="principle-num">5</div>
+      <div class="principle-body"><strong>Testene blir utdaterte (Pesticide Paradox)</strong><span>Variere og oppdatere tester jevnlig</span></div>
+    </div>
+    <div class="principle">
+      <div class="principle-num">6</div>
+      <div class="principle-body"><strong>Testing er kontekstavhengig</strong><span>Tilpass tilnærmingen til prosjektet</span></div>
+    </div>
+    <div class="principle">
+      <div class="principle-num">7</div>
+      <div class="principle-body"><strong>Fravær-av-feil er en illusjon</strong><span>Et feilfritt system er ubrukelig hvis det ikke møter behov</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">🔄</span> Testprosess – Nøkkelaktiviteter</h3>
+    <div class="flow">
+      <div class="flow-step">Testplanlegging</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Testanalyse</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Testdesign</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Implementering</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Utførelse</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Fullføring</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3><span class="icon">👥</span> Roller i testing</h3>
+      <table>
+        <tr><th>Rolle</th><th>Ansvar</th></tr>
+        <tr><td><strong>Testleder</strong></td><td>Planlegger og koordinerer</td></tr>
+        <tr><td><strong>Tester</strong></td><td>Utfører testing, finner defekter</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3><span class="icon">🧩</span> Testware</h3>
+      <ul class="styled">
+        <li>Testplaner</li>
+        <li>Testtilfeller og testskript</li>
+        <li>Testdata</li>
+        <li>Testrapporter</li>
+        <li>Defektrapporter</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">🌟</span> Nøkkelferdigheter og "whole team approach"</h3>
+    <div class="grid-2">
+      <div>
+        <strong style="font-size:13px;">Generelle ferdigheter</strong>
+        <div class="tags" style="margin-top:8px;">
+          <span class="tag">Domenekunnskap</span>
+          <span class="tag green">Analytisk evne</span>
+          <span class="tag orange">Kritisk tenkning</span>
+          <span class="tag purple">Kommunikasjon</span>
+          <span class="tag">Teknisk kunnskap</span>
+        </div>
+      </div>
+      <div>
+        <strong style="font-size:13px;">Whole Team Approach</strong>
+        <p style="font-size:13px;margin-top:8px;color:var(--muted);">Hele teamet er ansvarlig for kvalitet. Fremmer samarbeid mellom testere, utviklere og andre.</p>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <p style="font-size:13px;"><strong>Uavhengig testing:</strong> Fordel: objektivitet. Ulempe: potensielt gap mellom tester og utvikler. Nivåer fra ingen uavhengighet (selvtesting) til ekstern testorganisasjon.</p>
+  </div>
+</div>
+
+<!-- ===== CHAPTER 2 ===== -->
+<div id="ch2" class="section">
+  <div class="chapter-header">
+    <div class="chapter-icon" style="background:linear-gradient(135deg,#00a86b,#27ae60);color:white;">🔄</div>
+    <div>
+      <h2>Kap. 2: Testing gjennom SDLC</h2>
+      <div class="meta">130 minutter · SDLC, testnivåer, testtyper</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">🏗️</span> SDLC-modeller og testpraksis</h3>
+    <div class="grid-2">
+      <div>
+        <strong style="font-size:13px;color:var(--accent);">Sekvensielle modeller (Waterfall)</strong>
+        <p style="font-size:13px;margin-top:4px;">Testing starter sent i prosessen. Dynamisk testing utføres etter koding.</p>
+      </div>
+      <div>
+        <strong style="font-size:13px;color:var(--accent2);">Iterative/inkrementelle (Agile)</strong>
+        <p style="font-size:13px;margin-top:4px;">Testing er integrert i hver iterasjon fra start til slutt.</p>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <p style="font-size:13px;"><strong>God testpraksis uansett SDLC:</strong> For enhver SDLC finnes tilsvarende testaktiviteter. Testing bør starte så tidlig som mulig og ha klare mål per testnivå.</p>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">⬅️</span> Shift Left, DevOps og retrospektiver</h3>
+    <div class="grid-3">
+      <div style="background:var(--bg);border-radius:10px;padding:14px;">
+        <strong style="font-size:13px;color:#c0392b;">Shift Left</strong>
+        <p style="font-size:13px;margin-top:6px;">Start testing tidlig i SDLC. Analyser krav, gjennomgå design. Jo tidligere feil oppdages, jo billigere å fikse.</p>
+      </div>
+      <div style="background:var(--bg);border-radius:10px;padding:14px;">
+        <strong style="font-size:13px;color:var(--accent2);">DevOps</strong>
+        <p style="font-size:13px;margin-top:6px;">Automatisert testing som del av CI/CD-pipeline. Rask feedback. Testere hjelper med oppbygging av automatiserte tester.</p>
+      </div>
+      <div style="background:var(--bg);border-radius:10px;padding:14px;">
+        <strong style="font-size:13px;color:var(--accent);">Retrospektiver</strong>
+        <p style="font-size:13px;margin-top:6px;">Kontinuerlig forbedring av testprosessen etter hver iterasjon. Hva gikk bra? Hva kan forbedres?</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">🏢</span> Testnivåer</h3>
+    <table>
+      <tr><th>Nivå</th><th>Testobjekt</th><th>Typiske testere</th><th>Fokus</th></tr>
+      <tr>
+        <td><strong>Komponenttest</strong><br><span style="font-size:11px;color:var(--muted);">(Unit-test)</span></td>
+        <td>Enkeltkomponenter, klasser</td>
+        <td>Utviklere</td>
+        <td>Funksjonalitet, robusthet</td>
+      </tr>
+      <tr>
+        <td><strong>Komponentintegrasjonstest</strong></td>
+        <td>Grensesnitt mellom komponenter</td>
+        <td>Utviklere</td>
+        <td>Integrasjonspunkter</td>
+      </tr>
+      <tr>
+        <td><strong>Systemtest</strong></td>
+        <td>Hele systemet, end-to-end</td>
+        <td>Testere</td>
+        <td>Funksjonell og ikke-funksjonell</td>
+      </tr>
+      <tr>
+        <td><strong>Systemintegrasjonstest</strong></td>
+        <td>Grensesnitt mot andre systemer</td>
+        <td>Testere</td>
+        <td>Eksterne integrasjoner</td>
+      </tr>
+      <tr>
+        <td><strong>Akseptansetest</strong></td>
+        <td>Hele systemet</td>
+        <td>Kunder, sluttbrukere</td>
+        <td>Forretningsmessige behov, UAT</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">🧪</span> Testtyper</h3>
+    <div class="grid-2">
+      <div class="technique">
+        <strong>Funksjonell testing</strong>
+        <p>Tester hva systemet gjør. Basert på funksjonelle krav og brukerstories.</p>
+      </div>
+      <div class="technique white-box">
+        <strong>Ikke-funksjonell testing</strong>
+        <p>Tester hvordan systemet gjør det: ytelse, sikkerhet, brukervennlighet, pålitelighet.</p>
+      </div>
+      <div class="technique exp">
+        <strong>Black-box testing</strong>
+        <p>Basert på spesifikasjoner. Intern struktur er ukjent for testeren.</p>
+      </div>
+      <div class="technique collab">
+        <strong>White-box testing</strong>
+        <p>Basert på intern struktur. Tester kodedekning og logiske stier.</p>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="grid-2">
+      <div>
+        <strong style="font-size:13px;color:var(--accent2);">Bekreftelsestest (Confirmation Test)</strong>
+        <p style="font-size:13px;margin-top:4px;">Verifiserer at en defekt er fikset etter debugging.</p>
+      </div>
+      <div>
+        <strong style="font-size:13px;color:var(--accent3);">Regresjonstest</strong>
+        <p style="font-size:13px;margin-top:4px;">Sjekker at endringer ikke har introdusert nye defekter i eksisterende funksjonalitet.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">🔧</span> Vedlikeholdstesting</h3>
+    <p style="font-size:14px;">Utløses av endringer i et system som allerede er i produksjon. Typer: <strong>korrektiv</strong> (bugfiks), <strong>adaptiv</strong> (ny plattform/krav), <strong>perfektiv</strong> (ytelse/vedlikeholdsevne). Inkluderer alltid regresjonstesting for å sikre at eksisterende funksjonalitet ikke er påvirket.</p>
+  </div>
+</div>
+
+<!-- ===== CHAPTER 3 ===== -->
+<div id="ch3" class="section">
+  <div class="chapter-header">
+    <div class="chapter-icon" style="background:linear-gradient(135deg,#e67e22,#f39c12);color:white;">📄</div>
+    <div>
+      <h2>Kap. 3: Statisk testing</h2>
+      <div class="meta">80 minutter · Gjennomganger, reviews, statisk analyse</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3><span class="icon">📋</span> Hva er statisk testing?</h3>
+      <p style="font-size:14px;">Testing <strong>uten å kjøre kode</strong>. Inkluderer gjennomgang av arbeidsprodukter (krav, design, kode) og bruk av statiske analyseverktøy.</p>
+      <div class="tags" style="margin-top:12px;">
+        <span class="tag orange">Reviews</span>
+        <span class="tag orange">Walkthroughs</span>
+        <span class="tag orange">Inspeksjoner</span>
+        <span class="tag orange">Statisk analyse</span>
+      </div>
+    </div>
+    <div class="card">
+      <h3><span class="icon">🆚</span> Statisk vs. Dynamisk</h3>
+      <table>
+        <tr><th>Statisk</th><th>Dynamisk</th></tr>
+        <tr><td>Ingen kjøring</td><td>Kjøring av kode</td></tr>
+        <tr><td>Tidlig i SDLC</td><td>Etter implementering</td></tr>
+        <tr><td>Finner defekter direkte</td><td>Finner feil via svikt</td></tr>
+        <tr><td>Krav, design, kode</td><td>Systemet i kjøring</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">💡</span> Verdien av statisk testing</h3>
+    <div class="grid-2">
+      <ul class="styled">
+        <li>Oppdager defekter tidlig og billig</li>
+        <li>Øker kodekvalitet og vedlikeholdsevne</li>
+        <li>Forbedrer teamkommunikasjon</li>
+      </ul>
+      <ul class="styled">
+        <li>Finner defekter ikke-kjørbar kode kan ha</li>
+        <li>Kan avdekke mangler i krav</li>
+        <li>Øker felles forståelse</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">🔄</span> Review-prosessen – steg</h3>
+    <div class="flow">
+      <div class="flow-step" style="background:#e67e22;">Planlegging</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="background:#e67e22;">Gjennomgang</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="background:#e67e22;">Individuell gjennomlesning</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="background:#e67e22;">Møte</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="background:#e67e22;">Retting</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="background:#e67e22;">Oppfølging</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">👥</span> Roller i reviews</h3>
+    <table>
+      <tr><th>Rolle</th><th>Ansvar</th></tr>
+      <tr><td><strong>Forfatter</strong></td><td>Lager arbeidsproduktet, tar imot tilbakemeldinger</td></tr>
+      <tr><td><strong>Fasilitator (Moderator)</strong></td><td>Planlegger og leder møtet, sikrer effektivitet</td></tr>
+      <tr><td><strong>Revisor (Reviewer)</strong></td><td>Gjennomgår produktet, finner defekter</td></tr>
+      <tr><td><strong>Referent (Scribe)</strong></td><td>Dokumenterer funn og beslutninger</td></tr>
+      <tr><td><strong>Leder (Manager)</strong></td><td>Beslutter om review, allokerer ressurser</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">📊</span> Review-typer</h3>
+    <div class="grid-2">
+      <div class="technique exp">
+        <strong>Uformell gjennomgang</strong>
+        <p>Ingen formell prosess. Kan være en kollega som leser koden.</p>
+      </div>
+      <div class="technique">
+        <strong>Walkthrough</strong>
+        <p>Forfatteren leder gjennomgangen. Pedagogisk, ikke streng.</p>
+      </div>
+      <div class="technique white-box">
+        <strong>Teknisk gjennomgang</strong>
+        <p>Fokus på tekniske problemer. Ledes av fasilitator.</p>
+      </div>
+      <div class="technique collab">
+        <strong>Inspeksjon</strong>
+        <p>Mest formell. Prosessen er strengt definert med sjekklister og metrics.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">✅</span> Suksessfaktorer for reviews</h3>
+    <div class="tags">
+      <span class="tag orange">Klare mål</span>
+      <span class="tag orange">Riktige deltakere</span>
+      <span class="tag orange">Tilstrekkelig tid</span>
+      <span class="tag orange">Sjekklister</span>
+      <span class="tag orange">Tidlig tilbakemelding</span>
+      <span class="tag orange">Ledelsesstøtte</span>
+      <span class="tag orange">Kulturen for åpenhet</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CHAPTER 4 ===== -->
+<div id="ch4" class="section">
+  <div class="chapter-header">
+    <div class="chapter-icon" style="background:linear-gradient(135deg,#8e44ad,#9b59b6);color:white;">🧪</div>
+    <div>
+      <h2>Kap. 4: Testanalyse og -design</h2>
+      <div class="meta">390 minutter · Black-box, white-box, erfaringsbasert, samarbeidsteknikker</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">🗂️</span> Oversikt over testteknikker</h3>
+    <div class="grid-3">
+      <div style="background:#eff6ff;border-radius:10px;padding:14px;border:1px solid #bfdbfe;">
+        <div style="font-weight:700;color:#1d4ed8;margin-bottom:6px;">⬛ Black-box</div>
+        <p style="font-size:12px;">Basert på spesifikasjoner. Intern struktur ukjent.</p>
+      </div>
+      <div style="background:#f0fdf4;border-radius:10px;padding:14px;border:1px solid #bbf7d0;">
+        <div style="font-weight:700;color:#166534;margin-bottom:6px;">⬜ White-box</div>
+        <p style="font-size:12px;">Basert på intern struktur og kode.</p>
+      </div>
+      <div style="background:#fff7ed;border-radius:10px;padding:14px;border:1px solid #fed7aa;">
+        <div style="font-weight:700;color:#9a3412;margin-bottom:6px;">🎯 Erfaringsbasert</div>
+        <p style="font-size:12px;">Basert på testerens erfaring og kunnskap.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">⬛</span> Black-box teknikker</h3>
+
+    <details>
+      <summary>🔣 Ekvivalenspartisjonering (EP)</summary>
+      <div class="details-body">
+        <p>Del inndata i grupper (partisjoner) der systemet forventes å oppføre seg likt. Test én verdi fra hver partisjon – en test er representativ for alle i gruppen.</p>
+        <br>
+        <p><strong>Eksempel:</strong> Alder 1–17 = barn, 18–64 = voksen, 65+ = senior. Test én fra hver gruppe.</p>
+        <div class="tags" style="margin-top:8px;"><span class="tag purple">K2</span></div>
+      </div>
+    </details>
+
+    <details>
+      <summary>📏 Grenseverdianalyse (BVA)</summary>
+      <div class="details-body">
+        <p>Test på grensene mellom partisjoner. Defekter oppstår ofte akkurat ved grensene.</p>
+        <br>
+        <p><strong>2-verdi BVA:</strong> Test min og max av gyldig partisjon (+ én utenfor).</p>
+        <p><strong>3-verdi BVA:</strong> Test verdien rett under, på og rett over grensen.</p>
+        <div class="tags" style="margin-top:8px;"><span class="tag purple">K3</span></div>
+      </div>
+    </details>
+
+    <details>
+      <summary>📊 Beslutningstabell-testing</summary>
+      <div class="details-body">
+        <p>Brukes når systemets oppførsel avhenger av kombinasjoner av betingelser. Tabellen viser alle kombinasjoner av betingelser og tilhørende handlinger.</p>
+        <br>
+        <table>
+          <tr><th>Betingelse 1</th><th>Betingelse 2</th><th>Handling</th></tr>
+          <tr><td>Sann</td><td>Sann</td><td>Handling A</td></tr>
+          <tr><td>Sann</td><td>Usann</td><td>Handling B</td></tr>
+          <tr><td>Usann</td><td>Sann</td><td>Handling C</td></tr>
+          <tr><td>Usann</td><td>Usann</td><td>Ingen handling</td></tr>
+        </table>
+        <div class="tags" style="margin-top:8px;"><span class="tag purple">K3</span></div>
+      </div>
+    </details>
+
+    <details>
+      <summary>🔀 Tilstandsovergangstesting</summary>
+      <div class="details-body">
+        <p>Modellerer systemet som en tilstandsmaskin. Tester alle tilstander, overganger, triggere og handlinger.</p>
+        <br>
+        <p><strong>Elementer:</strong> Tilstander → Overganger → Triggere → Handlinger</p>
+        <p style="margin-top:8px;"><strong>Dekningstyper:</strong> Alle tilstander, alle overganger, alle gyldige/ugyldige overganger.</p>
+        <div class="tags" style="margin-top:8px;"><span class="tag purple">K3</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">⬜</span> White-box teknikker</h3>
+
+    <details>
+      <summary>📝 Setningsdekning (Statement Coverage)</summary>
+      <div class="details-body">
+        <p>Mål: kjøre alle kjørbare setninger i koden minst én gang.</p>
+        <p style="margin-top:8px;"><strong>Dekning %</strong> = (antall kjørte setninger / totalt antall setninger) × 100</p>
+        <p style="margin-top:8px;">100 % setningsdekning er nødvendig men ikke tilstrekkelig for full dekning.</p>
+        <div class="tags" style="margin-top:8px;"><span class="tag green">K2</span></div>
+      </div>
+    </details>
+
+    <details>
+      <summary>🌿 Grenedekning (Branch Coverage)</summary>
+      <div class="details-body">
+        <p>Mål: kjøre alle grener i koden (sant og usant for hver betingelse).</p>
+        <p style="margin-top:8px;">100 % grenedekning ⊃ 100 % setningsdekning. Sterkere enn setningsdekning.</p>
+        <p style="margin-top:8px;"><strong>Eksempel:</strong> En IF-setning har én sann-gren og én usann-gren. Begge må testes.</p>
+        <div class="tags" style="margin-top:8px;"><span class="tag green">K2</span></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">🎯</span> Erfaringsbaserte teknikker</h3>
+    <div class="technique exp">
+      <strong>Feilgjetting (Error Guessing)</strong>
+      <p>Bruk kunnskap om typiske feil, tidligere defekter og erfaring til å designe tester. Lag en "feil-liste" og test mot disse.</p>
+    </div>
+    <div class="technique exp">
+      <strong>Eksplorativ testing</strong>
+      <p>Simultant design, utføring og evaluering av tester. Timeboxed sessions med charter som definerer fokusområde. Fleksibel og læringsorientert.</p>
+    </div>
+    <div class="technique exp">
+      <strong>Sjekkliste-basert testing</strong>
+      <p>Tester basert på en sjekkliste av erfaring eller standarder. Gir bredde men kan bli utdatert.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">🤝</span> Samarbeidsbaserte testteknikker</h3>
+    <div class="grid-3">
+      <div style="background:#faf5ff;border-radius:10px;padding:14px;border:1px solid #e9d5ff;">
+        <strong style="font-size:13px;color:#6b21a8;">Collaborative User Story Writing</strong>
+        <p style="font-size:12px;margin-top:6px;">3 Cs: Card, Conversation, Confirmation. Alle bidrar til å skrive brukerstories.</p>
+      </div>
+      <div style="background:#faf5ff;border-radius:10px;padding:14px;border:1px solid #e9d5ff;">
+        <strong style="font-size:13px;color:#6b21a8;">Akseptansekriterier</strong>
+        <p style="font-size:12px;margin-top:6px;">Definerer hva som må oppfylles for at en story er ferdig. Given/When/Then-format (Gherkin).</p>
+      </div>
+      <div style="background:#faf5ff;border-radius:10px;padding:14px;border:1px solid #e9d5ff;">
+        <strong style="font-size:13px;color:#6b21a8;">ATDD</strong>
+        <p style="font-size:12px;margin-top:6px;">Acceptance Test-Driven Development. Testene skrives FØR koden basert på akseptansekriterier.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CHAPTER 5 ===== -->
+<div id="ch5" class="section">
+  <div class="chapter-header">
+    <div class="chapter-icon" style="background:linear-gradient(135deg,#c0392b,#e74c3c);color:white;">📊</div>
+    <div>
+      <h2>Kap. 5: Styre test-aktiviteter</h2>
+      <div class="meta">335 minutter · Planlegging, risiko, overvåking, rapportering, defekter</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">📋</span> Testplanlegging</h3>
+    <div class="grid-2">
+      <div>
+        <strong style="font-size:13px;">Innhold i testplanen</strong>
+        <ul class="styled" style="margin-top:8px;">
+          <li>Testomfang og mål</li>
+          <li>Testtilnærming og teknikker</li>
+          <li>Ressurser og tidsplan</li>
+          <li>Entry/exit-kriterier</li>
+          <li>Risikovurdering</li>
+          <li>Avhengigheter og forutsetninger</li>
+        </ul>
+      </div>
+      <div>
+        <strong style="font-size:13px;">Estimeringsteknikker</strong>
+        <ul class="styled" style="margin-top:8px;">
+          <li>Metrikk-basert (historiske data)</li>
+          <li>Ekspertbasert (faglig skjønn)</li>
+          <li>Planning Poker</li>
+          <li>Analogibasert</li>
+        </ul>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="grid-2">
+      <div style="background:#dcfce7;border-radius:8px;padding:12px;">
+        <strong style="font-size:13px;color:#166534;">Entry-kriterier (Definition of Ready)</strong>
+        <p style="font-size:12px;margin-top:4px;">Hva må være på plass FØR testing starter? F.eks: krav godkjent, testmiljø tilgjengelig.</p>
+      </div>
+      <div style="background:#fee2e2;border-radius:8px;padding:12px;">
+        <strong style="font-size:13px;color:#991b1b;">Exit-kriterier (Definition of Done)</strong>
+        <p style="font-size:12px;margin-top:4px;">Når er testing ferdig? F.eks: alle testtilfeller kjørt, akseptabel defekttetthet.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">🔺</span> Testpyramiden og testkvadrantene</h3>
+    <div class="grid-2">
+      <div>
+        <div class="pyramid">
+          <div class="pyramid-level" style="background:#c0392b;width:60%;">E2E / Akseptanse</div>
+          <div class="pyramid-level" style="background:#e67e22;width:80%;">Integrasjonstester</div>
+          <div class="pyramid-level" style="background:#00a86b;width:100%;">Unit-tester (mange, raske)</div>
+        </div>
+        <p style="font-size:12px;color:var(--muted);text-align:center;margin-top:8px;">Bunn = mange + billige, Topp = færre + dyre</p>
+      </div>
+      <div>
+        <strong style="font-size:13px;">Testkvadrantene (Brian Marick)</strong>
+        <table style="margin-top:8px;font-size:12px;">
+          <tr><th>Q1</th><td>Unit/komponent, automatisert (teknologi-fokus)</td></tr>
+          <tr><th>Q2</th><td>Funksjonell, stories, akseptanse</td></tr>
+          <tr><th>Q3</th><td>Utforskende, brukervennlighet, akseptanse</td></tr>
+          <tr><th>Q4</th><td>Ytelse, sikkerhet, belastning</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">⚠️</span> Risikostyring</h3>
+    <div class="grid-2">
+      <div>
+        <strong style="font-size:13px;">Risiko = Sannsynlighet × Konsekvens</strong>
+        <div class="risk-matrix" style="margin-top:10px;">
+          <div class="risk-cell" style="background:#fee2e2;color:#991b1b;">Høy sannsynlighet<br>Høy konsekvens<br><strong>KRITISK</strong></div>
+          <div class="risk-cell" style="background:#ffedd5;color:#9a3412;">Lav sannsynlighet<br>Høy konsekvens<br><strong>HØY</strong></div>
+          <div class="risk-cell" style="background:#fefce8;color:#713f12;">Høy sannsynlighet<br>Lav konsekvens<br><strong>MEDIUM</strong></div>
+          <div class="risk-cell" style="background:#f0fdf4;color:#166534;">Lav sannsynlighet<br>Lav konsekvens<br><strong>LAV</strong></div>
+        </div>
+      </div>
+      <div>
+        <strong style="font-size:13px;">Risikotyper</strong>
+        <ul class="styled" style="margin-top:8px;">
+          <li><strong>Produktrisiko:</strong> Feil i systemet som kan skade brukere</li>
+          <li><strong>Prosjektrisiko:</strong> Faktorer som påvirker prosjektleveransen</li>
+        </ul>
+        <div class="divider"></div>
+        <strong style="font-size:13px;">Risikokontroll</strong>
+        <ul class="styled" style="margin-top:8px;">
+          <li>Risikomitigering via mer testing</li>
+          <li>Risikoaksept (bevisst)</li>
+          <li>Risikooverføring</li>
+          <li>Risikounngåelse</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">📈</span> Testovervåking og -rapportering</h3>
+    <div class="grid-2">
+      <div>
+        <strong style="font-size:13px;">Nøkkelmetrikker</strong>
+        <ul class="styled" style="margin-top:8px;">
+          <li>Testtilfeller planlagt/utført/bestått</li>
+          <li>Defekttetthet og -status</li>
+          <li>Kodedekning (%)</li>
+          <li>Kost og tid brukt</li>
+          <li>Risikonivå gjenværende</li>
+        </ul>
+      </div>
+      <div>
+        <strong style="font-size:13px;">Rapporttyper</strong>
+        <ul class="styled" style="margin-top:8px;">
+          <li>Testfremdriftsrapport (løpende)</li>
+          <li>Testsluttrapport (etter test)</li>
+          <li>Dashboard (live status)</li>
+        </ul>
+        <p style="font-size:12px;color:var(--muted);margin-top:8px;">Tilpass rapporter til målgruppen: ledelse vil ha sammendrag, teknisk team vil ha detaljer.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">🐞</span> Defekthåndtering</h3>
+    <div class="flow">
+      <div class="flow-step" style="background:#c0392b;">Oppdaget</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="background:#e67e22;">Rapportert</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="background:#f39c12;">Tildelt</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="background:#8e44ad;">Under utbedring</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="background:#00a86b;">Bekreftet løst</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="background:#1a3a5c;">Lukket</div>
+    </div>
+    <div class="divider"></div>
+    <p style="font-size:13px;"><strong>God defektrapport inneholder:</strong> Unik ID, tittel, dato, reporter, miljø, alvorlighetsgrad, prioritet, reproduksjonssteg, forventet vs. faktisk resultat, vedlegg (skjermbilder/logger).</p>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">⚙️</span> Konfigurasjonsstyring</h3>
+    <p style="font-size:14px;">Sikrer at testware og testobjekter er korrekt identifisert, versjonert og sporbare. Muliggjør reproduksjon av tester. Testplaner, testtilfeller og testdata bør versjonskontrolleres.</p>
+  </div>
+</div>
+
+<!-- ===== CHAPTER 6 ===== -->
+<div id="ch6" class="section">
+  <div class="chapter-header">
+    <div class="chapter-icon" style="background:linear-gradient(135deg,#2980b9,#3498db);color:white;">🔧</div>
+    <div>
+      <h2>Kap. 6: Testverktøy</h2>
+      <div class="meta">20 minutter · Verktøystøtte og testautomatisering</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">🛠️</span> Kategorier av testverktøy</h3>
+    <table>
+      <tr><th>Kategori</th><th>Eksempler</th><th>Formål</th></tr>
+      <tr><td>Testadministrasjon</td><td>Jira, TestRail, Xray</td><td>Planlegging, sporing, rapportering</td></tr>
+      <tr><td>Statisk analyse</td><td>SonarQube, ESLint</td><td>Kodegjennomgang uten kjøring</td></tr>
+      <tr><td>Testdesign</td><td>Mind-maps, BDD-verktøy</td><td>Generere testtilfeller</td></tr>
+      <tr><td>CI/CD og bygging</td><td>Jenkins, GitHub Actions</td><td>Automatisk bygging og testkjøring</td></tr>
+      <tr><td>Funksjonell automatisering</td><td>Selenium, Playwright, Cypress</td><td>Automatisk UI-testing</td></tr>
+      <tr><td>Ytelsestesting</td><td>JMeter, k6, Gatling</td><td>Belastning og ytelse</td></tr>
+      <tr><td>Defekthåndtering</td><td>Jira, Azure DevOps</td><td>Rapportere og spore defekter</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">🤖</span> Fordeler og risikoer ved testautomatisering</h3>
+    <div class="grid-2">
+      <div>
+        <strong style="font-size:13px;color:var(--accent2);">✅ Fordeler</strong>
+        <ul class="styled" style="margin-top:8px;">
+          <li>Reduserer repetitivt manuelt arbeid</li>
+          <li>Raskere tilbakemelding (CI/CD)</li>
+          <li>Økt konsistens og reproduserbarhet</li>
+          <li>Mer tid til utforskende testing</li>
+          <li>Muliggjør hyppige regresjonstester</li>
+        </ul>
+      </div>
+      <div>
+        <strong style="font-size:13px;color:#c0392b;">⚠️ Risikoer</strong>
+        <ul class="styled" style="margin-top:8px;">
+          <li>Høye oppsettskostnader</li>
+          <li>Krever spesialistkompetanse</li>
+          <li>Vedlikehold av testskript</li>
+          <li>Falsk trygghet ("vi har automatisert")</li>
+          <li>Automatiserte tester finner ikke alt</li>
+        </ul>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div style="background:#fffbf0;border-radius:8px;padding:14px;border:1px solid #fde68a;">
+      <strong style="font-size:13px;">💡 Viktig å huske</strong>
+      <p style="font-size:13px;margin-top:6px;">Testautomatisering er IKKE et mål i seg selv. Det er et hjelpemiddel. Manuelle tester er fortsatt nødvendige, spesielt for brukervennlighet og eksplorativ testing.</p>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+</script>
+
+</body>
+</html>
