@@ -26,13 +26,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
-          cache-dependency-path: '**/package-lock.json'
 
       - name: Install og bygg Vite-app
         working-directory: app
         run: |
-          npm ci
+          npm install
           npm run build
         # Bygger til app/dist/ → kopieres til dist/app/
 
