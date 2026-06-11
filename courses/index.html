@@ -4,20 +4,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kursgjennomganger – OBQ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #0f172a;
-      --surface: #1e293b;
-      --border: #334155;
-      --text: #f1f5f9;
-      --muted: #94a3b8;
-      --accent: #a78bfa;
+      --bg:     #0c0e14;
+      --bg2:    #13161f;
+      --bg3:    #1a1e2a;
+      --border: rgba(255,255,255,0.07);
+      --text:   #e8eaf0;
+      --muted:  #7a8299;
+      --accent: #4f8ef7;
     }
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-family: 'IBM Plex Sans', system-ui, sans-serif;
       min-height: 100vh;
     }
     header {
@@ -28,20 +32,22 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      font-family: 'IBM Plex Mono', monospace;
       font-size: 12px;
       color: var(--muted);
       text-decoration: none;
       margin-bottom: 20px;
     }
     .back:hover { color: var(--text); }
-    header h1 { font-size: 1.6rem; font-weight: 800; margin-bottom: 6px; }
+    header h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.5px; }
     header p { font-size: 14px; color: var(--muted); }
 
     main { max-width: 860px; margin: 0 auto; padding: 40px 24px; }
 
     .label {
+      font-family: 'IBM Plex Mono', monospace;
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 500;
       letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--muted);
@@ -55,7 +61,7 @@
     }
 
     .course {
-      background: var(--surface);
+      background: var(--bg2);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 22px;
@@ -88,7 +94,7 @@
       font-weight: 600;
       padding: 2px 8px;
       border-radius: 10px;
-      background: #0f172a;
+      background: var(--bg3);
       color: var(--muted);
       border: 1px solid var(--border);
     }

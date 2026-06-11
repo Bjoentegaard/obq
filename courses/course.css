@@ -1,0 +1,405 @@
+/*
+ * OBQ – Shared Course Stylesheet
+ * Link to this from every course: <link rel="stylesheet" href="../course.css">
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Design system matches the OBQ quiz app:
+ *   bg #0c0e14 · surface #13161f · deep #1a1e2a
+ *   accent #4f8ef7 · green #3ecf8e · amber #f5a623 · red #f76f6f · purple #c084fc
+ *   font: IBM Plex Sans + IBM Plex Mono
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+
+/* ── Reset ──────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Tokens ─────────────────────────────────────────────────────────────── */
+:root {
+  --bg:      #0c0e14;
+  --bg2:     #13161f;
+  --bg3:     #1a1e2a;
+  --bg4:     #222636;
+  --border:  rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.13);
+  --text:    #e2e4ed;
+  --muted:   #7e849a;
+  --dim:     #454b60;
+  --accent:  #4f8ef7;
+  --green:   #3ecf8e;
+  --amber:   #f5a623;
+  --red:     #f76f6f;
+  --purple:  #c084fc;
+  --r:   10px;
+  --r2:  14px;
+  --font: 'IBM Plex Sans', system-ui, sans-serif;
+  --mono: 'IBM Plex Mono', monospace;
+}
+
+/* ── Base ───────────────────────────────────────────────────────────────── */
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* ── Topbar ─────────────────────────────────────────────────────────────── */
+.topbar {
+  border-bottom: 1px solid var(--border);
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  height: 52px;
+  gap: 1rem;
+  position: sticky;
+  top: 0;
+  background: rgba(12,14,20,0.94);
+  backdrop-filter: blur(12px);
+  z-index: 100;
+}
+.topbar-back {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: color .15s;
+  flex-shrink: 0;
+}
+.topbar-back:hover { color: var(--text); }
+.topbar-sep { color: var(--dim); font-family: var(--mono); font-size: 14px; }
+.topbar-title {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.topbar-title span { color: var(--accent); }
+
+/* ── Tab nav ────────────────────────────────────────────────────────────── */
+.tabs {
+  display: flex;
+  height: 100%;
+  margin-left: auto;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.tabs::-webkit-scrollbar { display: none; }
+.tab-btn {
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 0 14px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color .15s, border-color .15s;
+  height: 100%;
+  white-space: nowrap;
+}
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active { color: var(--text); border-bottom-color: var(--accent); }
+
+/* ── Page header ────────────────────────────────────────────────────────── */
+.course-header {
+  padding: 40px 1.5rem 32px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg2);
+}
+.course-badge {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(79,142,247,0.1);
+  border: 1px solid rgba(79,142,247,0.2);
+  border-radius: 20px;
+  padding: 3px 12px;
+  margin-bottom: 12px;
+}
+.course-title { font-size: 1.75rem; font-weight: 700; margin-bottom: 6px; }
+.course-desc  { font-size: 14px; color: var(--muted); }
+
+/* ── Main content ───────────────────────────────────────────────────────── */
+main { max-width: 920px; margin: 0 auto; padding: 32px 1.5rem 80px; }
+.section { display: none; }
+.section.active { display: block; }
+
+/* ── Chapter / section header ───────────────────────────────────────────── */
+.ch-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.ch-icon {
+  width: 48px; height: 48px;
+  border-radius: var(--r2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+.ch-header h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 2px; }
+.ch-header .ch-meta { font-size: 12px; color: var(--muted); font-family: var(--mono); }
+
+/* ── Label (section title above content) ────────────────────────────────── */
+.label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 10px;
+  margin-top: 4px;
+}
+
+/* ── Card ───────────────────────────────────────────────────────────────── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--r2);
+  padding: 20px 22px;
+  margin-bottom: 14px;
+}
+.card h3 {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── Grid helpers ───────────────────────────────────────────────────────── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+@media (max-width: 600px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+/* ── Inset block (colored bg inside card) ───────────────────────────────── */
+.inset {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 14px 16px;
+}
+.inset h4 { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+
+/* ── Numbered principle ─────────────────────────────────────────────────── */
+.principle {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  margin-bottom: 8px;
+}
+.principle-num {
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  background: rgba(79,142,247,0.12);
+  border: 1px solid rgba(79,142,247,0.2);
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 13px;
+  font-family: var(--mono);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.principle-body strong { display: block; font-size: 14px; margin-bottom: 2px; }
+.principle-body span   { font-size: 13px; color: var(--muted); }
+
+/* ── Flow / step chain ──────────────────────────────────────────────────── */
+.flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+.flow-step {
+  background: var(--accent);
+  color: white;
+  border-radius: 8px;
+  padding: 5px 13px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.flow-step.green  { background: var(--green); color: #0c1a12; }
+.flow-step.amber  { background: var(--amber); color: #1a1000; }
+.flow-step.red    { background: var(--red);   color: #1a0000; }
+.flow-step.purple { background: var(--purple); }
+.flow-arrow { color: var(--dim); font-size: 16px; font-weight: bold; }
+
+/* ── Table ──────────────────────────────────────────────────────────────── */
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th {
+  background: var(--bg3);
+  color: var(--dim);
+  padding: 9px 13px;
+  text-align: left;
+  font-size: 10px;
+  font-family: var(--mono);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+td { padding: 9px 13px; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--text); }
+tr:last-child td { border-bottom: none; }
+tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+/* ── Accordion ──────────────────────────────────────────────────────────── */
+details { border: 1px solid var(--border); border-radius: var(--r); margin-bottom: 8px; overflow: hidden; }
+summary {
+  padding: 13px 16px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  background: var(--bg2);
+  color: var(--text);
+  list-style: none;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+summary::-webkit-details-marker { display: none; }
+summary::after { content: '+'; margin-left: auto; font-size: 18px; color: var(--accent); font-family: var(--mono); }
+details[open] summary::after { content: '−'; }
+details[open] summary { border-bottom: 1px solid var(--border); }
+.details-body { padding: 16px; background: var(--bg3); font-size: 13.5px; color: var(--muted); line-height: 1.65; }
+
+/* ── Tags / pills ───────────────────────────────────────────────────────── */
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.tag {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: var(--mono);
+  background: rgba(79,142,247,0.1);
+  color: var(--accent);
+  border: 1px solid rgba(79,142,247,0.18);
+}
+.tag.green  { background: rgba(62,207,142,0.1);  color: var(--green);  border-color: rgba(62,207,142,0.2); }
+.tag.amber  { background: rgba(245,166,35,0.1);  color: var(--amber);  border-color: rgba(245,166,35,0.2); }
+.tag.red    { background: rgba(247,111,111,0.1); color: var(--red);    border-color: rgba(247,111,111,0.2); }
+.tag.purple { background: rgba(192,132,252,0.1); color: var(--purple); border-color: rgba(192,132,252,0.2); }
+.tag.gray   { background: rgba(255,255,255,0.05); color: var(--muted); border-color: var(--border); }
+
+/* ── List ───────────────────────────────────────────────────────────────── */
+ul.plain { list-style: none; padding: 0; }
+ul.plain li {
+  padding: 7px 0 7px 22px;
+  position: relative;
+  border-bottom: 1px solid var(--border);
+  font-size: 13.5px;
+  color: var(--muted);
+}
+ul.plain li:last-child { border-bottom: none; }
+ul.plain li::before { content: '→'; position: absolute; left: 0; color: var(--accent); }
+
+/* ── Divider ────────────────────────────────────────────────────────────── */
+hr.divider { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
+
+/* ── Exam tip ───────────────────────────────────────────────────────────── */
+.tip {
+  background: rgba(245,166,35,0.07);
+  border: 1px solid rgba(245,166,35,0.2);
+  border-radius: var(--r);
+  padding: 12px 14px;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-top: 10px;
+}
+.tip strong { color: var(--amber); }
+
+/* ── Clickable card grid (for interactive overviews) ────────────────────── */
+.click-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.click-card {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: var(--r);
+  padding: 14px;
+  cursor: pointer;
+  transition: border-color .15s, background .15s;
+}
+.click-card:hover, .click-card.active {
+  border-color: var(--accent);
+  background: var(--bg3);
+}
+
+/* ── Detail panel (appears after clicking a click-card) ─────────────────── */
+.detail-panel {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: var(--r);
+  padding: 18px 20px;
+  margin-bottom: 16px;
+  min-height: 56px;
+}
+.detail-panel .placeholder { font-size: 13px; color: var(--dim); }
+.dp-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+.dp-body  { font-size: 13.5px; color: var(--muted); line-height: 1.65; margin-bottom: 10px; }
+.dp-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--dim);
+  margin-bottom: 6px;
+}
+.pill-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.pill {
+  font-size: 11px; font-weight: 600;
+  padding: 3px 10px; border-radius: 20px;
+  background: rgba(79,142,247,0.1);
+  color: var(--accent);
+  border: 1px solid rgba(79,142,247,0.2);
+}
+.pill.green { background: rgba(62,207,142,0.1); color: var(--green); border-color: rgba(62,207,142,0.25); }
+
+/* ── Overview card grid (chapter/module overview) ───────────────────────── */
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 14px 0;
+}
+@media (max-width: 580px) { .overview-grid { grid-template-columns: 1fr 1fr; } }
+.overview-card {
+  border-radius: var(--r2);
+  padding: 18px;
+  color: white;
+  font-size: 13px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.overview-card .ov-num   { font-size: 26px; font-weight: 800; font-family: var(--mono); margin-bottom: 4px; }
+.overview-card .ov-title { font-weight: 700; margin-bottom: 4px; font-size: 13px; }
+.overview-card .ov-time  { opacity: 0.7; font-size: 11px; font-family: var(--mono); }
+
+/* ── Risk / info blocks ─────────────────────────────────────────────────── */
+.info-block {
+  border-radius: var(--r);
+  padding: 13px 15px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.info-block.green  { background: rgba(62,207,142,0.08);  border: 1px solid rgba(62,207,142,0.2); }
+.info-block.red    { background: rgba(247,111,111,0.08); border: 1px solid rgba(247,111,111,0.2); }
+.info-block.accent { background: rgba(79,142,247,0.08);  border: 1px solid rgba(79,142,247,0.2); }
+.info-block.amber  { background: rgba(245,166,35,0.08);  border: 1px solid rgba(245,166,35,0.2); }
+.info-block h4 { font-size: 12px; font-weight: 700; margin-bottom: 4px; }
+.info-block.green  h4 { color: var(--green); }
+.info-block.red    h4 { color: var(--red); }
+.info-block.accent h4 { color: var(--accent); }
+.info-block.amber  h4 { color: var(--amber); }

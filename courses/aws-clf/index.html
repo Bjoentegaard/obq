@@ -4,179 +4,51 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AWS CLF-C02 Konsepter – OBQ</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../course.css">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --bg:      #0c0e14;
-      --bg2:     #13161f;
-      --bg3:     #1a1e2a;
-      --bg4:     #222636;
-      --border:  rgba(255,255,255,0.07);
-      --border2: rgba(255,255,255,0.13);
-      --text:    #e2e4ed;
-      --text2:   #7e849a;
-      --text3:   #454b60;
-      --accent:  #4f8ef7;
-      --green:   #3ecf8e;
-      --red:     #f76f6f;
-      --amber:   #f5a623;
-      --r: 10px;
-      --font: 'IBM Plex Sans', sans-serif;
-      --mono: 'IBM Plex Mono', monospace;
-    }
-    body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; }
-
-    /* === TOPBAR === */
-    .topbar {
-      border-bottom: 1px solid var(--border);
-      padding: 0 2rem;
-      display: flex; align-items: center;
-      height: 52px;
-      position: sticky; top: 0;
-      background: rgba(12,14,20,0.94);
-      backdrop-filter: blur(10px);
-      z-index: 100;
-      gap: 1rem;
-    }
-    .back {
-      font-family: var(--mono); font-size: 11px; color: var(--text2);
-      text-decoration: none; display: flex; align-items: center; gap: 6px;
-      transition: color .15s;
-    }
-    .back:hover { color: var(--text); }
-    .topbar-title { font-family: var(--mono); font-size: 12px; color: var(--text2); }
-    .topbar-title span { color: var(--accent); }
-
-    .tabs {
-      display: flex; height: 100%; margin-left: auto; margin-right: auto;
-    }
-    .tab-btn {
-      font-family: var(--font); font-size: 13px; font-weight: 500;
-      padding: 0 16px; background: transparent; border: none;
-      border-bottom: 2px solid transparent; color: var(--text2);
-      cursor: pointer; transition: color .15s, border-color .15s;
-      height: 100%;
-    }
-    .tab-btn:hover { color: var(--text); }
-    .tab-btn.active { color: var(--text); border-bottom-color: var(--accent); }
-
-    /* === CONTENT === */
-    .page-inner { padding: 2rem 1.5rem; max-width: 760px; margin: 0 auto; }
-    .section { display: none; }
-    .section.active { display: block; }
-
-    .section-head {
-      font-family: var(--mono); font-size: 11px; letter-spacing: .08em;
-      text-transform: uppercase; color: var(--text3); margin-bottom: .6rem;
-    }
-
-    /* === WAF GRID === */
-    .waf-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
-      margin-bottom: 1rem;
-    }
+    /* AWS CLF-spesifikk CSS */
+    .waf-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 12px; }
     @media(max-width:560px) { .waf-grid { grid-template-columns: 1fr 1fr; } }
-
-    .waf-card {
-      border: 1px solid var(--border2); border-radius: var(--r);
-      padding: 16px 14px; cursor: pointer;
-      transition: border-color .15s, background .15s;
-      background: var(--bg2);
-    }
+    .waf-card { border: 1px solid var(--border2); border-radius: var(--r); padding: 16px 14px; cursor: pointer; transition: border-color .15s, background .15s; background: var(--bg2); }
     .waf-card:hover, .waf-card.active { border-color: var(--accent); background: var(--bg3); }
     .wc-icon { font-size: 22px; margin-bottom: 8px; }
     .wc-name { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
-    .wc-eng  { font-size: 11px; color: var(--text2); font-family: var(--mono); }
-
-    /* === DETAIL PANEL === */
-    .detail-panel {
-      background: var(--bg2); border: 1px solid var(--border2);
-      border-radius: var(--r); padding: 18px 20px; margin-bottom: 1.5rem;
-      min-height: 60px;
-    }
-    .placeholder { font-size: 13px; color: var(--text3); }
-    .dp-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
-    .dp-body  { font-size: 13.5px; color: var(--text2); line-height: 1.65; margin-bottom: 12px; }
-    .dp-label { font-family: var(--mono); font-size: 10px; text-transform: uppercase;
-                letter-spacing: .08em; color: var(--text3); margin-bottom: 6px; }
-
-    .pill-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
-    .pill {
-      font-size: 11px; font-weight: 600; padding: 3px 10px;
-      border-radius: 20px; border: 1px solid var(--border2);
-      background: var(--bg3); color: var(--text2);
-    }
-    .pill.p-accent { color: var(--accent); border-color: rgba(79,142,247,.3); background: rgba(79,142,247,.08); }
-    .pill.p-green  { color: var(--green); border-color: rgba(62,207,142,.3); background: rgba(62,207,142,.08); }
-
-    .exam-tip {
-      background: rgba(245,166,35,.08); border: 1px solid rgba(245,166,35,.2);
-      border-radius: var(--r); padding: 12px 14px;
-      font-size: 13px; color: var(--text2); line-height: 1.6;
-    }
-    .exam-tip strong { color: var(--amber); }
-
-    /* === PRICE GRID === */
-    .price-grid {
-      display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
-      margin-bottom: 1rem;
-    }
+    .wc-eng  { font-size: 11px; color: var(--muted); font-family: var(--mono); }
+    .price-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; margin-bottom: 12px; }
     @media(max-width:480px) { .price-grid { grid-template-columns: 1fr; } }
-
-    .price-card {
-      background: var(--bg2); border: 1px solid var(--border2);
-      border-radius: var(--r); padding: 16px; cursor: pointer;
-      transition: border-color .15s;
-    }
+    .price-card { background: var(--bg2); border: 1px solid var(--border2); border-radius: var(--r); padding: 16px; cursor: pointer; transition: border-color .15s; }
     .price-card:hover, .price-card.active { border-color: var(--accent); background: var(--bg3); }
     .pc-title { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
-    .pc-sub   { font-size: 11px; color: var(--text2); margin-bottom: 8px; }
-    .pc-badge {
-      display: inline-block; font-family: var(--mono); font-size: 10px; font-weight: 600;
-      padding: 2px 8px; border-radius: 20px; margin-bottom: 10px;
-    }
-    .badge-flex  { background: rgba(79,142,247,.12); color: var(--accent); }
-    .badge-save  { background: rgba(62,207,142,.12); color: var(--green); }
+    .pc-sub   { font-size: 11px; color: var(--muted); margin-bottom: 8px; }
+    .pc-badge { display: inline-block; font-family: var(--mono); font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px; margin-bottom: 10px; }
+    .badge-flex  { background: rgba(79,142,247,.12);  color: var(--accent); }
+    .badge-save  { background: rgba(62,207,142,.12);  color: var(--green); }
     .badge-cheap { background: rgba(245,166,35,.12);  color: var(--amber); }
     .badge-comp  { background: rgba(247,111,111,.12); color: var(--red); }
-
     .bar-wrap { height: 5px; background: var(--bg4); border-radius: 3px; overflow: hidden; margin-bottom: 3px; }
-    .bar-fill { height: 100%; border-radius: 3px; transition: width .4s; }
-    .bar-label { font-size: 10px; color: var(--text3); margin-bottom: 6px; font-family: var(--mono); }
-
-    /* === FACTOR GRID === */
-    .factor-grid {
-      display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin: 1rem 0;
-    }
+    .bar-fill { height: 100%; border-radius: 3px; }
+    .bar-label { font-size: 10px; color: var(--dim); margin-bottom: 6px; font-family: var(--mono); }
+    .factor-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin: 12px 0; }
     @media(max-width:520px) { .factor-grid { grid-template-columns: 1fr; } }
-    .factor-card {
-      background: var(--bg2); border: 1px solid var(--border);
-      border-radius: var(--r); padding: 14px;
-    }
-    .factor-title { font-size: 12px; font-weight: 700; margin-bottom: 6px; color: var(--accent); font-family: var(--mono); }
-    .factor-body  { font-size: 12px; color: var(--text2); line-height: 1.5; }
-
-    /* === SHARED MODEL === */
-    .shared-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 1rem 0; }
+    .factor-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r); padding: 14px; }
+    .factor-title { font-size: 11px; font-weight: 700; margin-bottom: 6px; color: var(--accent); font-family: var(--mono); text-transform: uppercase; letter-spacing:.06em; }
+    .factor-body  { font-size: 12px; color: var(--muted); line-height: 1.5; }
+    .shared-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
     @media(max-width:480px) { .shared-grid { grid-template-columns: 1fr; } }
     .shared-card { background: var(--bg2); border: 1px solid var(--border2); border-radius: var(--r); padding: 16px; }
     .shared-card h3 { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
     .shared-card ul { list-style: none; padding: 0; }
-    .shared-card li { font-size: 12px; color: var(--text2); padding: 4px 0; border-bottom: 1px solid var(--border); }
+    .shared-card li { font-size: 12px; color: var(--muted); padding: 4px 0; border-bottom: 1px solid var(--border); }
     .shared-card li:last-child { border-bottom: none; }
     .shared-card li::before { content: '→ '; color: var(--accent); }
-
-    hr.divider { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
   </style>
 </head>
 <body>
 
 <div class="topbar">
-  <a href="../../" class="back">← OBQ</a>
-  <div class="topbar-title">AWS <span>CLF-C02</span> · Konsepter</div>
+  <a href="../../" class="topbar-back">← OBQ</a>
+  <span class="topbar-sep">/</span>
+  <span class="topbar-title">AWS · <span>CLF-C02</span></span>
   <div class="tabs">
     <button class="tab-btn active" onclick="show('waf',this)">Well-Architected</button>
     <button class="tab-btn" onclick="show('price',this)">Prismodeller</button>
@@ -184,11 +56,18 @@
   </div>
 </div>
 
+<div class="course-header">
+  <div class="course-badge">AWS · Cloud Practitioner</div>
+  <div class="course-title">CLF-C02 Konsepter</div>
+  <div class="course-desc">Well-Architected Framework, prismodeller og Shared Responsibility – klikk for detaljer.</div>
+</div>
+
+<main>
 <!-- ===== WAF ===== -->
-<div class="page-inner">
+<div class="page-inner" style="padding:0">
 <div id="waf" class="section active">
-  <p class="section-head" style="margin-bottom:1rem;">AWS Well-Architected Framework — de 6 søylene</p>
-  <p style="font-size:13px;color:var(--text2);margin-bottom:1.25rem;line-height:1.7">Klikk et kort for å se detaljer, tjenester og eksamentips.</p>
+  <p class="label" style="margin-bottom:1rem;">AWS Well-Architected Framework — de 6 søylene</p>
+  <p style="font-size:13px;color:var(--muted);margin-bottom:1.25rem;line-height:1.7">Klikk et kort for å se detaljer, tjenester og eksamentips.</p>
 
   <div class="waf-grid" id="waf-grid">
     <div class="waf-card" data-pillar="op"><div class="wc-icon">⚙️</div><div class="wc-name">Operational Excellence</div><div class="wc-eng">Operational Excellence</div></div>
@@ -206,7 +85,7 @@
 
 <!-- ===== PRICE ===== -->
 <div id="price" class="section">
-  <p class="section-head" style="margin-bottom:1rem;">AWS Prismodeller</p>
+  <p class="label" style="margin-bottom:1rem;">AWS Prismodeller</p>
 
   <div class="price-grid" id="price-grid">
     <div class="price-card" data-price="od">
@@ -252,7 +131,7 @@
   </div>
 
   <hr class="divider">
-  <p class="section-head">Faktorer som påvirker AWS-pris</p>
+  <p class="label">Faktorer som påvirker AWS-pris</p>
   <div class="factor-grid">
     <div class="factor-card">
       <div class="factor-title">Beregning</div>
@@ -274,8 +153,8 @@
 
 <!-- ===== SHARED RESPONSIBILITY ===== -->
 <div id="shared" class="section">
-  <p class="section-head" style="margin-bottom:1rem;">AWS Shared Responsibility Model</p>
-  <p style="font-size:13px;color:var(--text2);margin-bottom:1.25rem;line-height:1.7">AWS er ansvarlig for sikkerheten <em>av</em> skyen. Kunden er ansvarlig for sikkerheten <em>i</em> skyen.</p>
+  <p class="label" style="margin-bottom:1rem;">AWS Shared Responsibility Model</p>
+  <p style="font-size:13px;color:var(--muted);margin-bottom:1.25rem;line-height:1.7">AWS er ansvarlig for sikkerheten <em>av</em> skyen. Kunden er ansvarlig for sikkerheten <em>i</em> skyen.</p>
 
   <div class="shared-grid">
     <div class="shared-card" style="border-color:rgba(79,142,247,.3)">
@@ -307,7 +186,7 @@
   </div>
 
   <hr class="divider">
-  <p class="section-head">Variert ansvar per tjenestetype</p>
+  <p class="label">Variert ansvar per tjenestetype</p>
   <div class="factor-grid">
     <div class="factor-card">
       <div class="factor-title">IaaS (EC2)</div>
@@ -324,6 +203,9 @@
   </div>
 </div>
 </div>
+
+
+</main>
 
 <script>
 const WAF = {
@@ -379,5 +261,3 @@ function show(id, btn) {
   btn.classList.add('active')
 }
 </script>
-</body>
-</html>

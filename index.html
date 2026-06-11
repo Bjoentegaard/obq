@@ -4,20 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OBQ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #0f172a;
-      --surface: #1e293b;
-      --border: #334155;
-      --text: #f1f5f9;
-      --muted: #94a3b8;
-      --accent: #38bdf8;
+      --bg:     #0c0e14;
+      --bg2:    #13161f;
+      --bg3:    #1a1e2a;
+      --border: rgba(255,255,255,0.07);
+      --text:   #e8eaf0;
+      --muted:  #7a8299;
+      --accent: #4f8ef7;
+      --green:  #3ecf8e;
+      --purple: #c084fc;
     }
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-family: 'IBM Plex Sans', system-ui, sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -29,8 +35,9 @@
     }
     .logo {
       display: inline-block;
+      font-family: 'IBM Plex Mono', monospace;
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 500;
       letter-spacing: 4px;
       text-transform: uppercase;
       color: var(--accent);
@@ -38,7 +45,8 @@
     }
     header h1 {
       font-size: clamp(1.8rem, 4vw, 2.8rem);
-      font-weight: 800;
+      font-weight: 700;
+      letter-spacing: -0.5px;
       margin-bottom: 12px;
     }
     header p { font-size: 1rem; color: var(--muted); max-width: 440px; margin: 0 auto; }
@@ -46,8 +54,9 @@
     main { flex: 1; max-width: 900px; margin: 0 auto; padding: 52px 24px; width: 100%; }
 
     .label {
+      font-family: 'IBM Plex Mono', monospace;
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 500;
       letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--muted);
@@ -61,7 +70,7 @@
       margin-bottom: 52px;
     }
     .card {
-      background: var(--surface);
+      background: var(--bg2);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 26px;
@@ -80,9 +89,9 @@
       height: 3px;
       border-radius: 12px 12px 0 0;
     }
-    .card.blue::before   { background: #38bdf8; }
-    .card.green::before  { background: #34d399; }
-    .card.purple::before { background: #a78bfa; }
+    .card.blue::before   { background: var(--accent); }
+    .card.green::before  { background: var(--green); }
+    .card.purple::before { background: var(--purple); }
     .card-icon { font-size: 28px; margin-bottom: 14px; display: block; }
     .card h2 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
     .card p { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 18px; }
@@ -95,7 +104,7 @@
       gap: 12px;
     }
     .course-card {
-      background: var(--surface);
+      background: var(--bg2);
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 18px 20px;
@@ -110,7 +119,7 @@
     .course-icon {
       width: 40px; height: 40px;
       border-radius: 10px;
-      background: #0f172a;
+      background: var(--bg3);
       border: 1px solid var(--border);
       display: flex; align-items: center; justify-content: center;
       font-size: 18px; flex-shrink: 0;
@@ -122,6 +131,7 @@
       text-align: center;
       padding: 24px;
       border-top: 1px solid var(--border);
+      font-family: 'IBM Plex Mono', monospace;
       font-size: 12px;
       color: var(--muted);
     }
@@ -138,7 +148,7 @@
   <div class="card-grid">
     <a href="./app/" class="card blue">
       <span class="card-icon">⚡</span>
-      <h2>Quiz &amp; Flashcards</h2>
+      <h2>Quiz &amp; Quiz-sett</h2>
       <p>Interaktiv øving med spørsmål og svar. Følg fremgang og test deg selv.</p>
       <span class="card-tag">Åpne app</span>
     </a>

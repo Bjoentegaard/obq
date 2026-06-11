@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KURSNAVN – OBQ</title>
+  <link rel="stylesheet" href="../course.css">
+  <!-- Legg til kurs-spesifikk CSS her om nødvendig: -->
+  <style>
+    /* Kun det som er unikt for dette kurset */
+  </style>
+</head>
+<body>
+
+<!-- ── Topbar ─────────────────────────────────────────────────────────── -->
+<div class="topbar">
+  <a href="../../" class="topbar-back">← OBQ</a>
+  <span class="topbar-sep">/</span>
+  <span class="topbar-title">KURSKATEGORI · <span>KURSNAVN</span></span>
+  <div class="tabs">
+    <!-- Legg til én knapp per seksjon. data-section må matche id på .section-div -->
+    <button class="tab-btn active" onclick="show('oversikt', this)">Oversikt</button>
+    <button class="tab-btn" onclick="show('seksjon2', this)">Seksjon 2</button>
+    <button class="tab-btn" onclick="show('seksjon3', this)">Seksjon 3</button>
+  </div>
+</div>
+
+<!-- ── Page header ────────────────────────────────────────────────────── -->
+<div class="course-header">
+  <div class="course-badge">KATEGORI · SERTIFISERING</div>
+  <div class="course-title">Kursnavn</div>
+  <div class="course-desc">Kort beskrivelse av kurset og hva det dekker.</div>
+</div>
+
+<!-- ── Main ───────────────────────────────────────────────────────────── -->
+<main>
+
+<!-- ====== SEKSJON 1: OVERSIKT ======================================== -->
+<div id="oversikt" class="section active">
+
+  <!-- Enkel tekstkort -->
+  <div class="card">
+    <h3>🎯 Hva er dette?</h3>
+    <p style="font-size:14px;color:var(--muted);">Beskrivelse av kurset...</p>
+    <div class="tags">
+      <span class="tag">Tag 1</span>
+      <span class="tag green">Tag 2</span>
+      <span class="tag amber">Tag 3</span>
+    </div>
+  </div>
+
+  <!-- Oversiktsgrid (kapitler/moduler) -->
+  <div class="overview-grid">
+    <div class="overview-card" style="background:linear-gradient(135deg,#1a2a4a,#0077cc)">
+      <div class="ov-num">1</div>
+      <div class="ov-title">Modul 1</div>
+      <div class="ov-time">⏱ 60 min</div>
+    </div>
+    <div class="overview-card" style="background:linear-gradient(135deg,#0a2a1a,#00a86b)">
+      <div class="ov-num">2</div>
+      <div class="ov-title">Modul 2</div>
+      <div class="ov-time">⏱ 90 min</div>
+    </div>
+    <!-- Legg til flere kort her -->
+  </div>
+
+  <!-- To-kolonne grid -->
+  <div class="grid-2">
+    <div class="inset">
+      <h4 style="color:var(--accent)">Venstre kolonne</h4>
+      <ul class="plain">
+        <li>Punkt 1</li>
+        <li>Punkt 2</li>
+      </ul>
+    </div>
+    <div class="inset">
+      <h4 style="color:var(--green)">Høyre kolonne</h4>
+      <ul class="plain">
+        <li>Punkt 1</li>
+        <li>Punkt 2</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<!-- ====== SEKSJON 2 =============================================== -->
+<div id="seksjon2" class="section">
+
+  <!-- Nummererte prinsipper -->
+  <div class="card">
+    <h3>⚖️ Prinsipper</h3>
+    <div class="principle">
+      <div class="principle-num">1</div>
+      <div class="principle-body">
+        <strong>Prinsipp 1</strong>
+        <span>Forklaring her</span>
+      </div>
+    </div>
+    <div class="principle">
+      <div class="principle-num">2</div>
+      <div class="principle-body">
+        <strong>Prinsipp 2</strong>
+        <span>Forklaring her</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Steg-for-steg flow -->
+  <div class="card">
+    <h3>🔄 Prosessflyt</h3>
+    <div class="flow">
+      <div class="flow-step">Steg 1</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Steg 2</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step green">Steg 3</div>
+    </div>
+  </div>
+
+  <!-- Tabell -->
+  <div class="card">
+    <h3>📊 Sammenligning</h3>
+    <table>
+      <tr><th>Kolonne A</th><th>Kolonne B</th><th>Kolonne C</th></tr>
+      <tr><td>Rad 1A</td><td>Rad 1B</td><td>Rad 1C</td></tr>
+      <tr><td>Rad 2A</td><td>Rad 2B</td><td>Rad 2C</td></tr>
+    </table>
+  </div>
+
+  <!-- Accordion -->
+  <div class="card">
+    <h3>📚 Detaljer</h3>
+    <details>
+      <summary>🔣 Tema 1</summary>
+      <div class="details-body">
+        <p>Innhold for tema 1...</p>
+        <div class="tags" style="margin-top:8px;"><span class="tag">K2</span></div>
+      </div>
+    </details>
+    <details>
+      <summary>📏 Tema 2</summary>
+      <div class="details-body">
+        <p>Innhold for tema 2...</p>
+      </div>
+    </details>
+  </div>
+
+</div>
+
+<!-- ====== SEKSJON 3: INTERAKTIV ================================== -->
+<div id="seksjon3" class="section">
+
+  <!-- Interaktivt klikkgrid -->
+  <div class="label">Klikk et kort for detaljer</div>
+  <div class="click-grid" id="my-grid">
+    <div class="click-card" data-id="a">
+      <div style="font-size:20px;margin-bottom:8px;">🔍</div>
+      <div style="font-size:13px;font-weight:700;">Kort A</div>
+      <div style="font-size:11px;color:var(--muted);">Undertittel</div>
+    </div>
+    <div class="click-card" data-id="b">
+      <div style="font-size:20px;margin-bottom:8px;">⚡</div>
+      <div style="font-size:13px;font-weight:700;">Kort B</div>
+      <div style="font-size:11px;color:var(--muted);">Undertittel</div>
+    </div>
+  </div>
+
+  <div class="detail-panel" id="my-detail">
+    <p class="placeholder">← Klikk et kort for å se detaljer</p>
+  </div>
+
+  <!-- Info-blokker -->
+  <div class="grid-2" style="margin-top:16px;">
+    <div class="info-block green">
+      <h4>✅ Fordeler</h4>
+      <p style="color:var(--muted);font-size:13px;">Positivt aspekt her...</p>
+    </div>
+    <div class="info-block red">
+      <h4>⚠️ Risikoer</h4>
+      <p style="color:var(--muted);font-size:13px;">Risikoelement her...</p>
+    </div>
+  </div>
+
+  <div class="tip">
+    <strong>Eksamentips:</strong> Viktig poeng å huske...
+  </div>
+
+</div>
+
+</main>
+
+<script>
+// ── Tab-navigasjon (kopier som-er til alle nye kurs) ──────────────────
+function show(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── Klikkbart grid-eksempel ───────────────────────────────────────────
+const DATA = {
+  a: { title: 'Kort A', body: 'Beskrivelse av A...', tags: ['Tag 1', 'Tag 2'] },
+  b: { title: 'Kort B', body: 'Beskrivelse av B...', tags: ['Tag 3'] },
+}
+
+document.querySelectorAll('#my-grid .click-card').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('#my-grid .click-card').forEach(c => c.classList.remove('active'));
+    card.classList.add('active');
+    const d = DATA[card.dataset.id];
+    const pills = d.tags.map(t => `<span class="pill">${t}</span>`).join('');
+    document.getElementById('my-detail').innerHTML = `
+      <div class="dp-title">${d.title}</div>
+      <div class="dp-body">${d.body}</div>
+      <div class="dp-label">Tags</div>
+      <div class="pill-row">${pills}</div>`;
+  });
+});
+</script>
+</body>
+</html>
