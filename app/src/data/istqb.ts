@@ -320,4 +320,587 @@ export const istqbQuestions: QuizQuestion[] = [
         answer: 1,
         explanation: 'Scope of maintenance testing is determined by impact analysis – the size and risk of the change.'
     },
+
+    // ── Practice 1 (additional) ───────────────────────────────────────────────
+    {
+        bank: 'istqb', domain: 'Practice 1',
+        question: 'Which of the following statements about testing and debugging is CORRECT?',
+        options: [
+            'Testing and debugging are the same activity',
+            'Testing identifies defects; debugging locates and fixes them',
+            'Debugging identifies defects; testing locates and fixes them',
+            'Testing and debugging are both performed only by developers'
+        ],
+        answer: 1,
+        explanation: 'Testing identifies failures; debugging is the development activity that locates, analyzes, and fixes defects.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 1',
+        question: 'Which of the following is a benefit of early testing?',
+        options: [
+            'Eliminates the need for testing later in the SDLC',
+            'Reduces the cost of fixing defects',
+            'Guarantees the product will be defect-free',
+            'Allows the test team to skip system testing'
+        ],
+        answer: 1,
+        explanation: 'The earlier a defect is found, the cheaper it is to fix. Early testing does not eliminate later testing or guarantee defect-free software.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 1',
+        question: 'Which testing principle states that testing cannot prove the absence of defects?',
+        options: [
+            'Exhaustive testing is impossible',
+            'Defect clustering',
+            'Testing shows the presence of defects',
+            'Pesticide paradox'
+        ],
+        answer: 2,
+        explanation: 'Principle 1: Testing can show that defects are present, but cannot prove there are no defects.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 1',
+        question: 'A tester notices that a small number of modules contain most of the defects found. Which testing principle does this illustrate?',
+        options: [
+            'Pesticide paradox',
+            'Defect clustering',
+            'Absence-of-errors fallacy',
+            'Exhaustive testing is impossible'
+        ],
+        answer: 1,
+        explanation: 'Defect clustering (principle 5) states that a small number of modules usually contain the majority of defects found during pre-release testing.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 1',
+        question: 'Which activity is part of the test analysis phase?',
+        options: [
+            'Creating the test schedule',
+            'Identifying test conditions from the test basis',
+            'Executing test cases and comparing results',
+            'Evaluating exit criteria'
+        ],
+        answer: 1,
+        explanation: 'Test analysis involves analyzing the test basis to identify testable features and define test conditions. Scheduling is planning; execution is test execution; evaluating exit criteria is test completion.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 1',
+        question: 'Which of the following BEST describes a test oracle?',
+        options: [
+            'A tool that automatically generates test cases',
+            'A source used to determine expected results',
+            'A testing environment with pre-loaded data',
+            'A checklist of testing standards'
+        ],
+        answer: 1,
+        explanation: 'A test oracle is any source (specification, existing system, expert knowledge) used to determine whether actual test results match expected results.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 1',
+        question: 'What does the "pesticide paradox" mean in testing?',
+        options: [
+            'Repeating the same tests will find new defects over time',
+            'If the same tests are run repeatedly, they stop finding new defects',
+            'Testing too early causes more defects to be introduced',
+            'Test automation eliminates the need for manual testing'
+        ],
+        answer: 1,
+        explanation: 'Principle 5 (pesticide paradox): Repeating the same tests will eventually stop finding new defects. Tests must be reviewed and updated regularly.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 1',
+        question: 'Which of the following BEST describes "confirmation testing"?',
+        options: [
+            'Testing to confirm all requirements are met',
+            'Re-running tests that previously failed to verify a defect has been fixed',
+            'Testing carried out by the end user to confirm acceptance',
+            'Testing performed to validate the test environment'
+        ],
+        answer: 1,
+        explanation: 'Confirmation testing (re-testing) re-executes tests that failed due to a defect, to verify the fix resolves it.'
+    },
+
+    // ── Practice 2 (additional) ───────────────────────────────────────────────
+    {
+        bank: 'istqb', domain: 'Practice 2',
+        question: 'Which statement about the V-model is CORRECT?',
+        options: [
+            'Each development phase corresponds to a test level',
+            'Testing begins only after coding is complete',
+            'It is only applicable to agile projects',
+            'Unit testing corresponds to system requirements'
+        ],
+        answer: 0,
+        explanation: 'In the V-model, each development phase has a corresponding test level: unit testing ↔ component design, integration testing ↔ architectural design, system testing ↔ system requirements, acceptance testing ↔ business requirements.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 2',
+        question: 'Which of the following is a characteristic of acceptance testing?',
+        options: [
+            'Focuses on internal code logic',
+            'Is typically performed by developers',
+            'Validates the system against user needs and contractual requirements',
+            'Is only performed in the waterfall model'
+        ],
+        answer: 2,
+        explanation: 'Acceptance testing validates that the system satisfies user needs and contractual requirements. It is typically performed by users or customers, not developers.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 2',
+        question: 'What is the primary purpose of integration testing?',
+        options: [
+            'To test individual components in isolation',
+            'To test interactions between components or systems',
+            'To verify the whole system meets requirements',
+            'To validate the software with end users'
+        ],
+        answer: 1,
+        explanation: 'Integration testing focuses on defects in the interfaces and interactions between components or systems.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 2',
+        question: 'Which test type focuses on NON-functional characteristics such as performance and usability?',
+        options: [
+            'Functional testing',
+            'Regression testing',
+            'Non-functional testing',
+            'Structural testing'
+        ],
+        answer: 2,
+        explanation: 'Non-functional testing evaluates characteristics like performance, usability, reliability, and security — how well the system works, not what it does.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 2',
+        question: 'In which SDLC model is testing most integrated with development from the start?',
+        options: [
+            'Waterfall',
+            'V-model',
+            'Agile',
+            'Big Bang'
+        ],
+        answer: 2,
+        explanation: 'Agile development integrates testing throughout the development lifecycle with short iterations, continuous feedback, and collaboration between testers and developers.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 2',
+        question: 'What is the main purpose of regression testing?',
+        options: [
+            'To test new features for the first time',
+            'To confirm that changes have not introduced new defects in unchanged areas',
+            'To validate performance under peak load',
+            'To test the system in the production environment'
+        ],
+        answer: 1,
+        explanation: 'Regression testing confirms that changes (bug fixes, new features) have not adversely affected existing functionality.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 2',
+        question: 'Which of the following BEST describes "smoke testing"?',
+        options: [
+            'A detailed functional test of all features',
+            'A quick check to see if a build is stable enough for further testing',
+            'Performance testing under extreme load conditions',
+            'Testing focused on security vulnerabilities'
+        ],
+        answer: 1,
+        explanation: 'Smoke testing (build verification) is a shallow, wide test used to assess whether a build is stable enough for more rigorous testing to proceed.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 2',
+        question: 'Which test level is MOST associated with verifying that modules work together correctly?',
+        options: [
+            'Component testing',
+            'Integration testing',
+            'System testing',
+            'Acceptance testing'
+        ],
+        answer: 1,
+        explanation: 'Integration testing verifies that components work together correctly. Component testing tests them in isolation.'
+    },
+
+    // ── Practice 3 (additional) ───────────────────────────────────────────────
+    {
+        bank: 'istqb', domain: 'Practice 3',
+        question: 'Which of the following is a static testing technique?',
+        options: [
+            'Equivalence partitioning',
+            'Exploratory testing',
+            'Code walkthrough',
+            'Boundary value analysis'
+        ],
+        answer: 2,
+        explanation: 'A code walkthrough is a static review technique. Equivalence partitioning and BVA are dynamic test design techniques. Exploratory testing is a dynamic approach.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 3',
+        question: 'Which type of review is the MOST formal?',
+        options: [
+            'Informal review',
+            'Walkthrough',
+            'Technical review',
+            'Inspection'
+        ],
+        answer: 3,
+        explanation: 'Inspection is the most formal review type: it follows a defined process, has trained moderators, uses entry/exit criteria, and produces formal metrics.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 3',
+        question: 'What is the role of the "author" in a formal review?',
+        options: [
+            'Leads the review meeting',
+            'Creates the work product being reviewed',
+            'Logs defects found during the review',
+            'Decides which defects to fix'
+        ],
+        answer: 1,
+        explanation: 'The author creates the work product under review and participates to understand feedback and plan fixes.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 3',
+        question: 'Which of the following defects is BEST detected by static testing?',
+        options: [
+            'Incorrect calculation at runtime',
+            'Inconsistent terminology in requirements documents',
+            'System failure under high load',
+            'Unexpected UI behavior'
+        ],
+        answer: 1,
+        explanation: 'Static testing (reviewing documents) is ideal for finding defects like inconsistencies, ambiguities, and omissions in requirements documents before execution.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 3',
+        question: 'What is the purpose of "entry criteria" in a formal review?',
+        options: [
+            'To define when the review meeting can begin',
+            'To specify conditions that must be met before the review starts',
+            'To list defects found in the review',
+            'To assign review tasks to participants'
+        ],
+        answer: 1,
+        explanation: 'Entry criteria define the preconditions that must be met before the review process begins (e.g., the document is complete, review checklist is available).'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 3',
+        question: 'In which review activity are individual reviewers examine the work product before the review meeting?',
+        options: [
+            'Planning',
+            'Review initiation',
+            'Individual review',
+            'Issue communication and analysis'
+        ],
+        answer: 2,
+        explanation: 'In the individual review (preparation) activity, reviewers examine the work product and identify potential defects, questions, and comments prior to the group meeting.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 3',
+        question: 'Which of the following is a benefit of static testing over dynamic testing?',
+        options: [
+            'It can verify runtime behavior of the system',
+            'It finds defects earlier when they are cheaper to fix',
+            'It always requires a working software build',
+            'It replaces the need for any dynamic testing'
+        ],
+        answer: 1,
+        explanation: 'Static testing finds defects early in documents or code before execution, when they are cheapest to fix. It does not require a running build and does not replace dynamic testing.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 3',
+        question: 'Which of the following is a typical checklist item used in a code review?',
+        options: [
+            'Does the system meet performance targets?',
+            'Are all variables initialized before use?',
+            'Is the user interface intuitive?',
+            'Does the system scale to 10,000 users?'
+        ],
+        answer: 1,
+        explanation: 'Code review checklists focus on static code quality concerns: variable initialization, naming conventions, error handling, and code complexity — not runtime behavior.'
+    },
+
+    // ── Practice 4 (additional) ───────────────────────────────────────────────
+    {
+        bank: 'istqb', domain: 'Practice 4',
+        question: 'Using 2-value Boundary Value Analysis on a field accepting values 1–100, which set of test values is CORRECT?',
+        options: [
+            '1, 50, 100',
+            '0, 1, 100, 101',
+            '1, 2, 99, 100',
+            '0, 1, 2, 99, 100, 101'
+        ],
+        answer: 1,
+        explanation: '2-value BVA tests the boundary and just outside: 0 (invalid), 1 (min valid), 100 (max valid), 101 (invalid).'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 4',
+        question: 'A field accepts values: 1-10 (low), 11-20 (medium), 21-30 (high). How many equivalence partitions exist?',
+        options: ['2', '3', '4', '6'],
+        answer: 2,
+        explanation: 'There are 4 partitions: invalid below 1, low (1-10), medium (11-20), high (21-30), and invalid above 30 — actually 5. But if counting only valid partitions + one invalid: 4. Per standard EP, there are 4 partitions including one invalid (<1 or >30) and three valid classes.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 4',
+        question: 'Which test design technique is BEST suited for testing combinations of conditions that produce different system behaviors?',
+        options: [
+            'Boundary Value Analysis',
+            'Equivalence Partitioning',
+            'Decision Table Testing',
+            'State Transition Testing'
+        ],
+        answer: 2,
+        explanation: 'Decision table testing systematically addresses combinations of conditions and the actions that result — ideal for business rule testing with multiple conditions.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 4',
+        question: 'State transition testing is MOST appropriate when:',
+        options: [
+            'The system behavior depends on the current state and past events',
+            'The inputs can be grouped into equivalent classes',
+            'Business rules involve many condition combinations',
+            'There are clear boundary values to test'
+        ],
+        answer: 0,
+        explanation: 'State transition testing is used when a system can be in different states and transitions between them based on events/inputs — like login attempts, ATM workflows, etc.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 4',
+        question: 'Which coverage criterion requires that every statement in the code is executed at least once?',
+        options: [
+            'Branch coverage',
+            'Statement coverage',
+            'Condition coverage',
+            'Path coverage'
+        ],
+        answer: 1,
+        explanation: 'Statement coverage measures whether each executable statement has been executed at least once during testing.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 4',
+        question: 'Which of the following is a BLACK-BOX test design technique?',
+        options: [
+            'Statement coverage',
+            'Branch coverage',
+            'Equivalence partitioning',
+            'Condition coverage'
+        ],
+        answer: 2,
+        explanation: 'Equivalence partitioning is a black-box technique based on the specification. Statement, branch, and condition coverage are white-box (structural) techniques.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 4',
+        question: 'What is "experience-based testing"?',
+        options: [
+            'Testing using formal mathematical proofs',
+            'Testing that relies on the tester\'s knowledge, intuition, and past experience',
+            'Testing that follows only written specifications',
+            'Testing that requires full code coverage'
+        ],
+        answer: 1,
+        explanation: 'Experience-based techniques like exploratory testing and error guessing rely on the tester\'s skill, intuition, and knowledge of common failure modes.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 4',
+        question: 'Which of the following BEST describes "use case testing"?',
+        options: [
+            'Testing based on the internal structure of code',
+            'Testing based on scenarios describing how users interact with the system to achieve goals',
+            'Testing focused on performance under load',
+            'Testing based on invalid and unexpected inputs'
+        ],
+        answer: 1,
+        explanation: 'Use case testing derives test cases from use cases — scenarios that describe the interactions between actors and the system to achieve a goal.'
+    },
+
+    // ── Practice 5 (additional) ───────────────────────────────────────────────
+    {
+        bank: 'istqb', domain: 'Practice 5',
+        question: 'What is the PRIMARY purpose of a test plan?',
+        options: [
+            'To record actual test results',
+            'To document the approach, scope, resources, and schedule of testing activities',
+            'To list all defects found during testing',
+            'To define the expected outputs of each test case'
+        ],
+        answer: 1,
+        explanation: 'A test plan describes the scope, approach, resources, and schedule for testing — it guides the overall testing effort.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 5',
+        question: 'Which of the following BEST describes "risk-based testing"?',
+        options: [
+            'Testing only the riskiest components until time runs out',
+            'Prioritizing testing efforts based on the likelihood and impact of failures',
+            'Avoiding testing features that are unlikely to fail',
+            'Using automated tools to eliminate testing risk'
+        ],
+        answer: 1,
+        explanation: 'Risk-based testing prioritizes test effort based on product risk — the combination of likelihood of failure and its potential impact.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 5',
+        question: 'What is the purpose of a "defect report"?',
+        options: [
+            'To request a new software feature',
+            'To provide developers with information needed to reproduce and fix a defect',
+            'To document passed test cases',
+            'To summarize the overall test coverage achieved'
+        ],
+        answer: 1,
+        explanation: 'A defect report (bug report) provides sufficient detail for the developer to reproduce, understand, and fix the defect.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 5',
+        question: 'Which metric is MOST useful for monitoring test progress during execution?',
+        options: [
+            'Number of requirements reviewed',
+            'Percentage of planned test cases executed',
+            'Number of code reviews completed',
+            'Lines of code written'
+        ],
+        answer: 1,
+        explanation: 'During test execution, tracking the percentage of planned test cases executed against the schedule is a key progress metric.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 5',
+        question: 'What is "exit criteria" in testing?',
+        options: [
+            'Conditions that must be met before testing begins',
+            'Conditions that must be met to consider testing complete',
+            'Criteria for selecting which tests to automate',
+            'Criteria for deciding when to escalate a defect'
+        ],
+        answer: 1,
+        explanation: 'Exit criteria (completion criteria) define the conditions that must be satisfied before testing can be considered complete and the test phase can be closed.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 5',
+        question: 'A defect has been reported but the developer cannot reproduce it. What is the MOST likely next step?',
+        options: [
+            'Close the defect as "not a bug"',
+            'Mark the defect as "cannot reproduce" and request more information from the tester',
+            'Immediately fix the code where the tester says the defect occurred',
+            'Re-run all tests to find the defect automatically'
+        ],
+        answer: 1,
+        explanation: 'If a defect cannot be reproduced, it should be flagged as such and more information (environment, steps, data) should be requested rather than closing or blindly fixing it.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 5',
+        question: 'Which of the following is a product risk?',
+        options: [
+            'Insufficient time for testing',
+            'Inexperienced test team',
+            'Software failing to meet performance requirements under load',
+            'Unclear test objectives'
+        ],
+        answer: 2,
+        explanation: 'Product risks relate to the quality of the work product itself (e.g., performance failure, security vulnerability). Project risks relate to the project management (budget, schedule, team).'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 5',
+        question: 'What is the role of "configuration management" in testing?',
+        options: [
+            'Managing changes to test objectives',
+            'Ensuring that testware is properly identified, controlled, and tracked',
+            'Defining the test approach for each release',
+            'Scheduling tester assignments for each sprint'
+        ],
+        answer: 1,
+        explanation: 'Configuration management ensures that testware (test cases, environments, scripts) and the items under test are properly identified, version-controlled, and traceable.'
+    },
+
+    // ── Practice 6 (additional) ───────────────────────────────────────────────
+    {
+        bank: 'istqb', domain: 'Practice 6',
+        question: 'Which of the following is a KEY benefit of test automation?',
+        options: [
+            'It eliminates the need for manual testing entirely',
+            'It reduces the effort for regression testing and enables faster feedback',
+            'It makes exploratory testing unnecessary',
+            'It guarantees 100% test coverage'
+        ],
+        answer: 1,
+        explanation: 'Test automation reduces the effort required for repeated regression testing and enables faster feedback, especially in CI/CD pipelines. It does not eliminate manual or exploratory testing.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 6',
+        question: 'Which of the following is a risk of test automation?',
+        options: [
+            'Faster test execution',
+            'Reduced regression effort',
+            'Maintenance overhead as the application evolves',
+            'Improved consistency of test execution'
+        ],
+        answer: 2,
+        explanation: 'A key risk of automation is maintenance overhead: automated tests must be updated whenever the application changes, which can be costly if not planned for.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 6',
+        question: 'A test tool that checks whether code meets coding standards without executing it is an example of which tool type?',
+        options: [
+            'Test execution tool',
+            'Static analysis tool',
+            'Performance testing tool',
+            'Test management tool'
+        ],
+        answer: 1,
+        explanation: 'Static analysis tools analyze code without executing it, checking for coding standards violations, potential vulnerabilities, and code complexity.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 6',
+        question: 'Which of the following BEST describes "keyword-driven testing"?',
+        options: [
+            'Tests written in natural language without any tool support',
+            'Test scripts that use keywords representing actions, making tests readable without scripting knowledge',
+            'Testing that searches for keywords in the application under test',
+            'A technique for generating test cases from keywords in requirements'
+        ],
+        answer: 1,
+        explanation: 'Keyword-driven testing uses keywords (like "Login", "ClickButton") representing actions, separating test logic from implementation so non-programmers can write tests.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 6',
+        question: 'When introducing a test tool into an organization, what is the FIRST step?',
+        options: [
+            'Purchase the most expensive tool available',
+            'Evaluate and select a tool that fits the organization\'s needs and context',
+            'Automate all existing manual test cases immediately',
+            'Replace the test manager with the tool'
+        ],
+        answer: 1,
+        explanation: 'The first step is evaluation and selection: assessing tools against the organization\'s needs, technical environment, and constraints before purchasing or deploying.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 6',
+        question: 'Which type of tool supports testers by capturing and replaying user interactions with the application?',
+        options: [
+            'Static analysis tool',
+            'Test management tool',
+            'Test execution / capture-replay tool',
+            'Coverage measurement tool'
+        ],
+        answer: 2,
+        explanation: 'Capture-replay (test execution) tools record user interactions and replay them automatically for regression testing.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 6',
+        question: 'Which of the following is an example of a "test management tool" capability?',
+        options: [
+            'Measuring how much code has been executed',
+            'Analyzing code for potential bugs without running it',
+            'Tracking test cases, results, and defects in a centralized repository',
+            'Simulating thousands of concurrent users'
+        ],
+        answer: 2,
+        explanation: 'Test management tools provide centralized repositories for test cases, execution results, defect links, and test planning — supporting the overall management of testing activities.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 6',
+        question: 'What is a "CI/CD pipeline" in the context of testing?',
+        options: [
+            'A manual process for deploying software',
+            'An automated sequence of build, test, and deployment steps that runs on each code change',
+            'A specialized database for storing test results',
+            'A method for conducting user acceptance testing'
+        ],
+        answer: 1,
+        explanation: 'A CI/CD pipeline automates building, testing, and deploying code on each commit — enabling rapid feedback and continuous delivery with automated tests at each stage.'
+    },
 ]

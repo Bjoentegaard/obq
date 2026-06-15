@@ -9,6 +9,8 @@ interface QuizSession {
     questions: QuizQuestion[]
     index: number
     correct: number
+    chosen: number[]   // chosen answer index per question
+    bank?: string
     setId?: string
 }
 
@@ -30,25 +32,22 @@ export function createQuizController(
 
     // ── Setup UI ─────────────────────────────────────────────────────────────
 
-    function buildQuizSetup(): string {
+    function buildQuizSetup(preselectedBank?: string): string {
+        const bank = preselectedBank ?? 'aws'
         const history = buildHistoryHTML(state.quizHistory)
+        const domainOptions = buildDomainOptions(bank)
+
         return `
       <div class="page-inner" id="quiz-setup">
         <p class="section-head">Kursbank</p>
         <div class="bank-tabs">
-          <button class="bank-tab active" data-bank="aws">☁️ AWS CLF-C02</button>
-          <button class="bank-tab" data-bank="istqb">🔍 ISTQB CTFL</button>
+          <button class="bank-tab ${bank === 'aws' ? 'active' : ''}" data-bank="aws">☁️ AWS CLF-C02</button>
+          <button class="bank-tab ${bank === 'istqb' ? 'active' : ''}" data-bank="istqb">🔍 ISTQB CTFL</button>
         </div>
 
         <p class="section-head" style="margin-top:1.25rem">Filtrer</p>
         <div class="quiz-controls">
-          <select class="quiz-select" id="q-domain">
-            <option value="all">Alle domener</option>
-            <option value="cloud">Cloud Concepts</option>
-            <option value="security">Security &amp; Compliance</option>
-            <option value="tech">Cloud Technology</option>
-            <option value="billing">Billing &amp; Pricing</option>
-          </select>
+          <select class="quiz-select" id="q-domain">${domainOptions}</select>
           <select class="quiz-select" id="q-count">
             <option value="10">10 spørsmål</option>
             <option value="20" selected>20 spørsmål</option>
@@ -63,13 +62,30 @@ export function createQuizController(
       </div>`
     }
 
+    function buildDomainOptions(bank: string): string {
+        if (bank === 'aws') {
+            return `<option value="all">Alle domener</option>
+               <option value="cloud">Cloud Concepts</option>
+               <option value="security">Security &amp; Compliance</option>
+               <option value="tech">Cloud Technology</option>
+               <option value="billing">Billing &amp; Pricing</option>`
+        }
+        // istqb + any future bank: auto-generate from available questions
+        const domains = [...new Set(allQuestions.filter(q => q.bank === bank).map(q => q.domain))]
+        const allLabel = bank === 'istqb' ? 'Alle practice exams' : 'Alle domener'
+        return `<option value="all">${allLabel}</option>` +
+            domains.map(d => `<option value="${d}">${d}</option>`).join('')
+    }
+
     function buildHistoryHTML(qh: QuizResult[]): string {
         if (!qh.length) return '<p class="empty-state">Ingen quiz fullført ennå.</p>'
         return '<div class="history-list">' + [...qh].reverse().slice(0, 8).map(r => {
             const pass = r.percentage >= 65
             const date = new Date(r.timestamp).toLocaleDateString('no-NO', {day: '2-digit', month: 'short'})
+            const bankLabel = r.bank ? `<span class="h-bank">${r.bank.toUpperCase()}</span>` : ''
             return `
         <div class="history-item">
+          ${bankLabel}
           <span class="h-score ${pass ? 'pass' : 'fail'}">${r.percentage}%</span>
           <div class="h-bar"><div class="h-bar-fill ${pass ? 'h-fill-pass' : 'h-fill-fail'}" style="width:${r.percentage}%"></div></div>
           <span style="font-size:12px;color:var(--text3)">${r.correct}/${r.total}</span>
@@ -98,7 +114,7 @@ export function createQuizController(
         const count = countVal === 'all' ? pool.length : Math.min(parseInt(countVal), pool.length)
         pool = pool.slice(0, count)
 
-        quizSession = {questions: pool, index: 0, correct: 0}
+        quizSession = {questions: pool, index: 0, correct: 0, chosen: [], bank}
         renderQuizQuestion()
     }
 
@@ -108,7 +124,7 @@ export function createQuizController(
             const j = Math.floor(Math.random() * (i + 1));
             [pool[i], pool[j]] = [pool[j], pool[i]]
         }
-        quizSession = {questions: pool as QuizQuestion[], index: 0, correct: 0, setId: set.id}
+        quizSession = {questions: pool as QuizQuestion[], index: 0, correct: 0, chosen: [], setId: set.id}
         renderQuizQuestion()
     }
 
@@ -164,6 +180,7 @@ export function createQuizController(
         const isRight = chosen === correct
 
         if (isRight) quizSession.correct++
+        quizSession.chosen.push(chosen)
 
         document.querySelectorAll<HTMLButtonElement>('.option-btn').forEach((btn, i) => {
             btn.disabled = true
@@ -193,7 +210,7 @@ export function createQuizController(
 
     function finishQuiz(): void {
         if (!quizSession) return
-        const {correct, questions, setId} = quizSession
+        const {correct, questions, setId, bank, chosen} = quizSession
         const total = questions.length
         const percentage = Math.round((correct / total) * 100)
         const pass = percentage >= 65
@@ -202,7 +219,7 @@ export function createQuizController(
             const progress: QuizSetProgress = {correct, total, percentage, timestamp: Date.now()}
             update(recordQuizSetResult(state, setId, progress))
         } else {
-            const result: QuizResult = {timestamp: Date.now(), correct, total, percentage}
+            const result: QuizResult = {timestamp: Date.now(), correct, total, percentage, bank}
             update({...state, quizHistory: [...state.quizHistory, result]})
         }
 
@@ -217,16 +234,69 @@ export function createQuizController(
             <div class="r-stat"><div class="r-stat-num">${total - correct}</div><div class="r-stat-lbl">Feil</div></div>
             <div class="r-stat"><div class="r-stat-num">${total}</div><div class="r-stat-lbl">Totalt</div></div>
           </div>
-          <button class="retry-btn" id="btn-retry">↺ Ta quiz igjen</button>
+          <div class="result-actions">
+            <button class="retry-btn" id="btn-retry">↺ Ta quiz igjen</button>
+            <button class="review-btn" id="btn-review">📋 Gå gjennom svar</button>
+          </div>
         </div>
       </div>`
 
         document.getElementById('btn-retry')!.onclick = () => navigate('quiz')
+        document.getElementById('btn-review')!.onclick = () => renderReview(questions, chosen)
     }
 
-    // ── Bank tab event binding (called after render) ───────────────────────────
+    // ── Review ────────────────────────────────────────────────────────────────
 
-    function bindBankTabs(): void {
+    function renderReview(questions: QuizQuestion[], chosen: number[]): void {
+        const items = questions.map((q, i) => {
+            const userAnswer = chosen[i] ?? -1
+            const correct = q.answer
+            const isRight = userAnswer === correct
+            const m = DOMAIN_META[q.domain]
+
+            const opts = q.options.map((opt, oi) => {
+                let cls = 'review-opt'
+                if (oi === correct) cls += ' review-correct'
+                if (oi === userAnswer && !isRight) cls += ' review-wrong'
+                const icon = oi === correct ? '✓' : oi === userAnswer && !isRight ? '✗' : ''
+                return `<div class="${cls}">
+                    <span class="opt-letter">${'ABCD'[oi]}</span>
+                    <span>${opt}</span>
+                    ${icon ? `<span class="review-icon">${icon}</span>` : ''}
+                </div>`
+            }).join('')
+
+            return `
+            <div class="review-item ${isRight ? 'review-item-pass' : 'review-item-fail'}">
+              <div class="review-item-header">
+                <span class="review-q-num">Spørsmål ${i + 1}</span>
+                <span class="q-domain-tag ${m?.cls ?? ''}" style="color:${m?.color ?? 'var(--accent)'}">${m?.label ?? q.domain}</span>
+                <span class="review-result-badge ${isRight ? 'pass' : 'fail'}">${isRight ? '✓ Riktig' : '✗ Feil'}</span>
+              </div>
+              <div class="review-q-text">${q.question}</div>
+              <div class="review-opts">${opts}</div>
+              ${q.explanation ? `<div class="review-explanation">${q.explanation}</div>` : ''}
+            </div>`
+        }).join('')
+
+        const main = document.getElementById('main-content')!
+        main.innerHTML = `
+      <div class="page-inner">
+        <div class="review-header">
+          <button class="quit-btn" id="btn-back-result">← Tilbake til resultat</button>
+          <h2 class="review-title">Svargjennomgang</h2>
+        </div>
+        <div class="review-list">${items}</div>
+        <button class="retry-btn" style="margin-top:1.5rem" id="btn-retry-from-review">↺ Ta quiz igjen</button>
+      </div>`
+
+        document.getElementById('btn-back-result')!.onclick = () => finishQuiz()
+        document.getElementById('btn-retry-from-review')!.onclick = () => navigate('quiz')
+    }
+
+    // ── Bank tab event binding ────────────────────────────────────────────────
+
+    function bindBankTabs(_preselected?: string): void {
         const tabs = document.querySelectorAll<HTMLButtonElement>('.bank-tab')
         const domainSelect = document.getElementById('q-domain') as HTMLSelectElement | null
         if (!tabs.length || !domainSelect) return
@@ -235,26 +305,8 @@ export function createQuizController(
             tab.onclick = () => {
                 tabs.forEach(t => t.classList.remove('active'))
                 tab.classList.add('active')
-                const bank = tab.dataset['bank']
-
-                // Swap filter options
-                if (bank === 'aws') {
-                    domainSelect.innerHTML = `
-                      <option value="all">Alle domener</option>
-                      <option value="cloud">Cloud Concepts</option>
-                      <option value="security">Security &amp; Compliance</option>
-                      <option value="tech">Cloud Technology</option>
-                      <option value="billing">Billing &amp; Pricing</option>`
-                } else {
-                    domainSelect.innerHTML = `
-                      <option value="all">Alle practice exams</option>
-                      <option value="Practice 1">Practice 1</option>
-                      <option value="Practice 2">Practice 2</option>
-                      <option value="Practice 3">Practice 3</option>
-                      <option value="Practice 4">Practice 4</option>
-                      <option value="Practice 5">Practice 5</option>
-                      <option value="Practice 6">Practice 6</option>`
-                }
+                const bank = tab.dataset['bank'] ?? 'aws'
+                domainSelect.innerHTML = buildDomainOptions(bank)
             }
         })
     }
@@ -264,6 +316,6 @@ export function createQuizController(
         startQuiz,
         startQuizFromSet,
         bindBankTabs,
-        syncState: (s: AppState) => { state = s }
+        syncState: (s: AppState) => { state = s },
     }
 }

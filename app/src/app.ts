@@ -1,13 +1,13 @@
-import {type AppState} from './state'
+import type {AppState} from './state'
 import type {QuizQuestion} from './data/quiz'
 import {iconGrid, iconImport, iconQuestion} from "./styles/icon.ts";
-import {buildDash} from "./pages/dashboard.ts";
+import {buildCoursesPage} from "./pages/courses.ts";
 import {createQuizController} from "./pages/quiz.ts";
 import {createSetsController} from "./pages/sets.ts";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-type Page = 'dash' | 'quiz' | 'sets'
+type Page = 'kurs' | 'quiz' | 'sets'
 
 interface AppOptions {
     mountEl: HTMLElement
@@ -21,7 +21,7 @@ interface AppOptions {
 export function renderApp(opts: AppOptions): void {
     const {mountEl, quizQuestions} = opts
     let {state} = opts
-    let currentPage: Page = 'dash'
+    let currentPage: Page = 'kurs'
 
     const quiz = createQuizController(state, quizQuestions, onControllerStateChange, navigate)
     const sets = createSetsController(state, onControllerStateChange, navigate, (set) => quiz.startQuizFromSet(set))
@@ -38,13 +38,13 @@ export function renderApp(opts: AppOptions): void {
         sets.syncState(state)
     }
 
-    function navigate(page: string): void {
+    function navigate(page: string, params?: { bank?: string }): void {
         currentPage = page as Page
-        renderPage()
+        renderPage(params)
     }
 
     mountEl.innerHTML = buildShell()
-    navigate('dash')
+    navigate('kurs')
 
     // ─── Shell ───────────────────────────────────────────────────────────────────
 
@@ -53,8 +53,8 @@ export function renderApp(opts: AppOptions): void {
       <nav class="topbar">
         <span class="brand">OBQ</span>
         <div class="tabs">
-          <button class="tab-btn" data-page="dash">
-            ${iconGrid()} Oversikt
+          <button class="tab-btn" data-page="kurs">
+            ${iconGrid()} Kurs
           </button>
           <button class="tab-btn" data-page="quiz">
             ${iconQuestion()} Quiz
@@ -71,16 +71,26 @@ export function renderApp(opts: AppOptions): void {
 
     // ─── Routing ─────────────────────────────────────────────────────────────────
 
-    function renderPage(): void {
+    function renderPage(params?: { bank?: string }): void {
         mountEl.querySelectorAll<HTMLButtonElement>('.tab-btn').forEach(btn => {
             btn.classList.toggle('active', btn.dataset['page'] === currentPage)
         })
 
         const main = mountEl.querySelector<HTMLElement>('#main-content')!
 
-        if (currentPage === 'dash') main.innerHTML = buildDash(state)
-        else if (currentPage === 'quiz') main.innerHTML = quiz.buildQuizSetup()
-        else if (currentPage === 'sets') { main.innerHTML = sets.buildSetsPage(); sets.bindEvents() }
+        if (currentPage === 'kurs') {
+            const {html, bind} = buildCoursesPage((bank) => {
+                navigate('quiz', {bank})
+            }, state.quizHistory)
+            main.innerHTML = html
+            bind()
+        } else if (currentPage === 'quiz') {
+            main.innerHTML = quiz.buildQuizSetup(params?.bank)
+            quiz.bindBankTabs(params?.bank)
+        } else if (currentPage === 'sets') {
+            main.innerHTML = sets.buildSetsPage()
+            sets.bindEvents()
+        }
 
         bindShellEvents()
     }
@@ -91,7 +101,7 @@ export function renderApp(opts: AppOptions): void {
         document.getElementById('btn-reset')?.addEventListener('click', () => {
             if (confirm('Nullstille ALL fremgang? Dette kan ikke angres.')) {
                 update({scores: {}, quizHistory: [], quizSets: [], quizSetHistory: {}})
-                navigate('dash')
+                navigate('kurs')
             }
         })
 
@@ -101,7 +111,6 @@ export function renderApp(opts: AppOptions): void {
 
         if (currentPage === 'quiz') {
             document.getElementById('btn-start-quiz')?.addEventListener('click', () => quiz.startQuiz())
-            quiz.bindBankTabs()
         }
     }
 }

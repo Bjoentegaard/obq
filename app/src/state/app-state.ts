@@ -1,4 +1,3 @@
-import type {Flashcard} from '../data/flashcards'
 import type {QuizSet} from '../data/quizset'
 
 export interface QuizResult {
@@ -6,6 +5,7 @@ export interface QuizResult {
     correct: number
     total: number
     percentage: number
+    bank?: string
 }
 
 export interface QuizSetProgress {
@@ -32,12 +32,6 @@ export function getKnownCount(state: AppState): number {
 
 export function getUnknownCount(state: AppState): number {
     return Object.values(state.scores).filter(v => v === false).length
-}
-
-export function getDomainProgress(state: AppState, cards: Flashcard[], domain: Flashcard['domain']): number {
-    const domainCards = cards.filter(card => card.domain === domain)
-    const known = domainCards.filter(c => state.scores[c.question] === true).length
-    return domainCards.length > 0 ? Math.round((known / domainCards.length) * 100) : 0
 }
 
 export function addQuizSet(state: AppState, set: QuizSet): AppState {
