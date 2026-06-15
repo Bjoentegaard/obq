@@ -69,6 +69,23 @@ body {
     color: var(--accent)
 }
 
+.topbar-back {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text2);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-right: 2rem;
+    flex-shrink: 0;
+    transition: color .15s;
+    white-space: nowrap;
+}
+
+.topbar-back:hover { color: var(--text); }
+
 .tabs {
     display: flex;
     height: 100%
