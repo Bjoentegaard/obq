@@ -101,6 +101,7 @@ export function renderApp(opts: AppOptions): void {
 
         if (currentPage === 'quiz') {
             document.getElementById('btn-start-quiz')?.addEventListener('click', () => quiz.startQuiz())
+            quiz.bindBankTabs()
         }
     }
 }

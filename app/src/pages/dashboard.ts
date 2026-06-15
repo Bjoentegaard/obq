@@ -1,6 +1,5 @@
 import {flashcards} from "../data/flashcards.ts";
 import { DOMAIN_META } from '../data/domain.ts'
-import type { Domain } from '../data/domain.ts'
 import {type AppState, getDomainProgress, getKnownCount, getUnknownCount} from "../state";
 
 export function buildDash(state: AppState): string {
@@ -9,8 +8,9 @@ export function buildDash(state: AppState): string {
     const qh = state.quizHistory
     const best = qh.length ? Math.max(...qh.map(r => r.percentage)) : null
 
-    const domainBars = (Object.keys(DOMAIN_META) as Domain[]).map(d => {
-        const pct = getDomainProgress(state, flashcards, d)
+    const awsDomains = ['cloud', 'security', 'tech', 'billing']
+    const domainBars = awsDomains.map(d => {
+        const pct = getDomainProgress(state, flashcards, d as 'cloud' | 'security' | 'tech' | 'billing')
         const m = DOMAIN_META[d]
         return `
         <div class="domain-row">

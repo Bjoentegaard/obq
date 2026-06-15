@@ -381,6 +381,13 @@ body {
     color: var(--bill-c)
 }
 
+.d-p1 { background: rgba(79,142,247,0.10);  color: #7ab3ff }
+.d-p2 { background: rgba(62,207,142,0.09);  color: #3ecf8e }
+.d-p3 { background: rgba(192,132,252,0.10); color: #c084fc }
+.d-p4 { background: rgba(245,166,35,0.10);  color: #f5a623 }
+.d-p5 { background: rgba(247,111,111,0.10); color: #f76f6f }
+.d-p6 { background: rgba(56,189,248,0.10);  color: #38bdf8 }
+
 .card-status {
     position: absolute;
     top: 14px;
@@ -532,6 +539,36 @@ kbd {
     font-family: var(--mono);
     font-size: 10px;
     color: var(--text2)
+}
+
+.bank-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: .5rem;
+}
+
+.bank-tab {
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 18px;
+    border-radius: var(--r);
+    border: 1px solid var(--border2);
+    background: var(--bg3);
+    color: var(--text2);
+    cursor: pointer;
+    transition: all .15s;
+}
+
+.bank-tab:hover {
+    border-color: var(--border3);
+    color: var(--text);
+}
+
+.bank-tab.active {
+    background: rgba(79,142,247,0.12);
+    border-color: var(--accent);
+    color: var(--accent);
 }
 
 .quiz-controls {
