@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ISTQB CTFL – Practice Exam</title>
+  <link rel="stylesheet" href="../course.css">
+  <style>
+    .exam-hero {
+      text-align: center;
+      padding: 48px 24px 32px;
+      border-bottom: 1px solid var(--border);
+    }
+    .exam-badge {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+    .exam-title { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 700; margin-bottom: 8px; letter-spacing: -0.5px; }
+    .exam-sub { font-size: 14px; color: var(--muted); }
+
+    .exam-setup {
+      max-width: 640px;
+      margin: 40px auto;
+      padding: 0 24px;
+    }
+    .setup-label { font-family: var(--mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+    .exam-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+    .exam-pill {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.15s;
+    }
+    .exam-pill:hover { border-color: var(--accent); color: var(--text); }
+    .exam-pill.active { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 600; }
+    .btn-start {
+      width: 100%;
+      padding: 14px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .btn-start:hover { opacity: 0.88; }
+    .btn-start:disabled { opacity: 0.4; cursor: default; }
+
+    /* Quiz interface */
+    #quiz-screen { display: none; max-width: 720px; margin: 0 auto; padding: 32px 24px 64px; }
+    .quiz-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .quiz-progress-bar {
+      height: 4px;
+      background: var(--bg3);
+      border-radius: 4px;
+      margin-bottom: 32px;
+      overflow: hidden;
+    }
+    .quiz-progress-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 4px;
+      transition: width 0.3s;
+    }
+    .q-badge {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+    .q-text {
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--text);
+      margin-bottom: 24px;
+      white-space: pre-wrap;
+    }
+    .opts { display: flex; flex-direction: column; gap: 10px; }
+    .opt-btn {
+      width: 100%;
+      text-align: left;
+      padding: 14px 18px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.5;
+      cursor: pointer;
+      transition: border-color 0.12s, background 0.12s;
+    }
+    .opt-btn:hover:not(:disabled) { border-color: var(--accent); }
+    .opt-btn.correct { background: rgba(62,207,142,0.12); border-color: var(--green); color: var(--green); }
+    .opt-btn.wrong   { background: rgba(247,111,111,0.12); border-color: var(--red);  color: var(--red);  }
+    .opt-btn.reveal  { border-color: var(--green); opacity: 0.6; }
+    .opt-btn:disabled { cursor: default; }
+
+    .rationale-box {
+      margin-top: 16px;
+      padding: 14px 16px;
+      background: var(--bg3);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+      display: none;
+    }
+    .rationale-box.show { display: block; }
+
+    .btn-next {
+      margin-top: 20px;
+      padding: 12px 28px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: none;
+      transition: opacity 0.15s;
+    }
+    .btn-next:hover { opacity: 0.88; }
+    .btn-next.show { display: inline-block; }
+
+    /* Results */
+    #result-screen { display: none; max-width: 640px; margin: 0 auto; padding: 32px 24px 64px; text-align: center; }
+    .score-circle {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin: 0 auto 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 4px solid var(--accent);
+    }
+    .score-pct { font-size: 28px; font-weight: 800; color: var(--accent); }
+    .score-label { font-size: 11px; color: var(--muted); }
+    .result-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 8px; }
+    .result-sub { color: var(--muted); font-size: 14px; margin-bottom: 28px; }
+    .result-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .stat-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+    .stat-num { font-size: 22px; font-weight: 700; }
+    .stat-lbl { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .btn-restart {
+      padding: 12px 32px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      margin: 0 6px;
+      transition: opacity 0.15s;
+    }
+    .btn-restart:hover { opacity: 0.88; }
+    .btn-restart.outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+    .review-list { text-align: left; margin-top: 32px; }
+    .review-item {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .review-item.ri-correct { border-left: 3px solid var(--green); }
+    .review-item.ri-wrong   { border-left: 3px solid var(--red); }
+    .review-q   { font-size: 13px; color: var(--text); margin-bottom: 8px; white-space: pre-wrap; }
+    .review-ans { font-size: 12px; color: var(--muted); }
+    .review-ans strong { color: var(--green); }
+    .review-ans .your-ans { color: var(--red); }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="../../" class="topbar-back">← OBQ</a>
+  <span class="topbar-sep">/</span>
+  <span class="topbar-title">ISTQB · <span>Practice Exam</span></span>
+</div>
+
+<!-- ── Setup screen ─────────────────────────────────────────────────── -->
+<div id="setup-screen">
+  <div class="exam-hero">
+    <div class="exam-badge">ISTQB® · Foundation Level</div>
+    <div class="exam-title">Practice Exam</div>
+    <div class="exam-sub">CTFL v4.0.1 · Multiple choice · Rationale after each answer</div>
+  </div>
+
+  <div class="exam-setup">
+    <div class="setup-label">Select exam</div>
+    <div class="exam-pills" id="exam-pills">
+      <div class="exam-pill active" data-exam="all">All questions (mix)</div>
+      <div class="exam-pill" data-exam="Practice 1">Practice 1</div>
+      <div class="exam-pill" data-exam="Practice 2">Practice 2</div>
+      <div class="exam-pill" data-exam="Practice 3">Practice 3</div>
+      <div class="exam-pill" data-exam="Practice 4">Practice 4</div>
+      <div class="exam-pill" data-exam="Practice 5">Practice 5</div>
+      <div class="exam-pill" data-exam="Practice 6">Practice 6</div>
+    </div>
+
+    <div class="setup-label">Mode</div>
+    <div class="exam-pills" id="mode-pills">
+      <div class="exam-pill active" data-mode="practice">Practice (see rationale)</div>
+      <div class="exam-pill" data-mode="exam">Exam mode (results at end)</div>
+    </div>
+
+    <div id="q-count-info" style="font-size:13px;color:var(--muted);margin-bottom:20px;"></div>
+    <button class="btn-start" id="btn-start">Start →</button>
+  </div>
+</div>
+
+<!-- ── Quiz screen ──────────────────────────────────────────────────── -->
+<div id="quiz-screen">
+  <div class="quiz-meta">
+    <span id="q-counter">Question 1 / 40</span>
+    <span id="q-exam-tag" style="color:var(--accent);font-family:var(--mono);font-size:11px;letter-spacing:1px;"></span>
+    <span id="q-score">Score: 0</span>
+  </div>
+  <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="progress-fill"></div></div>
+  <div class="q-badge" id="q-badge"></div>
+  <div class="q-text" id="q-text"></div>
+  <div class="opts" id="opts"></div>
+  <div class="rationale-box" id="rationale"></div>
+  <button class="btn-next" id="btn-next">Next question →</button>
+</div>
+
+<!-- ── Result screen ─────────────────────────────────────────────────── -->
+<div id="result-screen">
+  <div class="score-circle" id="score-circle">
+    <div class="score-pct" id="score-pct">0%</div>
+    <div class="score-label">Score</div>
+  </div>
+  <div class="result-title" id="result-title"></div>
+  <div class="result-sub" id="result-sub"></div>
+  <div class="result-stats">
+    <div class="stat-box"><div class="stat-num" id="stat-correct" style="color:var(--green)">0</div><div class="stat-lbl">Correct</div></div>
+    <div class="stat-box"><div class="stat-num" id="stat-wrong" style="color:var(--red)">0</div><div class="stat-lbl">Wrong</div></div>
+    <div class="stat-box"><div class="stat-num" id="stat-total">0</div><div class="stat-lbl">Total</div></div>
+  </div>
+  <button class="btn-restart" id="btn-retry">Retry same set</button>
+  <button class="btn-restart outline" id="btn-back-setup">← Choose another</button>
+  <div class="review-list" id="review-list"></div>
+</div>
+
+<script>
+const QUESTIONS = [
+  // ── PRACTICE 1 ──────────────────────────────────────────────────────────────
+  {
+    exam: "Practice 1",
+    q: "Which of the following is a typical objective of testing?",
+    opts: ["A) To find defects and failures", "B) To validate the project plan works as required", "C) Ensuring of complete testing", "D) Comparing actual results with expected results"],
+    answer: "A",
+    rationale: "A) Correct – finding defects is a core objective. B) Validating the project plan is project management, not testing. C) Contradicts principle #2 – exhaustive testing is impossible. D) Comparing results is a test activity, not an objective."
+  },
+  {
+    exam: "Practice 1",
+    q: "Which of the following is an example of a FAILURE in a car cruise control system?",
+    opts: ["A) The developer forgot to rename variables after a cut-and-paste", "B) Unnecessary code that sounds an alarm when reversing was included", "C) The system stops maintaining speed when the radio volume is changed", "D) The design specification wrongly states speeds"],
+    answer: "C",
+    rationale: "A failure is a deviation from expected behavior visible to the user. C) is a runtime failure – the cruise control behaves unexpectedly. A and D are defects in code/spec; B is a defect (wrong code included)."
+  },
+  {
+    exam: "Practice 1",
+    q: "Which of the following is a DEFECT rather than a root cause in a fitness tracker?",
+    opts: ["A) The requirements author was unfamiliar with fitness, so wrongly assumed heartbeat in beats per hour", "B) The tester hadn't been trained in state transition testing, so missed a major defect", "C) An incorrect configuration variable implemented for GPS could cause location problems during daylight saving", "D) The designer had never worked on wearable devices and misunderstood reflected sunlight effects"],
+    answer: "C",
+    rationale: "C) An incorrect configuration variable is faulty software (a defect) that may cause failures. A, B, D are root causes – lack of domain knowledge or training that led to a defect being introduced."
+  },
+  {
+    exam: "Practice 1",
+    q: "A product owner says your role as tester is to catch all bugs before the end of each iteration. Which testing principle best responds to this false statement?",
+    opts: ["A) Defect clustering", "B) Testing shows the presence of defects, not their absence", "C) Absence-of-errors fallacy", "D) Root cause analysis"],
+    answer: "B",
+    rationale: "Testing can show presence of defects but cannot prove their absence – so you can never guarantee all bugs are caught. Principle #1 and #2 (exhaustive testing impossible) both apply, but B directly addresses the false claim."
+  },
+  {
+    exam: "Practice 1",
+    q: "Which of the following is an example of a task that can be carried out as part of the TEST PROCESS?",
+    opts: ["A) Analyzing a defect", "B) Designing test data", "C) Assigning a version to a test item", "D) Writing a user story"],
+    answer: "B",
+    rationale: "B) Designing test data is a test implementation task. A) Analyzing a defect is debugging (development). C) Assigning versions is configuration management. D) Writing user stories is the product owner's task."
+  },
+  {
+    exam: "Practice 1",
+    q: "Match the test activities with the tasks:\nA=Test design, B=Test implementation, C=Test execution, D=Test completion\n1=Entering change requests for open defects\n2=Identifying test data to support test cases\n3=Prioritizing test procedures and creating test data\n4=Analyzing discrepancies to determine their cause",
+    opts: ["A) A-2, B-3, C-4, D-1", "B) A-2, B-1, C-3, D-4", "C) A-3, B-2, C-4, D-1", "D) A-3, B-2, C-1, D-4"],
+    answer: "A",
+    rationale: "Test design → identifying test data (2). Test implementation → prioritizing procedures & creating test data (3). Test execution → analyzing discrepancies (4). Test completion → entering change requests for open defects (1)."
+  },
+  {
+    exam: "Practice 1",
+    q: "Which activity is part of TEST ANALYSIS in the test process?",
+    opts: ["A) Identifying required infrastructure and tools", "B) Creating test suites from test scripts", "C) Analyzing lessons learned for process improvement", "D) Evaluating the test basis for testability"],
+    answer: "D",
+    rationale: "Test analysis involves evaluating the test basis to identify testable features and conditions. A) is test design, B) is test implementation, C) is test completion."
+  },
+  {
+    exam: "Practice 1",
+    q: "Consider this testware:\n'Test Charter #04.018 – Explore: Registration page / With: Incorrect input data / To discover: Defects related to accepting incorrect registration'\n\nWhich test activity produces this testware as output?",
+    opts: ["A) Test planning", "B) Test monitoring and control", "C) Test analysis", "D) Test design"],
+    answer: "D",
+    rationale: "Test charters are produced during test design. They define the scope and focus of exploratory test sessions."
+  },
+
+  // ── PRACTICE 2 ──────────────────────────────────────────────────────────────
+  {
+    exam: "Practice 2",
+    q: "Given these statements about testing in the SDLC:\n1. Each development activity should have a corresponding testing activity\n2. Reviewing should start as soon as FINAL versions of documents are available\n3. Design and implementation of tests should start during the corresponding development activity\n4. Testing activities should start early in the SDLC\n\nWhich are TRUE and FALSE?",
+    opts: ["A) True – 1, 2; False – 3, 4", "B) True – 2, 3; False – 1, 4", "C) True – 1, 2, 4; False – 3", "D) True – 1, 4; False – 2, 3"],
+    answer: "D",
+    rationale: "1: TRUE. 2: FALSE – reviewing starts on DRAFTS, not final versions. 3: FALSE – test ANALYSIS and DESIGN should start, not implementation. 4: TRUE."
+  },
+  {
+    exam: "Practice 2",
+    q: "An OS product is tested to verify support for various x86 PCs and confirm that important brands work. What type of test is this?",
+    opts: ["A) Performance test", "B) Processor test", "C) Functional test", "D) Portability test"],
+    answer: "D",
+    rationale: "Testing that software runs correctly across different hardware configurations is a portability test – a non-functional test type."
+  },
+  {
+    exam: "Practice 2",
+    q: "Which statement about regression testing is FALSE?",
+    opts: ["A) Regression testing should be performed whenever software is changed", "B) Regression tests should be reviewed to ensure they are still relevant", "C) Automated regression testing is always more efficient than manual regression testing", "D) Regression tests can be run many times"],
+    answer: "C",
+    rationale: "C is FALSE – automation can improve efficiency but does not guarantee it is always more efficient. Manual testing may be more appropriate for certain scenarios."
+  },
+  {
+    exam: "Practice 2",
+    q: "When should MAINTENANCE testing be carried out?",
+    opts: ["A) When any software is modified to remove defects", "B) When deployed software or its environment changes", "C) When deployed software has been in service for an extended period", "D) When requirements change late in a development project"],
+    answer: "B",
+    rationale: "Maintenance testing is triggered by changes to already released software or its environment – regardless of whether it's a bug fix, new feature, or platform change."
+  },
+  {
+    exam: "Practice 2",
+    q: "Which CORRECTLY describes the role of impact analysis in Maintenance Testing?",
+    opts: ["A) Impact analysis is used when deciding if a fix to a maintained system is worthwhile", "B) Impact analysis identifies how data should be migrated into the maintained system", "C) Impact analysis decides which hot fixes are of most value to the user", "D) Impact analysis determines the effectiveness of new maintenance test cases"],
+    answer: "A",
+    rationale: "Impact analysis shows which parts of the system are affected by a change, helping to evaluate whether the fix is worthwhile considering the regression testing scope needed."
+  },
+  {
+    exam: "Practice 2",
+    q: "Which of the following BEST compares confirmation testing and regression testing?",
+    opts: [
+      "A) Regression: all previously run tests still work. Confirmation: fixes to one part haven't broken other parts",
+      "B) Confirmation: a previously found defect has been fixed. Regression: no other parts have been adversely affected by the fix",
+      "C) Regression: changes haven't caused another part to fail. Confirmation: all previously run tests give the same results",
+      "D) Confirmation: changes were made successfully. Regression: previously failed tests now work"
+    ],
+    answer: "B",
+    rationale: "Confirmation testing verifies the specific defect is fixed. Regression testing checks that the fix hasn't introduced new problems elsewhere."
+  },
+  {
+    exam: "Practice 2",
+    q: "What is the key difference between ALPHA and BETA testing?",
+    opts: [
+      "A) Alpha: at developer's site; Beta: at customer's site",
+      "B) Alpha: performed by developers; Beta: by customers",
+      "C) Alpha: performed by customers; Beta: by developers",
+      "D) Alpha: at customer's site; Beta: at developer's site"
+    ],
+    answer: "A",
+    rationale: "Both alpha and beta are performed by customers/users, but alpha is at the developer's site with the developer present, while beta is at the customer's own location."
+  },
+  {
+    exam: "Practice 2",
+    q: "Which statement is TRUE regardless of the development lifecycle model used?",
+    opts: [
+      "A) Testers should review all development documents",
+      "B) The majority of development activities have an associated testing activity",
+      "C) Design of tests should begin after the corresponding development activity has completed",
+      "D) Each test level has objectives specific to that level"
+    ],
+    answer: "D",
+    rationale: "D is universally true – test levels always have specific objectives. A is too broad, B should be 'all' not 'majority', C reflects sequential models only."
+  },
+
+  // ── PRACTICE 3 ──────────────────────────────────────────────────────────────
+  {
+    exam: "Practice 3",
+    q: "Which statement CORRECTLY reflects the value of static testing?",
+    opts: [
+      "A) Reviews have increased both spec quality and the time required for development and testing",
+      "B) Static testing gives better control and cheaper defect management due to finding defects later in lifecycle",
+      "C) Static analysis has decreased missed requirements and improved tester–developer communication",
+      "D) Static analysis finds coding defects that might not be found by dynamic testing alone"
+    ],
+    answer: "D",
+    rationale: "D is correct – static analysis can find coding defects like dead code, unreachable branches, etc. that dynamic testing might miss. A: reviews should decrease time. B: defects are cheaper to fix EARLIER. C: the second part is a benefit of reviews, not static analysis."
+  },
+  {
+    exam: "Practice 3",
+    q: "Which statement about checklists in a formal review is CORRECT?",
+    opts: [
+      "A) During review planning, reviewers create the checklists",
+      "B) During issue communication, reviewers fill in the checklists",
+      "C) During the review meeting, reviewers create defect reports based on checklists",
+      "D) During review initiation (kick-off), reviewers receive the checklists"
+    ],
+    answer: "D",
+    rationale: "Checklists are distributed during the initiation/kick-off phase. Reviewers use them during individual review. The review leader or moderator – not reviewers – prepares checklists during planning."
+  },
+  {
+    exam: "Practice 3",
+    q: "Which CORRECTLY matches roles and responsibilities in a formal review?",
+    opts: [
+      "A) Manager – Decides on the execution of reviews",
+      "B) Review Leader – Ensures effective running of review meetings",
+      "C) Scribe – Fixes defects in the work product under review",
+      "D) Moderator – Monitors ongoing cost-effectiveness"
+    ],
+    answer: "A",
+    rationale: "A) Correct – the manager decides whether reviews are performed. B) The moderator (not review leader) runs meetings. C) The author fixes defects. D) The manager monitors cost-effectiveness."
+  },
+  {
+    exam: "Practice 3",
+    q: "A review has: a scribe, purpose to detect defects, the meeting is led by the AUTHOR, reviewers do individual review, and a review report is produced. Which review type is MOST likely?",
+    opts: ["A) Informal Review", "B) Walkthrough", "C) Technical Review", "D) Inspection"],
+    answer: "B",
+    rationale: "The author leading the meeting is characteristic of a walkthrough. Inspections use a trained moderator and don't allow the author to lead. Technical reviews typically don't have the author lead either."
+  },
+  {
+    exam: "Practice 3",
+    q: "Which is a benefit of carrying out static testing BEFORE dynamic testing?",
+    opts: [
+      "A) It may find defects that would be more expensive to fix if found during dynamic testing",
+      "B) It detects failures before release",
+      "C) It is easier and takes less time to set up",
+      "D) It would be impossible to find the same defects with dynamic testing"
+    ],
+    answer: "A",
+    rationale: "A) Correct – early defect detection reduces cost. B) Wrong – static testing finds defects, not failures (failures require execution). C) No basis. D) Some defects can be found by either method; static testing's advantage is timing, not exclusivity."
+  },
+  {
+    exam: "Practice 3",
+    q: "In a requirements spec, which pairs of requirements are INCONSISTENT?\n6: Librarians get responses within 5 seconds\n9: Borrowers fined for failing to return within 3 weeks\n10: Borrowers get responses within 3 seconds\n11: Borrowers may borrow at no cost for max 4 weeks\n15: All users get responses within 3 seconds",
+    opts: ["A) 6-10, 6-15, 7-12", "B) 6-15, 9-11", "C) 6-10, 6-15, 9-11", "D) 6-15, 7-12"],
+    answer: "B",
+    rationale: "6-15: Librarians must wait ≤5s but req 15 says all users ≤3s – inconsistent. 9-11: Fined for not returning within 3 weeks, but allowed to borrow for 4 weeks – inconsistent. 6-10 is NOT inconsistent (borrowers having a stricter time is fine)."
+  },
+  {
+    exam: "Practice 3",
+    q: "Which of these work products can be reviewed?\ni. Business requirements  ii. Schedule  iii. Test budget  iv. Third-party executable code  v. User stories with acceptance criteria",
+    opts: ["A) i and iv", "B) i, ii, iii and iv", "C) i, ii, iii, and v", "D) iii, iv, v"],
+    answer: "C",
+    rationale: "Any document or artifact that can be read can be reviewed, EXCEPT third-party executable code (iv) which cannot be reviewed because you don't have the source. All others (i, ii, iii, v) can be reviewed."
+  },
+  {
+    exam: "Practice 3",
+    q: "Which review type BEST suits reviewing safety-critical components where the process must be demonstrably formal with rules and checklists?",
+    opts: ["A) Informal Review", "B) Technical Review", "C) Inspection", "D) Walkthrough"],
+    answer: "C",
+    rationale: "Inspection is the most formal review type – it uses a defined process, entry/exit criteria, rules, checklists, and metrics. Required for safety-critical systems."
+  },
+  {
+    exam: "Practice 3",
+    q: "A team's velocity increases after user story refinement sessions with the product owner become more effective at detecting defects. Which benefit of static testing is MOST DIRECTLY related to this increased velocity?",
+    opts: ["A) Increasing total cost of quality", "B) Reducing testing cost", "C) Increasing development productivity", "D) Reducing total cost of quality"],
+    answer: "C",
+    rationale: "Velocity is a measure of development productivity in Agile. The benefit here is that early defect detection increases overall development team productivity – not just testing cost."
+  },
+  {
+    exam: "Practice 3",
+    q: "Classify these statements as true for STATIC or DYNAMIC testing:\ni. Abnormal external behaviors are easier to identify\nii. Discrepancies from coding standards are easier to find\niii. Identifies failures when the software is run\niv. Objective is to identify defects as early as possible\nv. Missing coverage for critical security requirements is easier to find\n\nWhich are TRUE for STATIC testing?",
+    opts: ["A) i, iv, v", "B) i, iii, iv", "C) ii, iii", "D) ii, iv, v"],
+    answer: "D",
+    rationale: "ii) Coding standards deviations → static testing. iv) Early defect detection → both static AND dynamic. v) Traceability/coverage gaps → static testing. i) Runtime behavior → dynamic. iii) Explicitly dynamic (running software). Answer: D (ii, iv, v)."
+  },
+
+  // ── PRACTICE 4 ──────────────────────────────────────────────────────────────
+  {
+    exam: "Practice 4",
+    q: "Which BEST describes exploratory testing?",
+    opts: [
+      "A) An in-depth investigation of the test object background to identify weaknesses examined by test cases",
+      "B) An approach where testers dynamically design and execute tests based on knowledge, exploration, and results of previous tests",
+      "C) Testing planned as uninterrupted sessions of test analysis and design, often used with checklist-based testing",
+      "D) Testing based on the tester's experience, knowledge, and intuition"
+    ],
+    answer: "B",
+    rationale: "B is the glossary definition of exploratory testing. C describes session-based testing but confuses it with exploratory. D is experience-based testing in general."
+  },
+  {
+    exam: "Practice 4",
+    q: "A fitness app gives feedback based on daily steps:\nUp to 1000: Couch Potato | 1001–2000: Lazy Bones | 2001–4000: Getting There | 4001–6000: Not Bad | 6001+: Way to Go\n\nWhich set of test inputs achieves the HIGHEST equivalence partition coverage?",
+    opts: [
+      "A) 0, 1000, 2000, 3000, 4000",
+      "B) 1000, 2001, 4000, 4001, 6000",
+      "C) 123, 2345, 3456, 4567, 5678",
+      "D) 666, 999, 2222, 5555, 6666"
+    ],
+    answer: "D",
+    rationale: "D) 666(1), 999(1), 2222(3), 5555(4), 6666(5) – covers 4 out of 5 partitions. A: 0(1),1000(1),2000(2),3000(3),4000(3) = 3 partitions. B: 1000(1),2001(3),4000(3),4001(4),6000(4) = 3 partitions. C: 123(1),2345(3),3456(3),4567(4),5678(4) = 3 partitions."
+  },
+  {
+    exam: "Practice 4",
+    q: "A smart home app gives temperature feedback:\nUp to 10°C: Icy Cool | 11–15°C: Chilled Out | 16–19°C: Cool Man | 20–22°C: Too Warm | 23°C+: Hot & Sweaty\n\nUsing TWO-POINT BVA, which test inputs give the highest boundary coverage?",
+    opts: [
+      "A) 0°C, 11°C, 20°C, 22°C, 23°C",
+      "B) 9°C, 15°C, 19°C, 23°C, 100°C",
+      "C) 10°C, 16°C, 19°C, 22°C, 23°C",
+      "D) 14°C, 15°C, 18°C, 19°C, 21°C, 22°C"
+    ],
+    answer: "C",
+    rationale: "2-value BVA boundary items: 10,11 | 15,16 | 19,20 | 22,23 = 8 items total. A: covers 11,20,22,23 = 4. B: covers 15,19,23 = 3. C: covers 10,16,19,22,23 = 5. D: covers 15,19,22 = 3. C has highest coverage."
+  },
+  {
+    exam: "Practice 4",
+    q: "You test a mobile banking app by evaluating each screen and field against a general list of UI best practices from a popular usability book. Which technique BEST categorizes what you are using?",
+    opts: ["A) Black-box", "B) Exploratory", "C) Checklist-based", "D) Error guessing"],
+    answer: "C",
+    rationale: "Using a checklist (the book's best practices list) to guide testing is checklist-based testing. It is not black-box (no formal spec), not exploratory (following a list, not improvising), not error guessing (not based on predicting specific faults)."
+  },
+
+  // ── PRACTICE 5 ──────────────────────────────────────────────────────────────
+  {
+    exam: "Practice 5",
+    q: "A test plan states: 'Testing will be performed using component testing and component integration testing. Regulations require 100% branch coverage for each critical component.'\n\nWhich part of the test plan does this belong to?",
+    opts: ["A) Communication", "B) Risk register", "C) Context of testing", "D) Test approach"],
+    answer: "D",
+    rationale: "Information about test levels (component, integration) and exit criteria (100% branch coverage) belongs to the test approach section of a test plan."
+  },
+  {
+    exam: "Practice 5",
+    q: "Which task is MOST LIKELY performed by the TEST MANAGER?",
+    opts: [
+      "A) Write test summary reports based on information gathered during testing",
+      "B) Review tests developed by others",
+      "C) Prepare and acquire test data",
+      "D) Analyze, review, and assess requirements for testability"
+    ],
+    answer: "A",
+    rationale: "Writing test summary/completion reports is a test manager responsibility. B, C, D are typical tester tasks."
+  },
+  {
+    exam: "Practice 5",
+    q: "Classify these as entry or exit criteria:\n1. Testing budget ($30k + $7k contingency) spent\n2. 96% of planned tests executed, rest out of scope\n3. Performance test environment set up and verified\n4. No critical defects, two high-priority open\n5. Autopilot specifications reviewed and reworked\n6. Tax calculation component has passed unit testing\n\nWhich BEST categorizes them?",
+    opts: [
+      "A) Entry: 5,6 / Exit: 1,2,3,4",
+      "B) Entry: 2,3,6 / Exit: 1,4,5",
+      "C) Entry: 1,3 / Exit: 2,4,5,6",
+      "D) Entry: 3,5,6 / Exit: 1,2,4"
+    ],
+    answer: "D",
+    rationale: "Entry (prerequisites before testing): 3 (environment ready), 5 (test basis reviewed), 6 (passed prior test level). Exit (signals to stop testing): 1 (budget spent), 2 (planned tests executed), 4 (defect level acceptable)."
+  },
+  {
+    exam: "Practice 5",
+    q: "Which statement about test estimation approaches is CORRECT?",
+    opts: [
+      "A) With metrics-based: estimate is from project measures so only available after testing starts",
+      "B) With expert-based: expert users identified by the client recommend the testing budget",
+      "C) With expert-based: test managers predict expected testing effort",
+      "D) With metrics-based: average testing costs from several past projects is used as budget"
+    ],
+    answer: "C",
+    rationale: "C) Expert-based estimation uses the judgment of those responsible for the testing activities. A is wrong – metrics-based can use data from other projects before testing starts. B is wrong – it's testing experts, not users. D partially describes one metrics-based technique but overstates it."
+  },
+  {
+    exam: "Practice 5",
+    q: "Which BEST defines risk level?",
+    opts: [
+      "A) Sum of probabilities of all problem situations and their financial harm",
+      "B) Probability of a threat × chance the threat results in financial damage",
+      "C) Combination of the probability of an undesirable event and the expected impact of that event",
+      "D) Sum of all potential hazards × sum of all potential losses"
+    ],
+    answer: "C",
+    rationale: "Risk level = likelihood × impact (consequence). C captures this correctly. A and D use 'sum' incorrectly. B adds an unnecessary second probability factor."
+  },
+  {
+    exam: "Practice 5",
+    q: "Which is MOST likely an example of a PRODUCT risk?",
+    opts: [
+      "A) The expected security features may not be supported by the system architecture",
+      "B) Developers may not have time to fix all defects found by the test team",
+      "C) Test cases may not provide full coverage of requirements",
+      "D) The performance test environment may not be ready before delivery"
+    ],
+    answer: "A",
+    rationale: "Product risks relate to the quality characteristics of the system itself. A) A security feature not being supported is a product quality risk. B) Developer time is a project risk. C) Test coverage is a project/process risk. D) Environment readiness is a project risk."
+  },
+
+  // ── PRACTICE 6 ──────────────────────────────────────────────────────────────
+  {
+    exam: "Practice 6",
+    q: "Which describes the MOST COMMON situation for a failure discovered during testing or in production?",
+    opts: [
+      "A) The product crashed when the user selected a dialog box option",
+      "B) The wrong version of compiled source code was included in the build",
+      "C) The computation algorithm used the wrong input variables",
+      "D) The developer misinterpreted the requirement for the algorithm"
+    ],
+    answer: "D",
+    rationale: "The most common root cause of failures is human error – typically a developer misinterpreting a requirement. This error leads to a defect in the code, which causes a failure when executed."
+  },
+  {
+    exam: "Practice 6",
+    q: "Which is an example of MAINTENANCE testing?",
+    opts: [
+      "A) Testing corrected defects during development of a new system",
+      "B) Testing enhancements to an existing operational system",
+      "C) Handling complaints about quality during user acceptance testing",
+      "D) Integrating functions during development of a new system"
+    ],
+    answer: "B",
+    rationale: "Maintenance testing applies to systems already in production. B describes testing an enhancement to a live system. A, C, D are activities during development, not maintenance."
+  },
+  {
+    exam: "Practice 6",
+    q: "Which BEST describes non-functional testing?",
+    opts: [
+      "A) Testing an integrated system to verify it meets specified requirements",
+      "B) Testing to determine system compliance with coding standards",
+      "C) Testing without reference to internal structure of the system",
+      "D) Testing system characteristics such as usability, reliability, or maintainability"
+    ],
+    answer: "D",
+    rationale: "Non-functional testing evaluates HOW the system performs, not WHAT it does. This includes quality characteristics like performance, security, usability, reliability."
+  },
+  {
+    exam: "Practice 6",
+    q: "Which is TRUE about regression and confirmation testing?",
+    opts: [
+      "A) Regression: check if correction was successful. Confirmation: verify no side effects",
+      "B) Regression: detect unintended side effects. Confirmation: check if system works in new environment",
+      "C) Regression: detect unintended side effects. Confirmation: check if original defect was fixed",
+      "D) Regression: check if new functionality works. Confirmation: check if original defect was fixed"
+    ],
+    answer: "C",
+    rationale: "C is correct: confirmation testing checks the specific defect is fixed; regression testing checks no other parts broke as a result of the fix."
+  },
+  {
+    exam: "Practice 6",
+    q: "What is the MAIN benefit of independent testing?",
+    opts: [
+      "A) Avoids author bias – testing from only the author's point of view",
+      "B) Ensures the maximum number of defects is found",
+      "C) Provides an opportunity to check that standards have been adhered to",
+      "D) Educates developers from other projects if exposed to other developers' work"
+    ],
+    answer: "A",
+    rationale: "The primary benefit of independent testing is objectivity – testers who did not write the code are less likely to have the same blind spots as the author."
+  },
+  {
+    exam: "Practice 6",
+    q: "Many organizations call the test department the 'Quality Assurance (QA) department.' Is this correct?",
+    opts: [
+      "A) Correct – testing and QA mean the same thing",
+      "B) Correct – the names can be used interchangeably",
+      "C) Not correct – testing is broader; it includes all activities regarding quality",
+      "D) Not correct – QA focuses on quality-related processes; testing demonstrates fitness and detects defects"
+    ],
+    answer: "D",
+    rationale: "D is correct. QA is process-oriented (ensuring the right processes are used), while testing is a specific set of activities aimed at finding defects and evaluating quality. They overlap but are not the same."
+  },
+  {
+    exam: "Practice 6",
+    q: "Regression testing should be performed (select ALL correct):\nI. Once a month\nII. When a defect has been fixed\nIII. When the test environment has changed\nIV. When the software has changed",
+    opts: ["A) II and IV", "B) II, III and IV", "C) I, II and III", "D) I and III"],
+    answer: "B",
+    rationale: "Regression testing is triggered by: II) fixing a defect (confirmation test finds fix, regression ensures no side effects), III) environment changes (may expose environment-related regressions), IV) software changes. I) 'once a month' is not a trigger – it's arbitrary."
+  },
+  {
+    exam: "Practice 6",
+    q: "What defines the SCOPE of maintenance testing?",
+    opts: [
+      "A) The coverage of the current regression pack",
+      "B) The size and risk of any change(s) to the system",
+      "C) The time since the last change was made to the system",
+      "D) Defects found at the last regression test run"
+    ],
+    answer: "B",
+    rationale: "The scope of maintenance testing is determined by impact analysis – specifically the size and risk of the change. Larger or riskier changes require more extensive maintenance testing."
+  }
+];
+
+// ── State ──────────────────────────────────────────────────────────────────────
+let selectedExam = "all";
+let selectedMode = "practice";
+let questions = [];
+let current = 0;
+let score = 0;
+let answers = []; // {q, chosen, correct, answer, rationale}
+
+// ── Setup ──────────────────────────────────────────────────────────────────────
+document.querySelectorAll('#exam-pills .exam-pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    document.querySelectorAll('#exam-pills .exam-pill').forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+    selectedExam = pill.dataset.exam;
+    updateCount();
+  });
+});
+document.querySelectorAll('#mode-pills .exam-pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    document.querySelectorAll('#mode-pills .exam-pill').forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+    selectedMode = pill.dataset.mode;
+  });
+});
+
+function getFiltered() {
+  if (selectedExam === 'all') return [...QUESTIONS];
+  return QUESTIONS.filter(q => q.exam === selectedExam);
+}
+function updateCount() {
+  const n = getFiltered().length;
+  document.getElementById('q-count-info').textContent = `${n} question${n !== 1 ? 's' : ''} available`;
+}
+updateCount();
+
+document.getElementById('btn-start').addEventListener('click', startQuiz);
+
+function shuffle(arr) {
+  return [...arr].sort(() => Math.random() - 0.5);
+}
+
+function startQuiz() {
+  questions = shuffle(getFiltered());
+  current = 0; score = 0; answers = [];
+  document.getElementById('setup-screen').style.display = 'none';
+  document.getElementById('result-screen').style.display = 'none';
+  document.getElementById('quiz-screen').style.display = 'block';
+  renderQuestion();
+}
+
+// ── Quiz ───────────────────────────────────────────────────────────────────────
+function renderQuestion() {
+  const q = questions[current];
+  const total = questions.length;
+  document.getElementById('q-counter').textContent = `Question ${current + 1} / ${total}`;
+  document.getElementById('q-score').textContent = `Score: ${score}`;
+  document.getElementById('q-exam-tag').textContent = q.exam.toUpperCase();
+  document.getElementById('progress-fill').style.width = `${(current / total) * 100}%`;
+  document.getElementById('q-badge').textContent = `Q${current + 1} · ${q.exam}`;
+  document.getElementById('q-text').textContent = q.q;
+
+  const ratBox = document.getElementById('rationale');
+  ratBox.textContent = '';
+  ratBox.classList.remove('show');
+
+  const nextBtn = document.getElementById('btn-next');
+  nextBtn.classList.remove('show');
+  nextBtn.textContent = (current < total - 1) ? 'Next question →' : 'See results →';
+
+  const optsEl = document.getElementById('opts');
+  optsEl.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.textContent = opt;
+    btn.addEventListener('click', () => handleAnswer(i, btn));
+    optsEl.appendChild(btn);
+  });
+}
+
+function handleAnswer(idx, btn) {
+  const q = questions[current];
+  const chosenLetter = ['A','B','C','D'][idx];
+  const correct = chosenLetter === q.answer;
+  if (correct) score++;
+
+  // disable all buttons
+  document.querySelectorAll('.opt-btn').forEach((b, i) => {
+    b.disabled = true;
+    const letter = ['A','B','C','D'][i];
+    if (letter === q.answer) b.classList.add(correct ? 'correct' : 'reveal');
+  });
+  if (!correct) btn.classList.remove('reveal');
+  if (!correct) btn.classList.add('wrong');
+
+  answers.push({ q: q.q, chosen: chosenLetter, answer: q.answer, correct, rationale: q.rationale, opts: q.opts });
+
+  // In practice mode show rationale immediately; exam mode show at end
+  if (selectedMode === 'practice') {
+    const ratBox = document.getElementById('rationale');
+    ratBox.textContent = q.rationale;
+    ratBox.classList.add('show');
+  }
+
+  document.getElementById('btn-next').classList.add('show');
+  document.getElementById('q-score').textContent = `Score: ${score}`;
+}
+
+document.getElementById('btn-next').addEventListener('click', () => {
+  current++;
+  if (current >= questions.length) showResults();
+  else renderQuestion();
+});
+
+// ── Results ────────────────────────────────────────────────────────────────────
+function showResults() {
+  document.getElementById('quiz-screen').style.display = 'none';
+  const rs = document.getElementById('result-screen');
+  rs.style.display = 'block';
+
+  const total = questions.length;
+  const pct = Math.round((score / total) * 100);
+  const pass = pct >= 65;
+
+  document.getElementById('score-pct').textContent = `${pct}%`;
+  document.getElementById('score-circle').style.borderColor = pass ? 'var(--green)' : 'var(--red)';
+  document.getElementById('score-pct').style.color = pass ? 'var(--green)' : 'var(--red)';
+  document.getElementById('result-title').textContent = pass ? '✅ Passed!' : '❌ Not yet – keep practicing';
+  document.getElementById('result-sub').textContent = `ISTQB CTFL passing threshold is 65% (26/40). ${pass ? 'Great work!' : 'Review the explanations below and try again.'}`;
+  document.getElementById('stat-correct').textContent = score;
+  document.getElementById('stat-wrong').textContent = total - score;
+  document.getElementById('stat-total').textContent = total;
+
+  // Build review list
+  const reviewEl = document.getElementById('review-list');
+  reviewEl.innerHTML = '<div style="font-family:var(--mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:16px;">Review</div>';
+  answers.forEach((a, i) => {
+    const div = document.createElement('div');
+    div.className = `review-item ${a.correct ? 'ri-correct' : 'ri-wrong'}`;
+    const icon = a.correct ? '✅' : '❌';
+    div.innerHTML = `
+      <div class="review-q">${icon} Q${i+1}: ${a.q}</div>
+      <div class="review-ans">
+        ${!a.correct ? `<span class="your-ans">Your answer: ${a.chosen}) ${(a.opts.find(o=>o.startsWith(a.chosen+')')))?.slice(3)||''}</span><br>` : ''}
+        <strong>Correct: ${a.answer}) ${(a.opts.find(o=>o.startsWith(a.answer+')')))?.slice(3)||''}</strong>
+        ${a.rationale ? `<br><span style="display:block;margin-top:6px;color:var(--muted)">${a.rationale}</span>` : ''}
+      </div>`;
+    reviewEl.appendChild(div);
+  });
+}
+
+document.getElementById('btn-retry').addEventListener('click', startQuiz);
+document.getElementById('btn-back-setup').addEventListener('click', () => {
+  document.getElementById('result-screen').style.display = 'none';
+  document.getElementById('setup-screen').style.display = 'block';
+});
+</script>
+</body>
+</html>
