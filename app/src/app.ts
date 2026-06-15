@@ -1,29 +1,28 @@
 import type {AppState} from './state'
 import type {QuizQuestion} from './data/quiz'
-import {iconGrid, iconImport, iconQuestion} from "./styles/icon.ts";
-import {buildCoursesPage} from "./pages/courses.ts";
+import {iconImport, iconQuestion} from "./styles/icon.ts";
 import {createQuizController} from "./pages/quiz.ts";
 import {createSetsController} from "./pages/sets.ts";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-type Page = 'kurs' | 'quiz' | 'sets'
+type Page = 'quiz' | 'sets'
 
 interface AppOptions {
     mountEl: HTMLElement
     state: AppState
-    quizQuestions: QuizQuestion[]
+    allQuestions: QuizQuestion[]
     onStateChange: (state: AppState) => void
 }
 
 // ─── Main render ──────────────────────────────────────────────────────────────
 
 export function renderApp(opts: AppOptions): void {
-    const {mountEl, quizQuestions} = opts
+    const {mountEl, allQuestions} = opts
     let {state} = opts
-    let currentPage: Page = 'kurs'
+    let currentPage: Page = 'quiz'
 
-    const quiz = createQuizController(state, quizQuestions, onControllerStateChange, navigate)
+    const quiz = createQuizController(state, allQuestions, onControllerStateChange, navigate)
     const sets = createSetsController(state, onControllerStateChange, navigate, (set) => quiz.startQuizFromSet(set))
 
     function onControllerStateChange(newState: AppState): void {
@@ -44,18 +43,15 @@ export function renderApp(opts: AppOptions): void {
     }
 
     mountEl.innerHTML = buildShell()
-    navigate('kurs')
+    navigate('quiz')
 
     // ─── Shell ───────────────────────────────────────────────────────────────────
 
     function buildShell(): string {
         return `
       <nav class="topbar">
-        <span class="brand">OBQ</span>
+        <a href="../" class="topbar-back">← OBQ</a>
         <div class="tabs">
-          <button class="tab-btn" data-page="kurs">
-            ${iconGrid()} Kurs
-          </button>
           <button class="tab-btn" data-page="quiz">
             ${iconQuestion()} Quiz
           </button>
@@ -78,13 +74,7 @@ export function renderApp(opts: AppOptions): void {
 
         const main = mountEl.querySelector<HTMLElement>('#main-content')!
 
-        if (currentPage === 'kurs') {
-            const {html, bind} = buildCoursesPage((bank) => {
-                navigate('quiz', {bank})
-            }, state.quizHistory)
-            main.innerHTML = html
-            bind()
-        } else if (currentPage === 'quiz') {
+        if (currentPage === 'quiz') {
             main.innerHTML = quiz.buildQuizSetup(params?.bank)
             quiz.bindBankTabs(params?.bank)
         } else if (currentPage === 'sets') {
@@ -101,7 +91,7 @@ export function renderApp(opts: AppOptions): void {
         document.getElementById('btn-reset')?.addEventListener('click', () => {
             if (confirm('Nullstille ALL fremgang? Dette kan ikke angres.')) {
                 update({quizHistory: [], quizSets: [], quizSetHistory: {}})
-                navigate('kurs')
+                navigate('quiz')
             }
         })
 

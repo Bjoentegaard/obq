@@ -10,6 +10,6 @@ const allQuestions = [...quizQuestions, ...istqbQuestions]
 renderApp({
     mountEl: document.getElementById('app')!,
     state,
-    quizQuestions: allQuestions,
+    allQuestions,
     onStateChange: (newState) => saveState(newState),
 })

@@ -9,9 +9,18 @@ interface QuizSession {
     questions: QuizQuestion[]
     index: number
     correct: number
-    chosen: number[]   // chosen answer index per question
+    chosen: number[]
     bank?: string
     setId?: string
+}
+
+interface QuizResultSnapshot {
+    correct: number
+    total: number
+    percentage: number
+    pass: boolean
+    questions: QuizQuestion[]
+    chosen: number[]
 }
 
 // ─── Controller ───────────────────────────────────────────────────────────────
@@ -24,6 +33,7 @@ export function createQuizController(
 ) {
     let state = initialState
     let quizSession: QuizSession | null = null
+    let lastResult: QuizResultSnapshot | null = null
 
     function update(newState: AppState): void {
         state = newState
@@ -70,7 +80,6 @@ export function createQuizController(
                <option value="tech">Cloud Technology</option>
                <option value="billing">Billing &amp; Pricing</option>`
         }
-        // istqb + any future bank: auto-generate from available questions
         const domains = [...new Set(allQuestions.filter(q => q.bank === bank).map(q => q.domain))]
         const allLabel = bank === 'istqb' ? 'Alle practice exams' : 'Alle domener'
         return `<option value="all">${allLabel}</option>` +
@@ -105,7 +114,6 @@ export function createQuizController(
         let pool = allQuestions.filter(q => q.bank === bank)
         if (domain !== 'all') pool = pool.filter(q => q.domain === domain)
 
-        // Shuffle
         for (let i = pool.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [pool[i], pool[j]] = [pool[j], pool[i]]
@@ -115,6 +123,7 @@ export function createQuizController(
         pool = pool.slice(0, count)
 
         quizSession = {questions: pool, index: 0, correct: 0, chosen: [], bank}
+        lastResult = null
         renderQuizQuestion()
     }
 
@@ -124,7 +133,12 @@ export function createQuizController(
             const j = Math.floor(Math.random() * (i + 1));
             [pool[i], pool[j]] = [pool[j], pool[i]]
         }
-        quizSession = {questions: pool as QuizQuestion[], index: 0, correct: 0, chosen: [], setId: set.id}
+        // Detect a common bank across all questions (if any)
+        const banks = [...new Set(pool.map(q => q.bank).filter(Boolean))]
+        const bank = banks.length === 1 ? banks[0] : undefined
+
+        quizSession = {questions: pool as QuizQuestion[], index: 0, correct: 0, chosen: [], bank, setId: set.id}
+        lastResult = null
         renderQuizQuestion()
     }
 
@@ -206,7 +220,7 @@ export function createQuizController(
         else renderQuizQuestion()
     }
 
-    // ── Finish ────────────────────────────────────────────────────────────────
+    // ── Finish: save once, render freely ─────────────────────────────────────
 
     function finishQuiz(): void {
         if (!quizSession) return
@@ -215,24 +229,34 @@ export function createQuizController(
         const percentage = Math.round((correct / total) * 100)
         const pass = percentage >= 65
 
-        if (setId) {
-            const progress: QuizSetProgress = {correct, total, percentage, timestamp: Date.now()}
-            update(recordQuizSetResult(state, setId, progress))
-        } else {
-            const result: QuizResult = {timestamp: Date.now(), correct, total, percentage, bank}
-            update({...state, quizHistory: [...state.quizHistory, result]})
+        // Save result exactly once
+        if (!lastResult) {
+            if (setId) {
+                const progress: QuizSetProgress = {correct, total, percentage, timestamp: Date.now()}
+                update(recordQuizSetResult(state, setId, progress))
+            } else {
+                const result: QuizResult = {timestamp: Date.now(), correct, total, percentage, bank}
+                update({...state, quizHistory: [...state.quizHistory, result]})
+            }
+            lastResult = {correct, total, percentage, pass, questions, chosen}
         }
 
+        renderResult(lastResult)
+    }
+
+    function renderResult(r: QuizResultSnapshot): void {
         const main = document.getElementById('main-content')!
         main.innerHTML = `
       <div class="page-inner">
         <div class="result-hero">
-          <div class="result-score-big ${pass ? 'pass' : 'fail'}">${percentage}%</div>
-          <div class="result-label">${pass ? `Bestått · ${correct} av ${total} riktige` : `Ikke bestått · Grense er 65% (${Math.ceil(total * 0.65)}/${total})`}</div>
+          <div class="result-score-big ${r.pass ? 'pass' : 'fail'}">${r.percentage}%</div>
+          <div class="result-label">${r.pass
+            ? `Bestått · ${r.correct} av ${r.total} riktige`
+            : `Ikke bestått · Grense er 65% (${Math.ceil(r.total * 0.65)}/${r.total})`}</div>
           <div class="result-stats">
-            <div class="r-stat"><div class="r-stat-num">${correct}</div><div class="r-stat-lbl">Riktige</div></div>
-            <div class="r-stat"><div class="r-stat-num">${total - correct}</div><div class="r-stat-lbl">Feil</div></div>
-            <div class="r-stat"><div class="r-stat-num">${total}</div><div class="r-stat-lbl">Totalt</div></div>
+            <div class="r-stat"><div class="r-stat-num">${r.correct}</div><div class="r-stat-lbl">Riktige</div></div>
+            <div class="r-stat"><div class="r-stat-num">${r.total - r.correct}</div><div class="r-stat-lbl">Feil</div></div>
+            <div class="r-stat"><div class="r-stat-num">${r.total}</div><div class="r-stat-lbl">Totalt</div></div>
           </div>
           <div class="result-actions">
             <button class="retry-btn" id="btn-retry">↺ Ta quiz igjen</button>
@@ -242,7 +266,7 @@ export function createQuizController(
       </div>`
 
         document.getElementById('btn-retry')!.onclick = () => navigate('quiz')
-        document.getElementById('btn-review')!.onclick = () => renderReview(questions, chosen)
+        document.getElementById('btn-review')!.onclick = () => renderReview(r.questions, r.chosen)
     }
 
     // ── Review ────────────────────────────────────────────────────────────────
@@ -290,7 +314,7 @@ export function createQuizController(
         <button class="retry-btn" style="margin-top:1.5rem" id="btn-retry-from-review">↺ Ta quiz igjen</button>
       </div>`
 
-        document.getElementById('btn-back-result')!.onclick = () => finishQuiz()
+        document.getElementById('btn-back-result')!.onclick = () => lastResult && renderResult(lastResult)
         document.getElementById('btn-retry-from-review')!.onclick = () => navigate('quiz')
     }
 

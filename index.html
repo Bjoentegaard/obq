@@ -10,14 +10,15 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg:     #0c0e14;
-      --bg2:    #13161f;
-      --bg3:    #1a1e2a;
-      --border: rgba(255,255,255,0.07);
-      --text:   #e8eaf0;
-      --muted:  #7a8299;
-      --accent: #4f8ef7;
-      --green:  #3ecf8e;
+      --bg:      #0c0e14;
+      --bg2:     #13161f;
+      --border:  rgba(255,255,255,0.07);
+      --border2: rgba(255,255,255,0.13);
+      --text:    #e8eaf0;
+      --muted:   #7a8299;
+      --dim:     #454b60;
+      --accent:  #4f8ef7;
+      --green:   #3ecf8e;
     }
     body {
       background: var(--bg);
@@ -28,7 +29,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 24px;
+      padding: 40px 24px;
     }
     .logo {
       font-family: 'IBM Plex Mono', monospace;
@@ -38,54 +39,82 @@
       text-transform: uppercase;
       color: var(--accent);
       margin-bottom: 40px;
-      text-align: center;
     }
-    .card-grid {
+
+    /* ── Shared card base ── */
+    .card-grid, .course-grid {
+      width: 100%;
+      max-width: 620px;
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 16px;
-      width: 100%;
-      max-width: 620px;
     }
-    .card {
+    a.card, a.course-card {
       background: var(--bg2);
       border: 1px solid var(--border);
       border-radius: 14px;
-      padding: 28px;
       text-decoration: none;
       color: inherit;
       display: block;
-      position: relative;
       overflow: hidden;
       transition: border-color 0.15s, transform 0.15s;
     }
-    .card:hover { border-color: rgba(255,255,255,0.18); transform: translateY(-2px); }
-    .card::before {
+    a.card:hover, a.course-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+
+    /* ── Nav cards (Quiz + Kokebok) ── */
+    a.card {
+      padding: 28px;
+      position: relative;
+    }
+    a.card::before {
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0;
       height: 3px;
       border-radius: 14px 14px 0 0;
     }
-    .card.blue::before  { background: var(--accent); }
-    .card.green::before { background: var(--green); }
+    a.card.blue::before  { background: var(--accent); }
+    a.card.green::before { background: var(--green); }
     .card-icon { font-size: 32px; margin-bottom: 16px; display: block; }
-    .card h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
-    .card p { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 20px; }
-    .card-cta {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.5px;
-      color: var(--accent);
-    }
-    .card.green .card-cta { color: var(--green); }
+    .card h2   { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+    .card p    { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 20px; }
+    .card-cta  { font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.5px; color: var(--accent); }
+    a.card.green .card-cta { color: var(--green); }
     .card-cta::after { content: ' →'; }
+
+    /* ── Section label ── */
+    .section-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin: 36px 0 16px;
+      width: 100%;
+      max-width: 620px;
+    }
+
+    /* ── Course cards ── */
+    .course-card-top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 20px 22px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .cc-icon  { font-size: 28px; flex-shrink: 0; }
+    .cc-title { font-size: 15px; font-weight: 700; }
+    .cc-sub   { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .course-card-body { padding: 14px 22px 20px; }
+    .cc-desc  { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 14px; }
+    .cc-cta   { font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.5px; }
+    .cc-cta::after { content: ' →'; }
+
     footer {
       margin-top: 48px;
       font-family: 'IBM Plex Mono', monospace;
       font-size: 11px;
-      color: var(--muted);
+      color: var(--dim);
       letter-spacing: 2px;
       text-transform: uppercase;
     }
@@ -96,16 +125,47 @@
 
   <div class="card-grid">
     <a href="./app/" class="card blue">
-      <span class="card-icon">📚</span>
-      <h2>Kurshub</h2>
-      <p>Kursgjennomganger, quiz og egne quiz-sett. AWS CLF-C02, ISTQB CTFL og flere.</p>
-      <span class="card-cta">Åpne kurshub</span>
+      <span class="card-icon">🧠</span>
+      <h2>Quiz</h2>
+      <p>Ta quiz i AWS CLF-C02, ISTQB CTFL og egne quiz-sett.</p>
+      <span class="card-cta">Start quiz</span>
     </a>
     <a href="./kokebok/" class="card green">
       <span class="card-icon">📗</span>
       <h2>Kokebok</h2>
       <p>Strukturerte notater fra kurs og sertifiseringer i søkbart mdBook-format.</p>
       <span class="card-cta">Åpne kokebok</span>
+    </a>
+  </div>
+
+  <div class="section-label">Kursgjennomganger</div>
+
+  <div class="course-grid">
+    <a href="./courses/aws-clf/" class="course-card" style="border-top: 3px solid #4f8ef7;">
+      <div class="course-card-top">
+        <span class="cc-icon">☁️</span>
+        <div>
+          <div class="cc-title">AWS CLF-C02</div>
+          <div class="cc-sub">Cloud Practitioner</div>
+        </div>
+      </div>
+      <div class="course-card-body">
+        <p class="cc-desc">Fundamentals of AWS cloud: arkitektur, sikkerhet, teknologi og prismodeller.</p>
+        <span class="cc-cta" style="color:#4f8ef7">Åpne gjennomgang</span>
+      </div>
+    </a>
+    <a href="./courses/istqb/" class="course-card" style="border-top: 3px solid #3ecf8e;">
+      <div class="course-card-top">
+        <span class="cc-icon">🔍</span>
+        <div>
+          <div class="cc-title">ISTQB CTFL</div>
+          <div class="cc-sub">Foundation Level v4.0.1</div>
+        </div>
+      </div>
+      <div class="course-card-body">
+        <p class="cc-desc">Grunnleggende testing: prosesser, teknikker, statisk testing og testledelse.</p>
+        <span class="cc-cta" style="color:#3ecf8e">Åpne gjennomgang</span>
+      </div>
     </a>
   </div>
 

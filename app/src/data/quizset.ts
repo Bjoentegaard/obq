@@ -11,6 +11,7 @@ export interface QuizSetQuestion {
     answer: 0 | 1 | 2 | 3
     explanation?: string
     domain?: string
+    bank?: string
 }
 
 /* e.g.

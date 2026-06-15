@@ -16,19 +16,17 @@ cd app && npm run build      # Production build → app/dist/ — must run on Ma
 
 ```
 obq/
-├── index.html               # Portal: two cards → app/ and kokebok/
+├── index.html               # Portal: Quiz + Kokebok cards, then course overview cards per course
 ├── app/                     # Vite + TypeScript SPA
 │   └── src/
 │       ├── main.ts          # Entry: merges question banks, calls renderApp()
-│       ├── app.ts           # Shell + routing (Page = 'kurs'|'quiz'|'sets')
+│       ├── app.ts           # Shell + routing (Page = 'quiz'|'sets'), ← OBQ back link
 │       ├── data/
 │       │   ├── quiz.ts      # QuizQuestion interface + AWS CLF-C02 questions (25)
 │       │   ├── istqb.ts     # ISTQB CTFL v4.0.1 questions (92, Practice 1–6)
-│       │   ├── courses.ts   # Course[] metadata array
 │       │   ├── domain.ts    # DOMAIN_META: tag colors/labels per domain string
-│       │   └── quizset.ts   # QuizSet type for custom user quiz sets
+│       │   └── quizset.ts   # QuizSet + QuizSetQuestion types
 │       ├── pages/
-│       │   ├── courses.ts   # Kurs tab — course cards with progress badge
 │       │   ├── quiz.ts      # Quiz setup → question → answer → result → review
 │       │   └── sets.ts      # Custom quiz sets CRUD + play
 │       ├── state/
@@ -62,7 +60,7 @@ interface QuizResult {
     correct: number
     total: number
     percentage: number
-    bank?: string                    // used to filter per-course progress on Kurs tab
+    bank?: string                    // used for history bank label in quiz setup
 }
 
 interface AppState {
@@ -71,17 +69,13 @@ interface AppState {
     quizSetHistory: Record<string, QuizSetProgress[]>
 }
 
-interface Course {
-    id: string
-    title: string
-    subtitle: string
-    icon: string
-    description: string
-    tags: string[]
-    color: string                    // accent color for card top border
-    overviewUrl: string              // always relative: '../courses/<slug>/'
-    quizBank: string                 // matches QuizQuestion.bank
-    questionCount: number
+interface QuizSetQuestion {
+    question: string
+    options: [string, string, string, string]
+    answer: 0 | 1 | 2 | 3
+    explanation?: string
+    domain?: string
+    bank?: string                    // optional; if all questions share same bank, recorded in history
 }
 ```
 
@@ -105,7 +99,7 @@ Fonts: IBM Plex Sans (body) + IBM Plex Mono (code/labels) via Google Fonts.
 
 ## Course Overview Pages
 
-Static HTML pages at `courses/<slug>/index.html`, linked from course cards via `overviewUrl`. Use `../course.css` for shared styles. **`overviewUrl` must be relative** (`../courses/<slug>/`) — the app is served from `/app/` so absolute paths break.
+Static HTML pages at `courses/<slug>/index.html`, linked from `index.html` course cards. Use `../course.css` for shared styles. Course cards in `index.html` are hardcoded HTML — add a new card there when adding a new course.
 
 ### Tab navigation (copy as-is from `_template.html`)
 
@@ -152,8 +146,8 @@ Each tab is a `<div id="<id>" class="section">`. First tab gets `class="section 
 1. **Questions** — create `app/src/data/<slug>.ts` with `QuizQuestion[]`, `bank: '<slug>'`
 2. **Merge** — import and spread into `allQuestions` in `main.ts`
 3. **Bank tab** — add `<button class="bank-tab" data-bank="<slug>">` in `buildQuizSetup()` in `pages/quiz.ts`. Domain options for non-`aws` banks are auto-generated from questions — no extra code needed. Optionally add entries to `DOMAIN_META` in `domain.ts` for custom tag colors.
-4. **Metadata** — add a `Course` entry to `data/courses.ts` (see interface above; remember relative `overviewUrl`)
-5. **Overview page** — copy `courses/_template.html` to `courses/<slug>/index.html`, fill in content using components from the library above
+4. **Overview page** — copy `courses/_template.html` to `courses/<slug>/index.html`, fill in content
+5. **Portal card** — add a course card to `index.html` in the `.course-grid` section (copy existing card pattern)
 
 ## Deployment
 
