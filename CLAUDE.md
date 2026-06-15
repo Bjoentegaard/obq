@@ -5,159 +5,159 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Build & Dev
 
 ```bash
-# Local dev (inside app/)
-cd app && npm run dev       # Vite dev server on localhost:5173
-
-# Production build — run on Mac (NOT in Linux ARM64 sandbox)
-cd app && npm run build     # Outputs to app/dist/
-
-# Typecheck only (works in sandbox)
-cd app && npx tsc --noEmit
+cd app && npm run dev        # Vite dev server — localhost:5173
+cd app && npx tsc --noEmit  # Typecheck (works in sandbox)
+cd app && npm run build      # Production build → app/dist/ — must run on Mac, not Linux ARM64
 ```
 
-> **Sandbox limitation**: Vite 8 uses rolldown, which requires a native binding not available on Linux ARM64. TypeScript compiles fine in the sandbox, but `npm run build` must run on the user's Mac. GitHub Actions (x86_64) handles the production build automatically on push to `main`.
+> Vite 8 uses rolldown which has no Linux ARM64 binding. GitHub Actions (x86_64) handles production builds on push to `main`.
 
 ## Architecture
 
 ```
 obq/
-├── index.html           # Portal — two cards: Kurshub (→ app/) + Kokebok (→ kokebok/)
-├── app/                 # Vite + TypeScript SPA (the main quiz/course app)
+├── index.html               # Portal: two cards → app/ and kokebok/
+├── app/                     # Vite + TypeScript SPA
 │   └── src/
-│       ├── main.ts          # Entry: loads state, merges question banks, calls renderApp()
-│       ├── app.ts           # Shell, routing (Page = 'kurs'|'quiz'|'sets'), tab nav
+│       ├── main.ts          # Entry: merges question banks, calls renderApp()
+│       ├── app.ts           # Shell + routing (Page = 'kurs'|'quiz'|'sets')
 │       ├── data/
 │       │   ├── quiz.ts      # QuizQuestion interface + AWS CLF-C02 questions (25)
-│       │   ├── istqb.ts     # ISTQB CTFL v4.0.1 questions (92, Practice 1-6)
-│       │   ├── courses.ts   # Course metadata (Course interface, courses array)
-│       │   ├── domain.ts    # Domain type (string), DOMAIN_META for tag colors/labels
+│       │   ├── istqb.ts     # ISTQB CTFL v4.0.1 questions (92, Practice 1–6)
+│       │   ├── courses.ts   # Course[] metadata array
+│       │   ├── domain.ts    # DOMAIN_META: tag colors/labels per domain string
 │       │   └── quizset.ts   # QuizSet type for custom user quiz sets
 │       ├── pages/
-│       │   ├── courses.ts   # Kurs tab: course cards with progress badge, links + quiz
-│       │   ├── quiz.ts      # Quiz setup, question render, answer, result + review screens
+│       │   ├── courses.ts   # Kurs tab — course cards with progress badge
+│       │   ├── quiz.ts      # Quiz setup → question → answer → result → review
 │       │   └── sets.ts      # Custom quiz sets CRUD + play
 │       ├── state/
-│       │   ├── app-state.ts # AppState, QuizResult (includes bank?), QuizSetProgress
+│       │   ├── app-state.ts # AppState, QuizResult, QuizSetProgress
 │       │   └── storage.ts   # localStorage key: obq_state_v1 (schema v2)
-│       └── styles/
-│           └── main.css     # All app CSS; design tokens in :root
-├── courses/             # Static HTML course overviews
-│   ├── _template.html   # Template for new courses — copy this
-│   ├── course.css       # Shared styles for all course overviews
-│   ├── aws-clf/         # AWS CLF-C02 course overview
-│   └── istqb/           # ISTQB CTFL course overview + exam.html
-└── kokebok/             # mdBook source (separate repo: Bjoentegaard/aws-kokebok)
+│       └── styles/main.css  # All app CSS; design tokens in :root
+├── courses/                 # Static HTML course overviews (standalone pages)
+│   ├── course.css           # Shared stylesheet for all course overviews
+│   ├── _template.html       # Starting point — copy for each new course
+│   ├── aws-clf/index.html   # AWS CLF-C02 overview
+│   └── istqb/
+│       ├── index.html       # ISTQB CTFL overview
+│       └── exam.html        # Standalone practice exam (not part of the Vite app)
+└── kokebok/                 # mdBook (external repo: Bjoentegaard/aws-kokebok)
 ```
 
-## Design System Tokens
-
-```css
---bg: #0c0e14   --bg2: #13161f   --bg3: #1a1e2a   --bg4: #222636
---border: rgba(255,255,255,0.07)
---text: #e2e4ed   --text2: #7e849a   --text3: #454b60
---accent: #4f8ef7   --green: #3ecf8e
---amber: #f5a623   --red: #f76f6f
-```
-
-Fonts: IBM Plex Sans (body) + IBM Plex Mono (code/labels) via Google Fonts.
-
-## Quiz Question Format
+## Data Model
 
 ```ts
 interface QuizQuestion {
-    bank: string                    // e.g. 'aws', 'istqb' — open string, no union restriction
-    domain: string                  // e.g. 'cloud', 'Practice 1'
+    bank: string                     // 'aws' | 'istqb' | any future bank
+    domain: string                   // 'cloud' | 'Practice 1' | etc.
     question: string
     options: [string, string, string, string]
-    answer: 0 | 1 | 2 | 3          // index of correct option (A=0, B=1, C=2, D=3)
+    answer: 0 | 1 | 2 | 3           // A=0 B=1 C=2 D=3
     explanation?: string
 }
-```
 
-All questions from all banks are merged in `main.ts`:
-```ts
-const allQuestions = [...quizQuestions, ...istqbQuestions]
-```
-
-## Quiz Result Format
-
-```ts
 interface QuizResult {
     timestamp: number
     correct: number
     total: number
     percentage: number
-    bank?: string   // which bank was quizzed — used for per-course progress on Kurs tab
+    bank?: string                    // used to filter per-course progress on Kurs tab
+}
+
+interface AppState {
+    quizHistory: QuizResult[]
+    quizSets: QuizSet[]
+    quizSetHistory: Record<string, QuizSetProgress[]>
+}
+
+interface Course {
+    id: string
+    title: string
+    subtitle: string
+    icon: string
+    description: string
+    tags: string[]
+    color: string                    // accent color for card top border
+    overviewUrl: string              // always relative: '../courses/<slug>/'
+    quizBank: string                 // matches QuizQuestion.bank
+    questionCount: number
 }
 ```
 
-## Key Features
+All question banks are merged in `main.ts`:
+```ts
+const allQuestions = [...quizQuestions, ...istqbQuestions]
+```
 
-- **Quiz review screen**: After completing a quiz, "Gå gjennom svar" shows all questions with correct/wrong highlighting and explanations.
-- **Progress badge on course cards**: Kurs tab shows average score and last attempt date per course, pulled from `state.quizHistory` filtered by `bank`.
-- **Dynamic domain options**: Quiz setup auto-generates domain filter options from available questions for the selected bank — no hardcoding needed for new banks.
-- **Quiz history bank labels**: History items show the bank (e.g. "AWS", "ISTQB") they belong to.
+## Design System
+
+Both the app (`app/src/styles/main.css`) and course overviews (`courses/course.css`) share the same tokens:
+
+```css
+--bg: #0c0e14   --bg2: #13161f   --bg3: #1a1e2a   --bg4: #222636
+--border: rgba(255,255,255,0.07)
+--text: #e2e4ed   --text2: #7e849a   --text3: #454b60
+--accent: #4f8ef7   --green: #3ecf8e   --amber: #f5a623   --red: #f76f6f
+```
+
+Fonts: IBM Plex Sans (body) + IBM Plex Mono (code/labels) via Google Fonts.
+
+## Course Overview Pages
+
+Static HTML pages at `courses/<slug>/index.html`, linked from course cards via `overviewUrl`. Use `../course.css` for shared styles. **`overviewUrl` must be relative** (`../courses/<slug>/`) — the app is served from `/app/` so absolute paths break.
+
+### Tab navigation (copy as-is from `_template.html`)
+
+```html
+<button class="tab-btn active" onclick="show('oversikt', this)">Oversikt</button>
+<button class="tab-btn" onclick="show('teknikker', this)">Teknikker</button>
+```
+```js
+function show(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+```
+
+Each tab is a `<div id="<id>" class="section">`. First tab gets `class="section active"`. Topbar back link: `<a href="../../" class="topbar-back">← OBQ</a>`.
+
+### Component library (`course.css`)
+
+| Component | Usage |
+|---|---|
+| `.card` | Content card — dark bg, rounded corners |
+| `.overview-grid` | 3-col gradient cards (chapters/modules) |
+| `.grid-2` / `.grid-3` | Responsive 2- or 3-column layout |
+| `.inset` | Darker block inside a card |
+| `.principle` + `.principle-num` | Numbered principles/rules |
+| `.flow` + `.flow-step` | Horizontal step chain with arrows |
+| `table` | Styled comparison table |
+| `details` / `summary` / `.details-body` | Accordion |
+| `.click-grid` + `.click-card` + `.detail-panel` | Interactive card → detail panel |
+| `.info-block.green/.red/.amber/.accent` | Colored info/risk blocks |
+| `.tip` | Amber exam tip box |
+| `.tags` + `.tag.green/.amber/.red/.purple` | Tag pills |
+| `ul.plain` | List with → markers |
+| `.label` | Small uppercase mono label |
+| `.ch-header` + `.ch-icon` | Chapter header with icon circle |
+
+`.flow-step` color variants: default (accent), `.green`, `.amber`, `.red`, `.purple`.
 
 ## Adding a New Course
 
-### 1. Add questions file
-
-Create `app/src/data/<slug>.ts` with questions using the `QuizQuestion` interface. Set `bank` to a new string value (e.g. `'pmi'`).
-
-### 2. Register the bank type in quiz.ts (AWS only hardcoded)
-
-In `app/src/pages/quiz.ts`, add domain options for the new bank in `buildDomainOptions()`. For banks other than `'aws'`, domain options are **auto-generated** from available questions — no additional code needed.
-
-In `app/src/data/domain.ts`, optionally add `DOMAIN_META` entries for the new domains (for tag colors/labels in quiz).
-
-### 3. Register in courses.ts
-
-Add an entry to `app/src/data/courses.ts`:
-```ts
-{
-    id: 'pmi-pmp',
-    title: 'PMI PMP',
-    subtitle: 'Project Management Professional',
-    icon: '📋',
-    description: 'Short description in Norwegian.',
-    tags: ['Project', 'Agile', 'Leadership'],
-    color: '#f5a623',
-    overviewUrl: '/courses/pmi-pmp/',
-    quizBank: 'pmi',          // string — no type change needed
-    questionCount: 30,
-}
-```
-
-### 4. Import questions in main.ts
-
-```ts
-import { pmiQuestions } from './data/pmi'
-const allQuestions = [...quizQuestions, ...istqbQuestions, ...pmiQuestions]
-```
-
-### 5. Add bank tab to quiz UI
-
-In `app/src/pages/quiz.ts`, add a tab button for the new bank in `buildQuizSetup()`:
-```ts
-<button class="bank-tab" data-bank="pmi">📋 PMI PMP</button>
-```
-
-### 6. Create static course overview
-
-Copy `courses/_template.html` to `courses/<slug>/index.html`. The template uses tab navigation via `show(id, btn)`, and components: `.card`, `.overview-grid`, `.grid-2`, `.inset`, `.flow`, `table`, `details`, `.click-grid`, `.info-block`, `.tip`. Link `../course.css` for shared styles.
+1. **Questions** — create `app/src/data/<slug>.ts` with `QuizQuestion[]`, `bank: '<slug>'`
+2. **Merge** — import and spread into `allQuestions` in `main.ts`
+3. **Bank tab** — add `<button class="bank-tab" data-bank="<slug>">` in `buildQuizSetup()` in `pages/quiz.ts`. Domain options for non-`aws` banks are auto-generated from questions — no extra code needed. Optionally add entries to `DOMAIN_META` in `domain.ts` for custom tag colors.
+4. **Metadata** — add a `Course` entry to `data/courses.ts` (see interface above; remember relative `overviewUrl`)
+5. **Overview page** — copy `courses/_template.html` to `courses/<slug>/index.html`, fill in content using components from the library above
 
 ## Deployment
 
-GitHub Actions (`deploy.yml`) builds and deploys on push to `main`:
-1. Builds Vite app (`app/dist/`)
-2. Builds mdBook from `Bjoentegaard/aws-kokebok`
-3. Assembles `dist/`: portal at root, app at `/app/`, kokebok at `/kokebok/`, courses at `/courses/`
-4. Deploys to GitHub Pages
-
-The old `deploy-pages.yml` is disabled (trigger changed to `workflow_dispatch`).
-
-## Dead Code / Cleanup Notes
-
-- `app/src/pages/dashboard.ts` — deleted (was the old Dash tab with flashcard progress; replaced by Kurs tab)
-- `app/src/state/app-state.ts` — `getDomainProgress()` and related flashcard functions removed since flashcards are gone
-- `app/src/data/quiz.ts` — `bank` field is now `string` (not `'aws' | 'istqb'` union) to avoid needing type changes for each new course
+Push to `main` → GitHub Actions (`deploy.yml`) builds everything and deploys to GitHub Pages:
+- Vite app → `dist/app/`
+- mdBook (from `Bjoentegaard/aws-kokebok`) → `dist/kokebok/`
+- Portal + courses → `dist/`

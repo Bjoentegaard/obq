@@ -100,7 +100,7 @@ export function renderApp(opts: AppOptions): void {
     function bindShellEvents(): void {
         document.getElementById('btn-reset')?.addEventListener('click', () => {
             if (confirm('Nullstille ALL fremgang? Dette kan ikke angres.')) {
-                update({scores: {}, quizHistory: [], quizSets: [], quizSetHistory: {}})
+                update({quizHistory: [], quizSets: [], quizSetHistory: {}})
                 navigate('kurs')
             }
         })

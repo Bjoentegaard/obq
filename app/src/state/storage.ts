@@ -67,9 +67,8 @@ function migratePersistedState(raw: unknown): AppState | null {
 }
 
 function sanitizeAppState(raw: Record<string, unknown>): AppState {
-    const scores = (raw['scores'] ?? {}) as Record<string, boolean>
     const quizHistory = (raw['quizHistory'] ?? []) as QuizResult[]
     const quizSets = (raw['quizSets'] ?? []) as QuizSet[]
     const quizSetHistory = (raw['quizSetHistory'] ?? {}) as Record<string, QuizSetProgress[]>
-    return {scores, quizHistory, quizSets, quizSetHistory}
+    return {quizHistory, quizSets, quizSetHistory}
 }

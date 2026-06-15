@@ -16,22 +16,13 @@ export interface QuizSetProgress {
 }
 
 export interface AppState {
-    scores: Record<string, boolean>
     quizHistory: QuizResult[]
     quizSets: QuizSet[]
     quizSetHistory: Record<string, QuizSetProgress[]>
 }
 
 export function defaultState(): AppState {
-    return {scores: {}, quizHistory: [], quizSets: [], quizSetHistory: {}}
-}
-
-export function getKnownCount(state: AppState): number {
-    return Object.values(state.scores).filter(v => v === true).length
-}
-
-export function getUnknownCount(state: AppState): number {
-    return Object.values(state.scores).filter(v => v === false).length
+    return {quizHistory: [], quizSets: [], quizSetHistory: {}}
 }
 
 export function addQuizSet(state: AppState, set: QuizSet): AppState {

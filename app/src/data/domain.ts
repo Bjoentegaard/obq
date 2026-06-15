@@ -1,6 +1,4 @@
 
-export type Domain = string
-
 export const DOMAIN_META: Record<string, { label: string; color: string; cls: string }> = {
     // AWS CLF-C02
     cloud:    { label: 'Cloud Concepts',  color: '#7ab3ff', cls: 'd-cloud' },
