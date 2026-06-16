@@ -903,4 +903,610 @@ export const istqbQuestions: QuizQuestion[] = [
         answer: 1,
         explanation: 'A CI/CD pipeline automates building, testing, and deploying code on each commit — enabling rapid feedback and continuous delivery with automated tests at each stage.'
     },
+    // ── Practice 1 ────────────────────────────────────────────────────────────
+    {
+        bank: 'istqb', domain: 'Practice 1',
+        question: 'A developer accidentally uses the wrong comparison operator (< instead of <=) when checking a boundary condition. The code compiles and runs but produces wrong output in edge cases. In the error → defect → failure chain, what is the CORRECT classification of each item?',
+        options: [
+            'The wrong operator is the error; the wrong logic in the code is the defect; the wrong output is the failure',
+            'The wrong output is the error; the wrong operator is the defect; the developer is the root cause',
+            'The wrong operator is the defect; the wrong output is the error; the root cause is the failure',
+            'The wrong output is the failure; the wrong operator is the error; there is no defect until the software is run'
+        ],
+        answer: 0,
+        explanation: 'An error is a human action (using < instead of <=). This creates a defect — a flaw in the work product (wrong operator in code). When executed and the wrong output is produced, that is a failure — a visible deviation from expected behavior.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 1',
+        question: 'Which of the following BEST illustrates the "absence-of-defects fallacy" (Testing Principle 7)?',
+        options: [
+            'A safety-critical system is fully tested and no defects are found, so it is released',
+            'An e-commerce checkout flow passes all tests but the checkout process requires 12 steps, causing 80% of users to abandon their carts',
+            'A system has known defects, but all are low-severity so testing is stopped',
+            'A test team finds no failures because all test cases are testing invalid partitions'
+        ],
+        answer: 1,
+        explanation: 'The absence-of-defects fallacy states that fixing all defects does not help if the system does not fulfill user needs. The checkout flow may be defect-free yet fail to satisfy users. Options A, C, and D describe other issues unrelated to this principle.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 1',
+        question: 'Principle 5 ("Tests wear out") advises that repeated tests stop finding new defects. Which EXCEPTION to this principle is explicitly recognized in ISTQB CTFL?',
+        options: [
+            'Performance testing, because load patterns change over time',
+            'Security testing, because new vulnerabilities are continuously discovered',
+            'Confirmation testing and regression testing, because repeatability is the key requirement',
+            'Exploratory testing, because it is non-deterministic'
+        ],
+        answer: 2,
+        explanation: 'ISTQB explicitly states that confirmation testing and regression testing are exceptions to the "tests wear out" principle — they rely on repeatability to confirm a fix worked and to detect unintended side effects.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 1',
+        question: 'A root cause analysis after a production failure reveals: "Budget restrictions prevented adequate training for requirements engineers, who consequently misunderstood the performance requirements, leading to an architectural defect that caused system timeouts under load." Which element in this chain is the ROOT CAUSE?',
+        options: [
+            'The architectural defect in the design',
+            'The misunderstood performance requirements',
+            'The system timeouts under load',
+            'The budget restrictions that prevented training'
+        ],
+        answer: 3,
+        explanation: 'The root cause is the source of the defect in the process. Budget restrictions → lack of training → misunderstanding → defect → failure. Removing the root cause (addressing budget/training) would prevent the defect type from recurring. The defect, requirements misunderstanding, and failure are downstream effects.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 1',
+        question: 'Testing Principle 3 states "Early testing saves time and money." Which of the following activities BEST demonstrates applying this principle?',
+        options: [
+            'Running full regression tests immediately after a production release',
+            'Testers reviewing requirement specifications during the requirements phase to find defects before coding begins',
+            'Delaying test planning until the system is fully built to avoid rework',
+            'Performing only acceptance testing because it catches all defects'
+        ],
+        answer: 1,
+        explanation: 'Reviewing requirements during the requirements phase catches defects at the earliest possible point — before they propagate to design and code. The earlier defects are found, the cheaper and easier they are to fix. Options A, C, D all delay testing to later stages.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 1',
+        question: 'Which statement CORRECTLY distinguishes "verification" from "validation" in ISTQB terminology?',
+        options: [
+            'Verification checks that the product meets user needs; validation checks it meets specifications',
+            'Verification evaluates whether work products meet specified requirements; validation evaluates whether the product meets user needs in its intended environment',
+            'Verification and validation are synonyms in ISTQB — both mean checking the product is correct',
+            'Verification is dynamic testing; validation is static testing'
+        ],
+        answer: 1,
+        explanation: 'Verification = "Are we building the software right?" — checks against specifications. Validation = "Are we building the right software?" — checks against user needs. They are distinct concepts; verification can be static or dynamic.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 1',
+        question: 'A team working under high time pressure releases software that later causes a critical production failure. An investigation reveals the developer misunderstood a requirement. Which of the following is MOST likely a cause of defects according to ISTQB?',
+        options: [
+            'The use of agile methodology',
+            'The lack of automated testing tools',
+            'Time pressure and misunderstandings related to project activities',
+            'The absence of a test completion report'
+        ],
+        answer: 2,
+        explanation: 'ISTQB lists time pressure and misunderstandings related to project activities and goals as typical causes of errors and defects. These are direct human factors. Methodology, tool absence, or report absence are not listed as primary defect causes.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 1',
+        question: 'Which statement CORRECTLY describes the relationship between testing and debugging?',
+        options: [
+            'Debugging is a testing activity performed by testers after a failure is found',
+            'Testing finds failures; debugging is a development activity where developers reproduce, diagnose, and fix defects',
+            'Testing and debugging are the same activity performed in different phases',
+            'Debugging proves the absence of defects after the tester confirms a fix'
+        ],
+        answer: 1,
+        explanation: 'Testing (by testers) finds failures and reports them. Debugging (by developers) involves reproducing the failure, diagnosing the root cause, and fixing the defect. Retesting (confirmation testing) then verifies the fix. They are separate activities performed by different roles.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 1',
+        question: 'Which of the following is NOT a typical test objective according to ISTQB CTFL?',
+        options: [
+            'Providing information to stakeholders to allow informed decisions about release',
+            'Proving that the software has zero defects',
+            'Reducing the level of risk of inadequate software quality',
+            'Verifying that the test object complies with contractual and regulatory requirements'
+        ],
+        answer: 1,
+        explanation: 'Proving zero defects is not a valid test objective — Testing Principle 1 explicitly states that testing can show the presence of defects but cannot prove their absence. All other options are listed as typical test objectives in ISTQB CTFL.'
+    },
+    // ── Practice 2 ────────────────────────────────────────────────────────────
+    {
+        bank: 'istqb', domain: 'Practice 2',
+        question: 'In the V-model, component integration testing verifies the interfaces between components. Which test LEVEL is responsible for testing the interfaces between the system under test and EXTERNAL systems or services?',
+        options: [
+            'Component testing',
+            'System testing',
+            'System integration testing',
+            'Acceptance testing'
+        ],
+        answer: 2,
+        explanation: 'System integration testing specifically focuses on the interfaces between the system under test and other external systems or services. Component integration testing focuses on internal component interfaces; system testing tests the system as a whole.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 2',
+        question: 'A project uses a "bottom-up" integration testing strategy. What does this mean?',
+        options: [
+            'Testing starts at the highest-level components and stubs are used for lower-level modules',
+            'Testing starts at the lowest-level components, and higher-level components are added one at a time',
+            'All components are assembled at once and the entire system is tested in one phase',
+            'Testing proceeds from the user interface down to the database layer'
+        ],
+        answer: 1,
+        explanation: 'Bottom-up integration starts with the lowest-level components (those with no dependencies) and progressively adds higher-level components. Drivers are used to simulate higher-level callers. Top-down is the reverse, using stubs for lower components. Big bang assembles everything at once.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 2',
+        question: 'Which statement CORRECTLY describes the PRIMARY purpose of acceptance testing compared to system testing?',
+        options: [
+            'Acceptance testing focuses on finding defects; system testing focuses on confirming readiness for release',
+            'Acceptance testing is performed by independent testers in the test environment; system testing is performed by users',
+            'Acceptance testing aims to gain confidence and confirm the system is fit for purpose; system testing aims to test the system as a whole against requirements',
+            'Acceptance testing and system testing have the same purpose but are performed at different times'
+        ],
+        answer: 2,
+        explanation: 'The main purpose of acceptance testing is no longer to find defects but to gain confidence and confirm the system is ready for release and fit for its intended purpose. System testing tests the whole system against specifications and typically does aim to find defects.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 2',
+        question: 'A software product is given to real end users at the supplier\'s environment before commercial release to gather feedback. Which type of acceptance testing is this?',
+        options: [
+            'Beta testing',
+            'Alpha testing',
+            'Operational acceptance testing',
+            'Regulatory acceptance testing'
+        ],
+        answer: 1,
+        explanation: 'Alpha testing is performed by end users at the supplier\'s (developer\'s) environment before release. Beta testing is performed by end users at their own environment. Both are forms of acceptance testing for commercial software to gather feedback before full release.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 2',
+        question: 'Which of the following BEST describes what "shift-left" means in the context of testing?',
+        options: [
+            'Moving all testing activities to a separate team on the left side of the organization chart',
+            'Starting testing earlier in the SDLC without neglecting later testing activities',
+            'Replacing all right-side activities (deployment, release) with testing activities',
+            'Shifting the test schedule leftward by one sprint to allow for more review time'
+        ],
+        answer: 1,
+        explanation: 'Shift-left means starting test activities earlier in the SDLC — reviewing requirements, writing tests before code (TDD), using static analysis, etc. It does NOT mean abandoning later testing; the note in ISTQB is explicit that later tests are not neglected.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 2',
+        question: 'In BDD (Behavior-Driven Development), test cases are written in which format?',
+        options: [
+            'If–Then–Else structured pseudocode',
+            'Given–When–Then natural language using Gherkin',
+            'As a [role], I want [goal], so that [value] (user story format)',
+            'Precondition–Step–Expected result table format'
+        ],
+        answer: 1,
+        explanation: 'BDD uses the Gherkin format: Given (context/precondition) – When (action/event) – Then (expected outcome). This is natural language that non-technical stakeholders can understand. User story format is for ATDD/user stories; table format is not BDD-specific.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 2',
+        question: 'Which of the following is a recognized CHALLENGE of implementing DevOps from a testing perspective?',
+        options: [
+            'DevOps produces too much documentation for testers to review',
+            'CI/CD pipelines eliminate the need for system testing',
+            'The delivery pipeline must be established and CI/CD tools must be maintained, requiring additional resources',
+            'DevOps forces all testing to be manual because automated tests are incompatible with continuous deployment'
+        ],
+        answer: 2,
+        explanation: 'ISTQB identifies that establishing and maintaining CI/CD pipelines and tools requires resources, and test automation itself requires additional investment. DevOps reduces documentation, enables automation, and does not eliminate system testing.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 2',
+        question: 'Operational Acceptance Testing (OAT) is performed by which group and focuses on which aspects?',
+        options: [
+            'End users; functional completeness and usability',
+            'System administrators; backup/restore, disaster recovery, user management, maintenance, security',
+            'Independent testers; compliance with legal regulations and security rules',
+            'Developers; confirming that all unit tests pass in the production environment'
+        ],
+        answer: 1,
+        explanation: 'OAT is performed by system administrators and focuses on operational aspects: backup and restore procedures, disaster recovery, user management, maintenance tasks, and security operations — not end-user functionality.'
+    },
+    // ── Practice 3 ────────────────────────────────────────────────────────────
+    {
+        bank: 'istqb', domain: 'Practice 3',
+        question: 'In a formal inspection, which role is SPECIFICALLY PROHIBITED from also acting as review leader, reader, or scribe?',
+        options: [
+            'The moderator',
+            'The scribe',
+            'The author',
+            'The reviewer'
+        ],
+        answer: 2,
+        explanation: 'In an Inspection (the most formal review type), the author cannot act as review leader, reader, or scribe. This separation ensures objectivity and thorough examination. In less formal review types this restriction does not apply.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 3',
+        question: 'A technical review is being held. Which statement BEST distinguishes a technical review from a walkthrough?',
+        options: [
+            'A walkthrough is led by a trained moderator; a technical review is led by the author',
+            'A technical review is led by a moderator (different from the author) and a scribe takes notes; a walkthrough is led by the author who presents the material',
+            'A technical review uses checklists based on standards; a walkthrough uses only expert judgment',
+            'A walkthrough requires all participants to study material before the meeting; a technical review has no such requirement'
+        ],
+        answer: 1,
+        explanation: 'In a technical review, a moderator (not the author) leads the meeting and a scribe takes notes. In a walkthrough, the author leads and presents the material to the audience. Inspection (not technical review) requires pre-meeting study and uses checklists based on standards.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 3',
+        question: 'Which statement CORRECTLY describes what the "moderator (facilitator)" does in a formal review?',
+        options: [
+            'Creates the material to be reviewed and fixes all defects found',
+            'Plans the review, assigns staff, and controls the budget',
+            'Ensures the review meeting runs effectively and moderates discussions',
+            'Collates defects and takes minutes during the review meeting'
+        ],
+        answer: 2,
+        explanation: 'The moderator (facilitator) ensures the review meeting runs effectively and moderates discussions. The author creates material and fixes defects. The manager plans and assigns resources. The scribe collates defects and takes minutes.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 3',
+        question: 'Which of the following is a type of defect that static testing can find that is TYPICALLY DIFFICULT to find with dynamic testing?',
+        options: [
+            'Runtime performance bottlenecks under production load',
+            'Unreachable (dead) code that can never be executed',
+            'Incorrect outputs when processing boundary values',
+            'System crashes caused by unhandled exceptions'
+        ],
+        answer: 1,
+        explanation: 'ISTQB specifically mentions dead code (unreachable code) as a defect that static testing finds but dynamic testing typically misses — because dynamic testing only finds failures when code actually executes, and dead code never executes. Runtime performance, wrong outputs, and crashes require code execution to detect.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 3',
+        question: 'Which of the following statements about the five steps of a formal review process is CORRECT?',
+        options: [
+            'Individual review happens before review initiation',
+            'The author presents the material and defects are discussed during the "Review Initiation" step',
+            'In the "Communication and Analysis" step, the review outcome can be: accepted, accepted with minor changes, or rejected',
+            'The "Planning" step includes distributing the material to reviewers'
+        ],
+        answer: 2,
+        explanation: 'In the "Communication and Analysis" step, defects are discussed and the formal outcome is decided: accepted / accepted with minor changes / rejected. Review Initiation (step 2) is where material is distributed. Individual Review (step 3) comes after Initiation. The author presents material during Communication and Analysis, not Initiation.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 3',
+        question: 'Which of the following work products is LEAST SUITABLE for static testing?',
+        options: [
+            'A requirements specification document',
+            'A user manual',
+            'Third-party compiled executable code that cannot be analyzed by tools',
+            'A test plan'
+        ],
+        answer: 2,
+        explanation: 'ISTQB states that work products not suitable for static testing include those difficult to interpret by humans or code produced by third parties that cannot be analyzed by tools. Compiled executables fall in this category. Requirements specs, user manuals, and test plans are all suitable for static testing.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 3',
+        question: 'In early agile iterations, a team holds short review sessions on each user story before development begins. Which benefit of static testing MOST DIRECTLY explains why this improves project outcomes?',
+        options: [
+            'It provides objective quality metrics for the test report',
+            'It prevents defects in requirements from propagating into code, reducing development time and costs',
+            'It measures quality characteristics that depend on code execution',
+            'It allows testers to identify performance bottlenecks early'
+        ],
+        answer: 1,
+        explanation: 'A key benefit of static testing is preventing defects from proceeding from documentation to code. Catching ambiguous or incorrect requirements before coding avoids far more expensive fixes later. Options C and D require code execution; option A is a monitoring benefit, not the primary prevention benefit.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 3',
+        question: 'Which of the following review types is MOST appropriate when the goal is to evaluate quality, gain consensus on technical issues, and discuss solutions — with no strict requirement for a formal process or standards compliance?',
+        options: [
+            'Inspection',
+            'Technical review',
+            'Walkthrough',
+            'Informal review'
+        ],
+        answer: 1,
+        explanation: 'A technical review is a systematic defect detection event led by a moderator (not the author), where participants can discuss solutions to problems, gain consensus, and make decisions on technical problems. Inspection is the most formal type. Walkthrough is led by the author. Informal review has no defined process.'
+    },
+    // ── Practice 4 ────────────────────────────────────────────────────────────
+    {
+        bank: 'istqb', domain: 'Practice 4',
+        question: 'A system accepts integer temperatures. Valid range is 5°C to 25°C (inclusive). Using TWO-VALUE BVA, which set of test values is CORRECT for the boundaries of this range?',
+        options: [
+            '{4, 5, 6} and {24, 25, 26}',
+            '{4, 5} and {25, 26}',
+            '{5, 6} and {24, 25}',
+            '{5} and {25}'
+        ],
+        answer: 1,
+        explanation: 'Two-value BVA requires 2 test cases per boundary: the boundary value itself and the closest value in the neighboring class. Lower boundary: 5 (boundary) and 4 (closest invalid neighbor). Upper boundary: 25 (boundary) and 26 (closest invalid neighbor). Three-value BVA would also include 6 and 24.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 4',
+        question: 'When applying three-value BVA at the boundary between two VALID partitions (e.g., 100–199 gives 2.5% discount; 200–499 gives 5% discount), what is the CORRECT minimal set of test values at that boundary?',
+        options: [
+            '{199, 200}',
+            '{198, 199, 200}',
+            '{198, 199, 200, 201}',
+            '{199, 200, 201}'
+        ],
+        answer: 2,
+        explanation: 'At a boundary between two valid classes, three-value BVA requires {one below, boundary, one above} for each boundary. At boundary 199/200: {198, 199, 200} from the lower partition and {199, 200, 201} from the upper. The minimal combined set that covers all three-value requirements is {198, 199, 200, 201}.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 4',
+        question: 'In Equivalence Partitioning, why must INVALID equivalence classes be tested INDIVIDUALLY (one test case per invalid class)?',
+        options: [
+            'To increase overall coverage metrics',
+            'Because invalid inputs always cause system crashes that prevent further testing',
+            'To prevent masking of failures — one invalid input might cause an error that prevents detection of failures from other invalid inputs in the same test',
+            'Because the ISTQB standard requires at least three test cases for each partition'
+        ],
+        answer: 2,
+        explanation: 'If multiple invalid inputs are combined in one test, one invalid input might cause an error/rejection that masks the behavior of the other invalid inputs — so failures from other invalid classes are never seen. Each invalid class must be tested separately to prevent this masking effect.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 4',
+        question: 'A decision table has 4 conditions, each with 2 possible values (True/False). How many combinations exist in a full limited-entry decision table, and what does 100% decision table coverage require?',
+        options: [
+            '8 combinations; test 4 of them',
+            '16 combinations; test all 16 feasible combinations',
+            '16 combinations; test at least 8 (50%) combinations',
+            '8 combinations; test all 8 combinations'
+        ],
+        answer: 1,
+        explanation: 'For 4 conditions each with 2 values: 2×2×2×2 = 16 combinations. 100% decision table coverage (coverage items = feasible columns/combinations) requires all feasible combinations to be tested at least once. If all 16 are feasible, all 16 must be covered.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 4',
+        question: 'Which statement BEST describes the relationship between branch coverage and statement coverage?',
+        options: [
+            '100% statement coverage guarantees 100% branch coverage',
+            '100% branch coverage guarantees 100% statement coverage, but 100% statement coverage does NOT guarantee 100% branch coverage',
+            'Branch coverage and statement coverage always produce the same percentage result',
+            '100% branch coverage only guarantees 100% statement coverage when there are no loops'
+        ],
+        answer: 1,
+        explanation: 'Branch coverage is stronger than statement coverage. Achieving 100% branch coverage means all branches (including both outcomes of decisions) are exercised, which necessarily executes all statements. However, 100% statement coverage only requires each statement to be executed once and may miss the false-branch of a decision.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 4',
+        question: 'In state transition testing, which coverage criterion requires testing all VALID transitions AND all INVALID transitions (attempting undefined/invalid events in each state)?',
+        options: [
+            'All states coverage',
+            'Valid transitions coverage (0-switch coverage)',
+            'All transitions coverage',
+            'All paths coverage'
+        ],
+        answer: 2,
+        explanation: 'All transitions coverage is the strongest standard criterion: it requires exercising all valid transitions AND attempting all invalid transitions. ISTQB states this should be the minimum for mission-critical and safety-critical software. Valid transitions coverage (0-switch) only covers valid transitions.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 4',
+        question: 'Which statement about valid transitions coverage (0-switch coverage) is CORRECT?',
+        options: [
+            'Achieving 100% valid transitions coverage guarantees 100% all states coverage',
+            'Achieving 100% all states coverage guarantees 100% valid transitions coverage',
+            'Valid transitions coverage and all states coverage are equivalent criteria',
+            'Valid transitions coverage is stronger than all transitions coverage'
+        ],
+        answer: 0,
+        explanation: 'ISTQB states that 100% valid transitions coverage guarantees 100% state coverage — to exercise all transitions you must visit all states. However, the reverse is NOT true: visiting all states does not guarantee all transitions between them are exercised. Valid transitions coverage is weaker than all transitions coverage.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 4',
+        question: 'Which of the following BEST describes the key WEAKNESS of statement coverage compared to branch coverage?',
+        options: [
+            'Statement coverage is more expensive to measure than branch coverage',
+            'Statement coverage cannot be applied to object-oriented code',
+            'Statement coverage does not test the decision logic — a decision with a false-branch that is never taken can still achieve 100% statement coverage',
+            'Statement coverage requires more test cases than branch coverage'
+        ],
+        answer: 2,
+        explanation: 'The key weakness of statement coverage is that it does not test decision logic. If an "if" statement always evaluates to true, all statements inside the block execute (giving 100% statement coverage) but the false-branch path is never tested. Branch coverage catches this by requiring both true and false branches to be exercised.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 4',
+        question: 'A tester uses knowledge of how similar systems have failed in the past, combined with a list of typical developer errors (wrong initialization, off-by-one errors), to design targeted test cases. Which experience-based technique is this?',
+        options: [
+            'Exploratory testing',
+            'Checklist-based testing',
+            'Error guessing with fault attacks',
+            'Boundary value analysis'
+        ],
+        answer: 2,
+        explanation: 'Error guessing uses tester knowledge of past failures and typical developer errors. When made more systematic by creating lists of potential errors and designing test cases against those lists, ISTQB calls these "fault attacks." Exploratory testing is simultaneous design and execution; checklist-based uses predefined checklists.'
+    },
+    // ── Practice 5 ────────────────────────────────────────────────────────────
+    {
+        bank: 'istqb', domain: 'Practice 5',
+        question: 'Which of the following is an example of an EXIT CRITERION (rather than an entry criterion) for a test level?',
+        options: [
+            'All planned test cases have been designed and reviewed',
+            'The test environment has been set up and is available',
+            'All critical and high-priority defects have been fixed and confirmed, and code coverage of 85% has been achieved',
+            'The test basis (requirements specification) has been approved'
+        ],
+        answer: 2,
+        explanation: 'Exit criteria define when testing is complete (Definition of Done). Coverage metrics, defect density thresholds, and passed/failed counts are exit criteria. Entry criteria (Definition of Ready) include resources (environment, test basis, personnel) being available before testing begins.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 5',
+        question: 'A test manager uses the Three-Point Estimation formula E = (a + 4m + b) / 6 where a=10 days, m=15 days, b=26 days. What is the estimated effort E?',
+        options: [
+            '17 days',
+            '51 days',
+            '15.5 days',
+            '16 days'
+        ],
+        answer: 3,
+        explanation: 'E = (a + 4m + b) / 6 = (10 + 4×15 + 26) / 6 = (10 + 60 + 26) / 6 = 96 / 6 = 16 days. The formula weights the most likely estimate (m) four times to reflect that it is the most probable outcome.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 5',
+        question: 'Which statement CORRECTLY describes the difference between "product risks" and "project risks" in ISTQB?',
+        options: [
+            'Product risks relate to development schedules; project risks relate to software quality',
+            'Product risks are related to quality characteristics of the system and CAN be affected by testing; project risks are related to project management and CANNOT be affected by testing',
+            'Product risks are always more severe than project risks',
+            'Project risks include code defects; product risks include staffing issues'
+        ],
+        answer: 1,
+        explanation: 'ISTQB defines product risks as related to quality characteristics (functionality, performance, security, etc.) — these can be reduced by testing. Project risks are related to project management and control (schedule, budget, staffing, organizational issues) — testing cannot directly affect these.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 5',
+        question: 'In risk-based testing, how is the RISK LEVEL of a product risk calculated?',
+        options: [
+            'Severity × frequency of occurrence',
+            'Likelihood of occurrence × impact (or cost/severity)',
+            'Number of defects found × test effort spent',
+            'Business value × technical complexity'
+        ],
+        answer: 1,
+        explanation: 'ISTQB defines risk level = likelihood × impact (sometimes expressed as likelihood × severity or likelihood × cost). This formula is used in both quantitative risk assessment (mathematical) and as the basis for qualitative risk matrices to prioritize testing effort.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 5',
+        question: 'Which of the following is classified as a PROJECT RISK (not a product risk)?',
+        options: [
+            'The payment module may calculate incorrect totals',
+            'The system may fail under peak load during sales events',
+            'Key test staff may leave the project due to reorganization, causing schedule delays',
+            'The login feature may have security vulnerabilities'
+        ],
+        answer: 2,
+        explanation: 'Staff departing and causing schedule delays is a people/organizational project risk — related to project management, not software quality. Incorrect calculations, load failures, and security vulnerabilities are all product risks related to quality characteristics that testing can directly address.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 5',
+        question: 'In Planning Poker (the agile variant of Wideband Delphi), what happens after each round of estimates is revealed and there is NO consensus?',
+        options: [
+            'The average of all estimates is automatically accepted',
+            'The highest estimator wins and their estimate is used',
+            'The team discusses the reasons for differences, then another round of estimation is done',
+            'The test manager makes the final decision based on project constraints'
+        ],
+        answer: 2,
+        explanation: 'In Wideband Delphi (including Planning Poker), when estimates diverge, the group discusses reasons for the differences — especially outliers explain their reasoning. Then another estimation round is conducted. This continues until consensus is reached. The average is not automatically used; discussion drives convergence.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 5',
+        question: 'In the testing quadrants model, which quadrant contains smoke tests and non-functional automated tests (except usability)?',
+        options: [
+            'Q1 — Technology facing, supporting the team',
+            'Q2 — Business facing, supporting the team',
+            'Q3 — Business facing, critiquing the product',
+            'Q4 — Technology facing, critiquing the product'
+        ],
+        answer: 3,
+        explanation: 'Q4 is technology-facing and critiques the product. It contains smoke tests, performance tests, load tests, security tests and other non-functional tests (except usability, which is in Q3). Q1 has automated component/integration tests. Q2 has functional tests and user story tests. Q3 has exploratory testing and UAT.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 5',
+        question: 'Which statement about the TEST PYRAMID (Mike Cohn) is CORRECT?',
+        options: [
+            'The top layer (end-to-end/UI tests) should contain the most test cases because they provide the most confidence',
+            'The bottom layer (unit/component tests) should have many small fast tests; the top layer should have few complex slow tests',
+            'The pyramid implies equal numbers of tests at each level for balanced coverage',
+            'The pyramid applies only to automated testing and does not include manual testing'
+        ],
+        answer: 1,
+        explanation: 'The test pyramid model shows: bottom (unit/component) = many small, fast, isolated tests; middle (integration/service) = fewer; top (end-to-end/UI) = few, complex, slow, high-level tests. More tests are needed at lower levels. The pyramid supports automation but the principle applies to test effort allocation broadly.'
+    },
+    // ── Practice 6 ────────────────────────────────────────────────────────────
+    {
+        bank: 'istqb', domain: 'Practice 6',
+        question: 'In a defect lifecycle, a developer investigates a reported defect and concludes it is actually caused by incorrect test data, not a code defect. What status should the defect report most likely be given?',
+        options: [
+            'Fixed',
+            'Postponed',
+            'Rejected',
+            'Re-opened'
+        ],
+        answer: 2,
+        explanation: 'A defect report can be rejected when investigation shows there is no actual defect in the code — for example, if it was caused by a test environment issue, incorrect test data (false positive), or an invalid test case. "Fixed" is for genuine defects that are resolved; "Postponed" is when the fix is deferred; "Re-opened" is after a failed fix verification.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 6',
+        question: 'Which of the following is an example of a FALSE POSITIVE in testing?',
+        options: [
+            'A test case that fails because a genuine defect in the code causes wrong output',
+            'A test case that passes despite a defect existing in the code',
+            'A test case that fails but investigation reveals no actual defect — the failure was due to an environment issue',
+            'A test case that is never executed because of a dependency issue'
+        ],
+        answer: 2,
+        explanation: 'A false positive is a test that fails (reports a defect) when there is actually no real defect — the failure was caused by something other than a code defect (e.g., test environment instability, wrong test data). A false negative is when a test passes despite a real defect existing (option B).'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 6',
+        question: 'Which category of test tools includes tools that measure how much of the code has been executed during testing?',
+        options: [
+            'Static testing tools',
+            'Test design and implementation tools',
+            'Test execution and coverage tools',
+            'Non-functional testing tools'
+        ],
+        answer: 2,
+        explanation: 'Code coverage tools that measure what percentage of code (statements, branches) has been executed fall under "test execution and coverage tools" in ISTQB\'s tool categories. Static testing tools analyze code without executing it. Test design tools help generate test cases. Non-functional tools handle performance, security, etc.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 6',
+        question: 'Which of the following is a recognized RISK of test automation according to ISTQB?',
+        options: [
+            'Automated tests execute faster than manual tests',
+            'Tools may be abandoned by vendors or open-source development may stop, leaving the organization unable to maintain them',
+            'Automated tests are always more reliable than manual tests',
+            'Test automation eliminates the need for test managers'
+        ],
+        answer: 1,
+        explanation: 'ISTQB identifies vendor problems and open-source risks as specific automation risks: a vendor may close or stop support, and open-source development may stop — forcing the organization to maintain tools themselves. Fast execution and high reliability are benefits, not risks. Automation does not eliminate the need for test managers.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 6',
+        question: 'Which tool category would BEST support a team wanting to track defects, manage test cases, and view test execution dashboards in one place?',
+        options: [
+            'Static testing tools',
+            'Test design and implementation tools',
+            'Test execution and coverage tools',
+            'Management tools (test management tools)'
+        ],
+        answer: 3,
+        explanation: 'Management tools increase test process efficiency by facilitating management of requirements, tests, defects, and configuration. Test management tools specifically provide centralized tracking of test cases, defect management, execution status, and reporting dashboards. Coverage tools measure code coverage; static tools analyze code without execution.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 6',
+        question: 'A test team wants to simulate 10,000 concurrent users accessing a web application to measure its response time under peak load. Which tool category supports this?',
+        options: [
+            'Collaboration tools',
+            'Non-functional testing tools (performance/load testing tools)',
+            'Test execution and coverage tools',
+            'DevOps tools'
+        ],
+        answer: 1,
+        explanation: 'Non-functional testing tools allow testing of characteristics that are difficult or impossible to test manually. Performance/load testing tools simulate high volumes of concurrent users to measure response time, throughput, and system behavior under load. This is not achievable manually with real users at scale.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 6',
+        question: 'Which statement about the contents of a defect report (incident report) per ISO/IEC/IEEE 29119-3 is CORRECT?',
+        options: [
+            'A defect report must include the full source code of the component where the defect was found',
+            'A defect report should include the expected result, actual result, impact/severity, and priority of the fix',
+            'A defect report only needs the defect title and a screenshot — other details slow down the fix process',
+            'Defect reports are only required for critical defects; minor defects can be communicated verbally'
+        ],
+        answer: 1,
+        explanation: 'ISTQB (per ISO/IEC/IEEE 29119-3) specifies that defect reports should include: identifier, title, date/author, test item identification, context (SDLC phase, test case, test data), description with logs/screenshots, expected and actual results, impact/severity, fix priority, and status. Source code is not a required component.'
+    },
+    {
+        bank: 'istqb', domain: 'Practice 6',
+        question: 'Which statement about test automation BEST reflects the ISTQB position on the relationship between tools and testers?',
+        options: [
+            'Once comprehensive test automation is in place, the number of testers can be reduced proportionally',
+            'Tools are not a substitute for people; testers cannot be removed from software development projects because of automation',
+            'Test automation should eventually replace all manual testing activities',
+            'The primary purpose of automation is to reduce the need for skilled testers'
+        ],
+        answer: 1,
+        explanation: 'ISTQB explicitly states: "Tools are not a substitute for people. Testers cannot be removed from software development projects because of automation." Automation handles repetitive tasks and enables testers to focus on more creative/critical testing that tools cannot perform. The goal is not headcount reduction.'
+    },
 ]
