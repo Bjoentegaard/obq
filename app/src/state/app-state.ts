@@ -19,10 +19,11 @@ export interface AppState {
     quizHistory: QuizResult[]
     quizSets: QuizSet[]
     quizSetHistory: Record<string, QuizSetProgress[]>
+    wrongQuestionKeys: string[]   // `${bank}::${question}` for each unanswered question
 }
 
 export function defaultState(): AppState {
-    return {quizHistory: [], quizSets: [], quizSetHistory: {}}
+    return {quizHistory: [], quizSets: [], quizSetHistory: {}, wrongQuestionKeys: []}
 }
 
 export function addQuizSet(state: AppState, set: QuizSet): AppState {

@@ -1070,6 +1070,34 @@ kbd {
     background: rgba(79, 142, 247, 0.2)
 }
 
+.wrong-retry-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap
+}
+
+.wrong-retry-btn {
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 10px 18px;
+    border-radius: var(--r);
+    border: 1px solid var(--amber);
+    background: rgba(245, 166, 35, 0.10);
+    color: var(--amber);
+    cursor: pointer;
+    transition: all .15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1
+}
+
+.wrong-retry-btn:hover {
+    background: rgba(245, 166, 35, 0.18)
+}
+
 .history-list {
     margin-top: .5rem
 }

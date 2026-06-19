@@ -70,5 +70,6 @@ function sanitizeAppState(raw: Record<string, unknown>): AppState {
     const quizHistory = (raw['quizHistory'] ?? []) as QuizResult[]
     const quizSets = (raw['quizSets'] ?? []) as QuizSet[]
     const quizSetHistory = (raw['quizSetHistory'] ?? {}) as Record<string, QuizSetProgress[]>
-    return {quizHistory, quizSets, quizSetHistory}
+    const wrongQuestionKeys = (raw['wrongQuestionKeys'] ?? []) as string[]
+    return {quizHistory, quizSets, quizSetHistory, wrongQuestionKeys}
 }

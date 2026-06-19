@@ -90,7 +90,7 @@ export function renderApp(opts: AppOptions): void {
     function bindShellEvents(): void {
         document.getElementById('btn-reset')?.addEventListener('click', () => {
             if (confirm('Nullstille ALL fremgang? Dette kan ikke angres.')) {
-                update({quizHistory: [], quizSets: [], quizSetHistory: {}})
+                update({quizHistory: [], quizSets: [], quizSetHistory: {}, wrongQuestionKeys: []})
                 navigate('quiz')
             }
         })
@@ -101,6 +101,9 @@ export function renderApp(opts: AppOptions): void {
 
         if (currentPage === 'quiz') {
             document.getElementById('btn-start-quiz')?.addEventListener('click', () => quiz.startQuiz())
+            document.querySelectorAll<HTMLButtonElement>('[data-wrong-bank]').forEach(btn => {
+                btn.addEventListener('click', () => quiz.startWrongQuiz(btn.dataset['wrongBank']!))
+            })
         }
     }
 }

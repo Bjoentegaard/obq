@@ -46,9 +46,23 @@ export function createQuizController(
         const bank = preselectedBank ?? 'aws'
         const history = buildHistoryHTML(state.quizHistory)
         const domainOptions = buildDomainOptions(bank)
+        const wrongByBank: {bank: string; label: string; count: number}[] = [
+            {bank: 'aws',   label: '☁️ AWS CLF-C02'},
+            {bank: 'istqb', label: '🔍 ISTQB CTFL'},
+        ].map(b => ({
+            ...b,
+            count: state.wrongQuestionKeys.filter(k => k.startsWith(`${b.bank}::`)).length,
+        })).filter(b => b.count > 0)
+
+        const wrongBtns = wrongByBank.length > 0
+            ? `<div class="wrong-retry-group">${wrongByBank.map(b =>
+                `<button class="wrong-retry-btn" data-wrong-bank="${b.bank}">📌 ${b.label} feil (${b.count})</button>`
+              ).join('')}</div>`
+            : ''
 
         return `
       <div class="page-inner" id="quiz-setup">
+        ${wrongBtns}
         <p class="section-head">Kursbank</p>
         <div class="bank-tabs">
           <button class="bank-tab ${bank === 'aws' ? 'active' : ''}" data-bank="aws">☁️ AWS CLF-C02</button>
@@ -142,6 +156,21 @@ export function createQuizController(
         renderQuizQuestion()
     }
 
+    function startWrongQuiz(filterBank: string): void {
+        const wrongSet = new Set(state.wrongQuestionKeys)
+        let pool = allQuestions.filter(q =>
+            q.bank === filterBank && wrongSet.has(`${q.bank}::${q.question}`)
+        )
+        if (!pool.length) return
+        for (let i = pool.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [pool[i], pool[j]] = [pool[j], pool[i]]
+        }
+        quizSession = {questions: pool, index: 0, correct: 0, chosen: [], bank: filterBank}
+        lastResult = null
+        renderQuizQuestion()
+    }
+
     // ── Render question ───────────────────────────────────────────────────────
 
     function renderQuizQuestion(): void {
@@ -231,12 +260,21 @@ export function createQuizController(
 
         // Save result exactly once
         if (!lastResult) {
+            // Update wrong-question tracking
+            const wrongSet = new Set(state.wrongQuestionKeys)
+            questions.forEach((q, i) => {
+                const key = `${q.bank ?? 'unknown'}::${q.question}`
+                if (chosen[i] === q.answer) wrongSet.delete(key)
+                else wrongSet.add(key)
+            })
+            const baseState = {...state, wrongQuestionKeys: [...wrongSet]}
+
             if (setId) {
                 const progress: QuizSetProgress = {correct, total, percentage, timestamp: Date.now()}
-                update(recordQuizSetResult(state, setId, progress))
+                update(recordQuizSetResult(baseState, setId, progress))
             } else {
                 const result: QuizResult = {timestamp: Date.now(), correct, total, percentage, bank}
-                update({...state, quizHistory: [...state.quizHistory, result]})
+                update({...baseState, quizHistory: [...baseState.quizHistory, result]})
             }
             lastResult = {correct, total, percentage, pass, questions, chosen}
         }
@@ -261,12 +299,17 @@ export function createQuizController(
           <div class="result-actions">
             <button class="retry-btn" id="btn-retry">↺ Ta quiz igjen</button>
             <button class="review-btn" id="btn-review">📋 Gå gjennom svar</button>
+            ${quizSession && state.wrongQuestionKeys.filter(k => k.startsWith(`${quizSession!.bank}::`)).length > 0
+                ? `<button class="wrong-retry-btn" id="btn-result-wrong" data-wrong-bank="${quizSession!.bank}">📌 Ta feil-oppgavene (${state.wrongQuestionKeys.filter(k => k.startsWith(`${quizSession!.bank}::`)).length})</button>`
+                : ''}
           </div>
         </div>
       </div>`
 
         document.getElementById('btn-retry')!.onclick = () => navigate('quiz')
         document.getElementById('btn-review')!.onclick = () => renderReview(r.questions, r.chosen)
+        const resultWrongBtn = document.getElementById('btn-result-wrong') as HTMLButtonElement | null
+        resultWrongBtn?.addEventListener('click', () => startWrongQuiz(resultWrongBtn.dataset['wrongBank']!))
     }
 
     // ── Review ────────────────────────────────────────────────────────────────
@@ -339,6 +382,7 @@ export function createQuizController(
         buildQuizSetup,
         startQuiz,
         startQuizFromSet,
+        startWrongQuiz,
         bindBankTabs,
         syncState: (s: AppState) => { state = s },
     }
