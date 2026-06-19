@@ -96,9 +96,17 @@ export function createQuizController(
                <option value="tech">Cloud Technology</option>
                <option value="billing">Billing &amp; Pricing</option>`
         }
+        if (bank === 'istqb') {
+            return `<option value="all">Alle kapitler</option>
+               <option value="Ch 1: Fundamentals">Ch 1: Fundamentals</option>
+               <option value="Ch 2: SDLC">Ch 2: SDLC</option>
+               <option value="Ch 3: Static">Ch 3: Static</option>
+               <option value="Ch 4: Techniques">Ch 4: Techniques</option>
+               <option value="Ch 5: Management">Ch 5: Management</option>
+               <option value="Ch 6: Tools">Ch 6: Tools</option>`
+        }
         const domains = [...new Set(allQuestions.filter(q => q.bank === bank).map(q => q.domain))]
-        const allLabel = bank === 'istqb' ? 'Alle kapitler' : 'Alle domener'
-        return `<option value="all">${allLabel}</option>` +
+        return `<option value="all">Alle domener</option>` +
             domains.map(d => `<option value="${d}">${d}</option>`).join('')
     }
 
