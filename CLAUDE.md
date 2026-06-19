@@ -22,9 +22,9 @@ obq/
 │       ├── main.ts          # Entry: merges question banks, calls renderApp()
 │       ├── app.ts           # Shell + routing (Page = 'quiz'|'sets'), ← OBQ back link
 │       ├── data/
-│       │   ├── quiz.ts      # QuizQuestion interface + AWS CLF-C02 questions (25)
-│       │   ├── istqb.ts     # ISTQB CTFL v4.0.1 questions (92, Practice 1–6)
-│       │   ├── domain.ts    # DOMAIN_META: tag colors/labels per domain string
+│       │   ├── banks.ts     # BankConfig registry — single source of truth for all banks/domains
+│       │   ├── aws.ts       # QuizQuestion interface + AWS CLF-C02 questions (25)
+│       │   ├── istqb.ts     # ISTQB CTFL v4.0.1 questions (142, Ch 1–6)
 │       │   └── quizset.ts   # QuizSet + QuizSetQuestion types
 │       ├── pages/
 │       │   ├── quiz.ts      # Quiz setup → question → answer → result → review
@@ -47,12 +47,21 @@ obq/
 
 ```ts
 interface QuizQuestion {
-    bank: string                     // 'aws' | 'istqb' | any future bank
-    domain: string                   // 'cloud' | 'Practice 1' | etc.
+    bank: string                     // matches BankConfig.id — 'aws' | 'istqb' | any future bank
+    domain: string                   // matches DomainConfig.value — e.g. 'cloud' | 'Ch 1: Fundamentals'
     question: string
     options: [string, string, string, string]
     answer: 0 | 1 | 2 | 3           // A=0 B=1 C=2 D=3
-    explanation?: string
+    explanation: string
+}
+
+// banks.ts — add an entry here for each new bank:
+interface BankConfig {
+    id: string           // matches q.bank
+    label: string        // "AWS CLF-C02"
+    icon: string         // "☁️"
+    allLabel: string     // "Alle domener" / "Alle kapitler"
+    domains: DomainConfig[]
 }
 
 interface QuizResult {
@@ -81,7 +90,7 @@ interface QuizSetQuestion {
 
 All question banks are merged in `main.ts`:
 ```ts
-const allQuestions = [...quizQuestions, ...istqbQuestions]
+const allQuestions = [...awsQuestions, ...istqbQuestions]
 ```
 
 ## Design System
@@ -143,11 +152,13 @@ Each tab is a `<div id="<id>" class="section">`. First tab gets `class="section 
 
 ## Adding a New Course
 
-1. **Questions** — create `app/src/data/<slug>.ts` with `QuizQuestion[]`, `bank: '<slug>'`
-2. **Merge** — import and spread into `allQuestions` in `main.ts`
-3. **Bank tab** — add `<button class="bank-tab" data-bank="<slug>">` in `buildQuizSetup()` in `pages/quiz.ts`. Domain options for non-`aws` banks are auto-generated from questions — no extra code needed. Optionally add entries to `DOMAIN_META` in `domain.ts` for custom tag colors.
+1. **Bank config** — add a `BankConfig` entry to `BANKS` in `data/banks.ts` with id, label, icon, allLabel, and ordered domains
+2. **Questions** — create `app/src/data/<slug>.ts` with `QuizQuestion[]`, `bank: '<slug>'`, domain values matching the `DomainConfig.value` strings from step 1
+3. **Merge** — import and spread into `allQuestions` in `main.ts`
 4. **Overview page** — copy `courses/_template.html` to `courses/<slug>/index.html`, fill in content
 5. **Portal card** — add a course card to `index.html` in the `.course-grid` section (copy existing card pattern)
+
+Bank tabs and domain filter dropdowns are generated dynamically from `BANKS` — no changes needed in `pages/quiz.ts`.
 
 ## Deployment
 

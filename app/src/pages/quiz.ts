@@ -1,6 +1,5 @@
-import {type QuizQuestion} from '../data/quiz'
+import {type QuizQuestion, BANKS, BANK_MAP, DOMAIN_META} from '../data/banks'
 import {type QuizSet} from '../data/quizset'
-import {DOMAIN_META} from '../data/domain.ts'
 import {type AppState, type QuizResult, type QuizSetProgress, recordQuizSetResult} from '../state'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -45,31 +44,26 @@ export function createQuizController(
     // ── Setup UI ─────────────────────────────────────────────────────────────
 
     function buildQuizSetup(preselectedBank?: string): string {
-        const bank = preselectedBank ?? 'aws'
+        const bank = preselectedBank ?? BANKS[0].id
         const history = buildHistoryHTML(state.quizHistory)
         const domainOptions = buildDomainOptions(bank)
-        const wrongByBank: {bank: string; label: string; count: number}[] = [
-            {bank: 'aws',   label: '☁️ AWS CLF-C02'},
-            {bank: 'istqb', label: '🔍 ISTQB CTFL'},
-        ].map(b => ({
-            ...b,
-            count: state.wrongQuestionKeys.filter(k => k.startsWith(`${b.bank}::`)).length,
-        })).filter(b => b.count > 0)
 
-        const wrongBtns = wrongByBank.length > 0
-            ? `<div class="wrong-retry-group">${wrongByBank.map(b =>
-                `<button class="wrong-retry-btn" data-wrong-bank="${b.bank}">📌 ${b.label} feil (${b.count})</button>`
-              ).join('')}</div>`
-            : ''
+        const wrongBtns = BANKS
+            .map(b => ({b, count: state.wrongQuestionKeys.filter(k => k.startsWith(`${b.id}::`)).length}))
+            .filter(({count}) => count > 0)
+            .map(({b, count}) =>
+                `<button class="wrong-retry-btn" data-wrong-bank="${b.id}">📌 ${b.icon} ${b.label} feil (${count})</button>`
+            ).join('')
+
+        const bankTabs = BANKS.map(b =>
+            `<button class="bank-tab ${b.id === bank ? 'active' : ''}" data-bank="${b.id}">${b.icon} ${b.label}</button>`
+        ).join('')
 
         return `
       <div class="page-inner" id="quiz-setup">
-        ${wrongBtns}
+        ${wrongBtns ? `<div class="wrong-retry-group">${wrongBtns}</div>` : ''}
         <p class="section-head">Kursbank</p>
-        <div class="bank-tabs">
-          <button class="bank-tab ${bank === 'aws' ? 'active' : ''}" data-bank="aws">☁️ AWS CLF-C02</button>
-          <button class="bank-tab ${bank === 'istqb' ? 'active' : ''}" data-bank="istqb">🔍 ISTQB CTFL</button>
-        </div>
+        <div class="bank-tabs">${bankTabs}</div>
 
         <p class="section-head" style="margin-top:1.25rem">Filtrer</p>
         <div class="quiz-controls">
@@ -89,22 +83,12 @@ export function createQuizController(
     }
 
     function buildDomainOptions(bank: string): string {
-        if (bank === 'aws') {
-            return `<option value="all">Alle domener</option>
-               <option value="cloud">Cloud Concepts</option>
-               <option value="security">Security &amp; Compliance</option>
-               <option value="tech">Cloud Technology</option>
-               <option value="billing">Billing &amp; Pricing</option>`
+        const cfg = BANK_MAP[bank]
+        if (cfg) {
+            return `<option value="all">${cfg.allLabel}</option>` +
+                cfg.domains.map(d => `<option value="${d.value}">${d.label}</option>`).join('')
         }
-        if (bank === 'istqb') {
-            return `<option value="all">Alle kapitler</option>
-               <option value="Ch 1: Fundamentals">Ch 1: Fundamentals</option>
-               <option value="Ch 2: SDLC">Ch 2: SDLC</option>
-               <option value="Ch 3: Static">Ch 3: Static</option>
-               <option value="Ch 4: Techniques">Ch 4: Techniques</option>
-               <option value="Ch 5: Management">Ch 5: Management</option>
-               <option value="Ch 6: Tools">Ch 6: Tools</option>`
-        }
+        // Fallback for unknown banks: auto-generate from questions
         const domains = [...new Set(allQuestions.filter(q => q.bank === bank).map(q => q.domain))]
         return `<option value="all">Alle domener</option>` +
             domains.map(d => `<option value="${d}">${d}</option>`).join('')
@@ -115,9 +99,10 @@ export function createQuizController(
         return '<div class="history-list">' + [...qh].reverse().slice(0, 10).map(r => {
             const pass = r.percentage >= 65
             const date = new Date(r.timestamp).toLocaleDateString('no-NO', {day: '2-digit', month: 'short'})
-            const bankLabel = r.bank ? `<span class="h-bank">${r.bank.toUpperCase()}</span>` : ''
+            const bankCfg = r.bank ? BANK_MAP[r.bank] : undefined
+            const bankLabel = r.bank ? `<span class="h-bank">${bankCfg ? `${bankCfg.icon} ${bankCfg.label}` : r.bank.toUpperCase()}</span>` : ''
             const domainLabel = r.domain ? `<span class="h-domain">${r.domain}</span>` : ''
-            const modeTag = r.mode === 'wrong' ? `<span class="h-mode-wrong">📌 Feil-quiz</span>` : ''
+            const modeTag = r.wrongQuiz ? `<span class="h-mode-wrong">📌 Feil-quiz</span>` : ''
             return `
         <div class="history-item">
           <div class="h-meta">${bankLabel}${domainLabel}${modeTag}</div>
@@ -172,7 +157,7 @@ export function createQuizController(
     function startWrongQuiz(filterBank: string): void {
         const wrongSet = new Set(state.wrongQuestionKeys)
         let pool = allQuestions.filter(q =>
-            q.bank === filterBank && wrongSet.has(`${q.bank}::${q.question}`)
+            q.bank === filterBank && wrongSet.has(`${q.bank}::${q.id}`)
         )
         if (!pool.length) return
         for (let i = pool.length - 1; i > 0; i--) {
@@ -276,7 +261,7 @@ export function createQuizController(
             // Update wrong-question tracking
             const wrongSet = new Set(state.wrongQuestionKeys)
             questions.forEach((q, i) => {
-                const key = `${q.bank ?? 'unknown'}::${q.question}`
+                const key = `${q.bank}::${q.id}`
                 if (chosen[i] === q.answer) wrongSet.delete(key)
                 else wrongSet.add(key)
             })
@@ -286,8 +271,8 @@ export function createQuizController(
                 const progress: QuizSetProgress = {correct, total, percentage, timestamp: Date.now()}
                 update(recordQuizSetResult(baseState, setId, progress))
             } else {
-                const mode = quizSession?.wrongQuiz ? 'wrong' as const : undefined
-                const result: QuizResult = {timestamp: Date.now(), correct, total, percentage, bank, domain, mode}
+                const wrongQuiz = quizSession?.wrongQuiz
+                const result: QuizResult = {timestamp: Date.now(), correct, total, percentage, bank, domain, wrongQuiz}
                 update({...baseState, quizHistory: [...baseState.quizHistory, result]})
             }
             lastResult = {correct, total, percentage, pass, questions, chosen}

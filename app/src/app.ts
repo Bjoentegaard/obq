@@ -1,5 +1,5 @@
 import type {AppState} from './state'
-import type {QuizQuestion} from './data/quiz'
+import type {QuizQuestion} from './data/banks'
 import {iconImport, iconQuestion} from "./styles/icon.ts";
 import {createQuizController} from "./pages/quiz.ts";
 import {createSetsController} from "./pages/sets.ts";
