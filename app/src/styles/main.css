@@ -1566,13 +1566,31 @@ svg.icon {
 
 /* ─── History bank label ─────────────────────────────────────────────────── */
 
+.h-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    flex-shrink: 0;
+}
+
 .h-bank {
     font-family: var(--mono);
     font-size: 10px;
     font-weight: 600;
     color: var(--text3);
     letter-spacing: .5px;
-    min-width: 42px;
+}
+
+.h-domain {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: .3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
 }
 
 .h-mode-wrong {

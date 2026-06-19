@@ -11,6 +11,7 @@ interface QuizSession {
     correct: number
     chosen: number[]
     bank?: string
+    domain?: string
     setId?: string
     wrongQuiz?: true
 }
@@ -107,10 +108,11 @@ export function createQuizController(
             const pass = r.percentage >= 65
             const date = new Date(r.timestamp).toLocaleDateString('no-NO', {day: '2-digit', month: 'short'})
             const bankLabel = r.bank ? `<span class="h-bank">${r.bank.toUpperCase()}</span>` : ''
+            const domainLabel = r.domain ? `<span class="h-domain">${r.domain}</span>` : ''
             const modeTag = r.mode === 'wrong' ? `<span class="h-mode-wrong">📌 Feil-quiz</span>` : ''
             return `
         <div class="history-item">
-          ${bankLabel}${modeTag}
+          <div class="h-meta">${bankLabel}${domainLabel}${modeTag}</div>
           <span class="h-score ${pass ? 'pass' : 'fail'}">${r.percentage}%</span>
           <div class="h-bar"><div class="h-bar-fill ${pass ? 'h-fill-pass' : 'h-fill-fail'}" style="width:${r.percentage}%"></div></div>
           <span style="font-size:12px;color:var(--text3)">${r.correct}/${r.total}</span>
@@ -138,7 +140,8 @@ export function createQuizController(
         const count = countVal === 'all' ? pool.length : Math.min(parseInt(countVal), pool.length)
         pool = pool.slice(0, count)
 
-        quizSession = {questions: pool, index: 0, correct: 0, chosen: [], bank}
+        const domainFilter = domain !== 'all' ? domain : undefined
+        quizSession = {questions: pool, index: 0, correct: 0, chosen: [], bank, domain: domainFilter}
         lastResult = null
         renderQuizQuestion()
     }
@@ -255,7 +258,7 @@ export function createQuizController(
 
     function finishQuiz(): void {
         if (!quizSession) return
-        const {correct, questions, setId, bank, chosen} = quizSession
+        const {correct, questions, setId, bank, domain, chosen} = quizSession
         const total = questions.length
         const percentage = Math.round((correct / total) * 100)
         const pass = percentage >= 65
@@ -276,7 +279,7 @@ export function createQuizController(
                 update(recordQuizSetResult(baseState, setId, progress))
             } else {
                 const mode = quizSession?.wrongQuiz ? 'wrong' as const : undefined
-                const result: QuizResult = {timestamp: Date.now(), correct, total, percentage, bank, mode}
+                const result: QuizResult = {timestamp: Date.now(), correct, total, percentage, bank, domain, mode}
                 update({...baseState, quizHistory: [...baseState.quizHistory, result]})
             }
             lastResult = {correct, total, percentage, pass, questions, chosen}

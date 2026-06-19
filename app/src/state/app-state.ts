@@ -6,6 +6,7 @@ export interface QuizResult {
     total: number
     percentage: number
     bank?: string
+    domain?: string   // domain filter used ('all' is omitted)
     mode?: 'wrong'    // set when the quiz was a retry-wrong-questions session
 }
 
