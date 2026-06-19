@@ -6,6 +6,7 @@ export interface QuizResult {
     total: number
     percentage: number
     bank?: string
+    mode?: 'wrong'    // set when the quiz was a retry-wrong-questions session
 }
 
 export interface QuizSetProgress {

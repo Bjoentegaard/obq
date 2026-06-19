@@ -1574,3 +1574,11 @@ svg.icon {
     letter-spacing: .5px;
     min-width: 42px;
 }
+
+.h-mode-wrong {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--amber);
+    letter-spacing: .3px;
+}

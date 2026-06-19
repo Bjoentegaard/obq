@@ -12,6 +12,7 @@ interface QuizSession {
     chosen: number[]
     bank?: string
     setId?: string
+    wrongQuiz?: true
 }
 
 interface QuizResultSnapshot {
@@ -102,13 +103,14 @@ export function createQuizController(
 
     function buildHistoryHTML(qh: QuizResult[]): string {
         if (!qh.length) return '<p class="empty-state">Ingen quiz fullført ennå.</p>'
-        return '<div class="history-list">' + [...qh].reverse().slice(0, 8).map(r => {
+        return '<div class="history-list">' + [...qh].reverse().slice(0, 10).map(r => {
             const pass = r.percentage >= 65
             const date = new Date(r.timestamp).toLocaleDateString('no-NO', {day: '2-digit', month: 'short'})
             const bankLabel = r.bank ? `<span class="h-bank">${r.bank.toUpperCase()}</span>` : ''
+            const modeTag = r.mode === 'wrong' ? `<span class="h-mode-wrong">📌 Feil-quiz</span>` : ''
             return `
         <div class="history-item">
-          ${bankLabel}
+          ${bankLabel}${modeTag}
           <span class="h-score ${pass ? 'pass' : 'fail'}">${r.percentage}%</span>
           <div class="h-bar"><div class="h-bar-fill ${pass ? 'h-fill-pass' : 'h-fill-fail'}" style="width:${r.percentage}%"></div></div>
           <span style="font-size:12px;color:var(--text3)">${r.correct}/${r.total}</span>
@@ -166,7 +168,7 @@ export function createQuizController(
             const j = Math.floor(Math.random() * (i + 1));
             [pool[i], pool[j]] = [pool[j], pool[i]]
         }
-        quizSession = {questions: pool, index: 0, correct: 0, chosen: [], bank: filterBank}
+        quizSession = {questions: pool, index: 0, correct: 0, chosen: [], bank: filterBank, wrongQuiz: true}
         lastResult = null
         renderQuizQuestion()
     }
@@ -273,7 +275,8 @@ export function createQuizController(
                 const progress: QuizSetProgress = {correct, total, percentage, timestamp: Date.now()}
                 update(recordQuizSetResult(baseState, setId, progress))
             } else {
-                const result: QuizResult = {timestamp: Date.now(), correct, total, percentage, bank}
+                const mode = quizSession?.wrongQuiz ? 'wrong' as const : undefined
+                const result: QuizResult = {timestamp: Date.now(), correct, total, percentage, bank, mode}
                 update({...baseState, quizHistory: [...baseState.quizHistory, result]})
             }
             lastResult = {correct, total, percentage, pass, questions, chosen}
