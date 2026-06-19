@@ -97,7 +97,7 @@ export function createQuizController(
                <option value="billing">Billing &amp; Pricing</option>`
         }
         const domains = [...new Set(allQuestions.filter(q => q.bank === bank).map(q => q.domain))]
-        const allLabel = bank === 'istqb' ? 'Alle practice exams' : 'Alle domener'
+        const allLabel = bank === 'istqb' ? 'Alle kapitler' : 'Alle domener'
         return `<option value="all">${allLabel}</option>` +
             domains.map(d => `<option value="${d}">${d}</option>`).join('')
     }
